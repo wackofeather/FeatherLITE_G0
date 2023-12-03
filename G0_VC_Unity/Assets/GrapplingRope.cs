@@ -28,7 +28,7 @@ public class GrapplingRope : MonoBehaviour {
 
     void DrawRope() {
         //If not grappling, don't draw rope
-        if (!grapplingGun.IsGrappling()) {
+        if (!grapplingGun.isGrappling) {
             currentGrapplePosition = grapplingGun.gunTip.position;
             spring.Reset();
             if (lr.positionCount > 0)

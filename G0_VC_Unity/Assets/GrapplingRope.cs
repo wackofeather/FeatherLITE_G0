@@ -14,7 +14,7 @@ public class GrapplingRope : MonoBehaviour {
     public float waveCount;
     public float waveHeight;
     public AnimationCurve affectCurve;
-    
+    [SerializeField] Transform grappleHand;
     void Awake() {
         lr = GetComponent<LineRenderer>();
         spring = new Spring();
@@ -28,13 +28,15 @@ public class GrapplingRope : MonoBehaviour {
 
     void DrawRope() {
         //If not grappling, don't draw rope
-        if (!grapplingGun.isGrappling) {
+        if (!grapplingGun.IsGrappling()) {
             currentGrapplePosition = grapplingGun.gunTip.position;
             spring.Reset();
             if (lr.positionCount > 0)
                 lr.positionCount = 0;
             return;
         }
+
+        
 
         if (lr.positionCount == 0) {
             spring.SetVelocity(velocity);
@@ -58,5 +60,7 @@ public class GrapplingRope : MonoBehaviour {
             
             lr.SetPosition(i, Vector3.Lerp(gunTipPosition, currentGrapplePosition, delta) + offset);
         }
+
+        grappleHand.position = currentGrapplePosition;
     }
 }

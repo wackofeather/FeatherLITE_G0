@@ -588,9 +588,9 @@ MonoBehaviour:
   - {fileID: 9176002160699643285}
   DummyOnlyObjects:
   - {fileID: 7239333705212147260}
-  speed: 5
+  speed: 10
   mouseSens: 1
-  accel: 2
+  accel: 3
   tooFastaccel: 1
   MaxSpeed: 51.25
   grappleLeniency: 42.33
@@ -1201,38 +1201,9 @@ MonoBehaviour:
   gunTip: {fileID: 3577198158580607602}
   Playercamera: {fileID: 5087725685347788842}
   player: {fileID: 2920028746863420625}
-  maxDistance: 100
   Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   grappleSpeed: 53.2
-  grappleTime: 0.125
-  grappleSpeedCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   grappleHand: {fileID: 5797151198118576430}
-  isGrappling: 0
-  grappleLine: {fileID: 6869756106250369789}
-  GrappleStart: {fileID: 3577198158580607602}
 --- !u!114 &5184948639662322760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1240,7 +1211,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8052138231561209821}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c63ffc6b3ca48cd4e88ebdfd11c0cb96, type: 3}
   m_Name: 
@@ -1276,6 +1247,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  grappleHand: {fileID: 7461241620872723705}
 --- !u!120 &6869756106250369789
 LineRenderer:
   m_ObjectHideFlags: 0

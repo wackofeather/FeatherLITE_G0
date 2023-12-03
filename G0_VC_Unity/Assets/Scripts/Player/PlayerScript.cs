@@ -110,11 +110,11 @@ public class PlayerScript : NetworkBehaviour
     {
         if (!IsOwner)
         {
-            if (grapplingGunScript.isGrappling)
+            if (grapplingGunScript.IsGrappling())
             {
                 if (!lineRenderer.enabled) lineRenderer.enabled = true;
             }
-            if (!grapplingGunScript.isGrappling)
+            if (!grapplingGunScript.IsGrappling())
             {
                 if (lineRenderer.enabled) lineRenderer.enabled = false;
             }
@@ -149,11 +149,11 @@ public class PlayerScript : NetworkBehaviour
 
         if (!IsOwner) return;
 
-        Debug.Log(grapplingGunScript.isGrappling);
+        Debug.Log(grapplingGunScript.IsGrappling());
 
         if (inputVector != Vector3.zero)
         {
-            if (!grapplingGunScript.isGrappling)
+            if (!grapplingGunScript.IsGrappling())
             {
                 if (rb.velocity.magnitude > MaxSpeed)
                 {
@@ -179,7 +179,7 @@ public class PlayerScript : NetworkBehaviour
                 else rb.AddForce((PlayerCamera.transform.rotation * inputVector * speed - rb.velocity) * accel);
             }
 
-            if (grapplingGunScript.isGrappling)
+            if (grapplingGunScript.IsGrappling())
             {
                 if (rb.velocity.magnitude < MaxSpeed) rb.AddForce((PlayerCamera.transform.rotation * inputVector * speed));
             }

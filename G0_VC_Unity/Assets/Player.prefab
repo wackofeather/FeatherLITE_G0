@@ -1131,9 +1131,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5230236037117931691}
-  - component: {fileID: 3524589570143911055}
   - component: {fileID: 1199171846237049367}
   - component: {fileID: 5184948639662322760}
+  - component: {fileID: 3524589570143911055}
   - component: {fileID: 6869756106250369789}
   m_Layer: 0
   m_Name: Grappler
@@ -1159,30 +1159,6 @@ Transform:
   m_Father: {fileID: 3205671146708248980}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3524589570143911055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8052138231561209821}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 133523389af84924ea4332586b15e54b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
-  GrapplePoint: {fileID: 3577198158580607602}
-  Camera: {fileID: 5087725685347788842}
-  lineRenderer: {fileID: 8217942930679748817}
-  grappleHand: {fileID: 7461241620872723705}
-  player: {fileID: 2920028746863420625}
-  grappleSpeed: 1
-  grappleLayerMask:
-    serializedVersion: 2
-    m_Bits: 127
-  grappleHit: {x: 0, y: 0, z: 0}
-  isGrappling: 0
 --- !u!114 &1199171846237049367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1204,6 +1180,61 @@ MonoBehaviour:
   Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   grappleSpeed: 53.2
   grappleHand: {fileID: 5797151198118576430}
+  quality: 500
+  damper: 14
+  strength: 800
+  velocity: 15
+  waveCount: 3
+  waveHeight: 8.63
+  affectCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.16345313
+      outSlope: 0.16345313
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.14782113
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  retractCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  retractSpeed: 130
 --- !u!114 &5184948639662322760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1211,7 +1242,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8052138231561209821}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c63ffc6b3ca48cd4e88ebdfd11c0cb96, type: 3}
   m_Name: 
@@ -1248,6 +1279,30 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   grappleHand: {fileID: 7461241620872723705}
+--- !u!114 &3524589570143911055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8052138231561209821}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133523389af84924ea4332586b15e54b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  GrapplePoint: {fileID: 3577198158580607602}
+  Camera: {fileID: 5087725685347788842}
+  lineRenderer: {fileID: 8217942930679748817}
+  grappleHand: {fileID: 7461241620872723705}
+  player: {fileID: 2920028746863420625}
+  grappleSpeed: 1
+  grappleLayerMask:
+    serializedVersion: 2
+    m_Bits: 127
+  grappleHit: {x: 0, y: 0, z: 0}
+  isGrappling: 0
 --- !u!120 &6869756106250369789
 LineRenderer:
   m_ObjectHideFlags: 0

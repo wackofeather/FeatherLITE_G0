@@ -32,8 +32,17 @@ public class GrapplingGun : MonoBehaviour {
     public AnimationCurve affectCurve;
     public AnimationCurve retractCurve;
     [SerializeField] float retractSpeed;
-
+    [SerializeField] Transform grappleTangentWeight;
+    private Vector3 cachedGrappleTangent_local_pos;
     private bool isGrappling;
+    [Range(0,1)]
+    [SerializeField] float lookAwayLeniency;
+    public AnimationCurve tangentpullbackCurve_angle;
+    public AnimationCurve tangentpullbackCurve_distance;
+    private Vector3 tangent_cache;
+    public GameObject test;
+
+
     void Awake()
     {
         lr = GetComponent<LineRenderer>();
@@ -44,12 +53,16 @@ public class GrapplingGun : MonoBehaviour {
     private void Start()
     {
         isGrappling = false;
+        cachedGrappleTangent_local_pos = grappleTangentWeight.localPosition;
     }
 
     void Update() {
+        //if (isGrappling && Physics.Linecast(gunTip.position, Vector3.Lerp(gunTip.position, Playercamera.position, 0.9f), grappleBreakers)) Debug.Log("PLUH");
         if (Grapple.action.triggered && !isGrappling) {
             StartGrapple();
         }
+
+        test.transform.position = tangent_cache;
 
     }
 
@@ -103,10 +116,25 @@ public class GrapplingGun : MonoBehaviour {
     {
         while (true)
         {
-            if (Grapple.action.WasReleasedThisFrame())
-            {
-                break;
-            }
+            
+            float ClampedDistance = (player.position - grapplePoint).magnitude / maxDistance;
+            float Angle = Vector3.Angle(Playercamera.transform.forward, (grapplePoint - Playercamera.position));
+
+            Debug.Log((tangentpullbackCurve_angle.Evaluate(Angle / (Playercamera.GetComponent<Camera>().fieldOfView * (1 + lookAwayLeniency))) + tangentpullbackCurve_distance.Evaluate(ClampedDistance)) / 2);
+
+            RaycastHit hit;
+            Physics.Raycast(Playercamera.position, (grapplePoint - Playercamera.position), out hit, maxDistance, whatIsGrappleable);
+            //Debug.Log(grapplePoint - hit.point);
+
+            if (Angle > Playercamera.GetComponent<Camera>().fieldOfView * (1 + lookAwayLeniency)) break;
+
+            if ((grapplePoint - hit.point).magnitude >= 0.1f) break;
+            
+            //if (hit.point != grapplePoint) Debug.Log("PLUHHHSHS");
+
+            if (Grapple.action.WasReleasedThisFrame()) break;
+            
+
             if (Vector3.Distance(player.position, grapplePoint) > 0.25f)
             {
                 /*joint.maxDistance -= grappleSpeed;
@@ -125,20 +153,24 @@ public class GrapplingGun : MonoBehaviour {
             spring.SetStrength(strength);
             spring.Update(Time.deltaTime);
 
-
             var up = Quaternion.LookRotation((grapplePoint - gunTip.position).normalized) * Vector3.up;
 
             currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 12f);
 
+            //grappleHand.transform.position = currentGrapplePosition;
+
+            tangent_cache = Vector3.Lerp(gunTip.position, grappleTangentWeight.position, (tangentpullbackCurve_angle.Evaluate(Angle / (Playercamera.GetComponent<Camera>().fieldOfView * (1 + lookAwayLeniency))) + tangentpullbackCurve_distance.Evaluate(ClampedDistance)) / 2);
+
             for (var i = 0; i < quality + 1; i++)
             {
+
                 var delta = i / (float)quality;
                 var offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
 
-                lr.SetPosition(i, Vector3.Lerp(gunTip.position, currentGrapplePosition, delta) + offset);
+                lr.SetPosition(i, Vector3.Lerp(Vector3.Lerp(gunTip.position, tangent_cache, delta), Vector3.Lerp(tangent_cache, grapplePoint, delta), delta) + offset);
             }
 
-            grappleHand.transform.position = currentGrapplePosition;
+            grappleHand.transform.position = lr.GetPosition(quality);
 
             /*else
             {
@@ -168,6 +200,9 @@ public class GrapplingGun : MonoBehaviour {
             }
             if (Vector3.Distance(currentGrapplePosition, gunTip.position) < 0.5f) break;
 
+            
+
+
             spring.SetDamper(damper);
             spring.SetStrength(strength);
             spring.Update(Time.deltaTime);
@@ -175,18 +210,25 @@ public class GrapplingGun : MonoBehaviour {
 
             var up = Quaternion.LookRotation((grapplePoint - gunTip.position).normalized) * Vector3.up;
 
-            
-            currentGrapplePosition = Vector3.Lerp(grapplePoint, gunTip.position, retractCurve.Evaluate(timer));
+            float t = retractCurve.Evaluate(timer);
+            //Debug.Log(t);
+            currentGrapplePosition = Vector3.Lerp(Vector3.Lerp(grapplePoint, grappleTangentWeight.position, t), Vector3.Lerp(grappleTangentWeight.position, gunTip.position, t), t);
 
+            float ClampedDistance = (player.position - currentGrapplePosition).magnitude / maxDistance;
+            float Angle = Vector3.Angle(Playercamera.transform.forward, (currentGrapplePosition - Playercamera.position));
+
+            //grappleHand.transform.position = currentGrapplePosition;
+
+            tangent_cache = Vector3.Lerp(gunTip.position, grappleTangentWeight.position, 1 - t); //(tangentpullbackCurve_angle.Evaluate(Angle / (Playercamera.GetComponent<Camera>().fieldOfView * (1 + lookAwayLeniency))) + tangentpullbackCurve_distance.Evaluate(ClampedDistance)) / 2); //Vector3.Lerp(grappleTangentWeight.position, gunTip.position, t);
             for (var i = 0; i < quality + 1; i++)
             {
                 var delta = i / (float)quality;
                 var offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
 
-                lr.SetPosition(i, Vector3.Lerp(gunTip.position, currentGrapplePosition, delta) + offset);
+                lr.SetPosition(i, Vector3.Lerp(Vector3.Lerp(gunTip.position, tangent_cache, delta), Vector3.Lerp(tangent_cache, currentGrapplePosition, delta), delta) + offset);
             }
 
-            grappleHand.transform.position = currentGrapplePosition;
+            grappleHand.transform.position = lr.GetPosition(quality);
 
             if (timer == 1)
             {

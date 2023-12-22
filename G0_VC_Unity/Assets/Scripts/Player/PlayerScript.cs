@@ -149,7 +149,7 @@ public class PlayerScript : NetworkBehaviour
 
         if (!IsOwner) return;
 
-        Debug.Log(grapplingGunScript.IsGrappling());
+        //Debug.Log(grapplingGunScript.IsGrappling());
 
         if (inputVector != Vector3.zero)
         {

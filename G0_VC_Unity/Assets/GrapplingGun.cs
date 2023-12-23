@@ -43,6 +43,34 @@ public class GrapplingGun : MonoBehaviour {
     public GameObject test;
 
 
+
+    //method overloading with multiple versions of bool
+    private bool CanGrapple(out RaycastHit hit)
+    {
+        if (isGrappling)
+        {
+            hit = default;
+            return false;
+        }
+        else
+        {
+            RaycastHit hitinfo;
+            bool canGrapple = Physics.Raycast(Playercamera.position, Playercamera.forward, out hitinfo, maxDistance, whatIsGrappleable);
+            hit = hitinfo;
+            return canGrapple;
+        }
+        
+    }
+    public bool CanGrapple()
+    {
+        if (isGrappling)
+        {
+            return false;
+        }
+        else return Physics.Raycast(Playercamera.position, Playercamera.forward, maxDistance, whatIsGrappleable);
+    }
+
+
     void Awake()
     {
         lr = GetComponent<LineRenderer>();
@@ -79,7 +107,8 @@ public class GrapplingGun : MonoBehaviour {
     /// </summary>
     void StartGrapple() {
         RaycastHit hit;
-        if (Physics.Raycast(Playercamera.position, Playercamera.forward, out hit, maxDistance, whatIsGrappleable)) {
+        if (CanGrapple(out hit)) 
+        {
             grapplePoint = hit.point;
             Vector3 relativeVelocity = Playercamera.InverseTransformVector(player.velocity);
             if (relativeVelocity.z < 0) relativeVelocity.z = 0f;
@@ -120,8 +149,6 @@ public class GrapplingGun : MonoBehaviour {
             float ClampedDistance = (player.position - grapplePoint).magnitude / maxDistance;
             float Angle = Vector3.Angle(Playercamera.transform.forward, (grapplePoint - Playercamera.position));
 
-            Debug.Log((tangentpullbackCurve_angle.Evaluate(Angle / (Playercamera.GetComponent<Camera>().fieldOfView * (1 + lookAwayLeniency))) + tangentpullbackCurve_distance.Evaluate(ClampedDistance)) / 2);
-
             RaycastHit hit;
             Physics.Raycast(Playercamera.position, (grapplePoint - Playercamera.position), out hit, maxDistance, whatIsGrappleable);
             //Debug.Log(grapplePoint - hit.point);
@@ -157,17 +184,13 @@ public class GrapplingGun : MonoBehaviour {
 
             currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 12f);
 
-            //grappleHand.transform.position = currentGrapplePosition;
-
-            tangent_cache = Vector3.Lerp(gunTip.position, grappleTangentWeight.position, (tangentpullbackCurve_angle.Evaluate(Angle / (Playercamera.GetComponent<Camera>().fieldOfView * (1 + lookAwayLeniency))) + tangentpullbackCurve_distance.Evaluate(ClampedDistance)) / 2);
-
             for (var i = 0; i < quality + 1; i++)
             {
 
                 var delta = i / (float)quality;
                 var offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
 
-                lr.SetPosition(i, Vector3.Lerp(Vector3.Lerp(gunTip.position, tangent_cache, delta), Vector3.Lerp(tangent_cache, grapplePoint, delta), delta) + offset);
+                lr.SetPosition(i, Vector3.Lerp(gunTip.position, currentGrapplePosition, delta) + offset);
             }
 
             grappleHand.transform.position = lr.GetPosition(quality);
@@ -178,71 +201,19 @@ public class GrapplingGun : MonoBehaviour {
             }*/
             yield return null;
         }
-        StartCoroutine(StopGrapple());
+        StopGrapple();
         yield break;
     }
 
-    public IEnumerator StopGrapple()
+    public void StopGrapple()
     {
         Destroy(joint);
 
 
         spring.Reset();
         spring.SetVelocity(velocity);
-        float bringbackScaler = Vector3.Distance(gunTip.position, grapplePoint);
-        //lr.positionCount = quality + 1;
-        float timer = 0;
-        while (true)
-        {
-            if (timer > 1)
-            {
-                timer = 1;
-            }
-            if (Vector3.Distance(currentGrapplePosition, gunTip.position) < 0.5f) break;
-
-            
-
-
-            spring.SetDamper(damper);
-            spring.SetStrength(strength);
-            spring.Update(Time.deltaTime);
-
-
-            var up = Quaternion.LookRotation((grapplePoint - gunTip.position).normalized) * Vector3.up;
-
-            float t = retractCurve.Evaluate(timer);
-            //Debug.Log(t);
-            currentGrapplePosition = Vector3.Lerp(Vector3.Lerp(grapplePoint, grappleTangentWeight.position, t), Vector3.Lerp(grappleTangentWeight.position, gunTip.position, t), t);
-
-            float ClampedDistance = (player.position - currentGrapplePosition).magnitude / maxDistance;
-            float Angle = Vector3.Angle(Playercamera.transform.forward, (currentGrapplePosition - Playercamera.position));
-
-            //grappleHand.transform.position = currentGrapplePosition;
-
-            tangent_cache = Vector3.Lerp(gunTip.position, grappleTangentWeight.position, 1 - t); //(tangentpullbackCurve_angle.Evaluate(Angle / (Playercamera.GetComponent<Camera>().fieldOfView * (1 + lookAwayLeniency))) + tangentpullbackCurve_distance.Evaluate(ClampedDistance)) / 2); //Vector3.Lerp(grappleTangentWeight.position, gunTip.position, t);
-            for (var i = 0; i < quality + 1; i++)
-            {
-                var delta = i / (float)quality;
-                var offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
-
-                lr.SetPosition(i, Vector3.Lerp(Vector3.Lerp(gunTip.position, tangent_cache, delta), Vector3.Lerp(tangent_cache, currentGrapplePosition, delta), delta) + offset);
-            }
-
-            grappleHand.transform.position = lr.GetPosition(quality);
-
-            if (timer == 1)
-            {
-                break;
-            }
-
-            timer += Time.deltaTime / bringbackScaler * retractSpeed;
-
-            yield return null;
-
-        }
         isGrappling = false;
         grappleHand.SetActive(false);
-        yield break;
     }
 
     public bool IsGrappling() {
@@ -258,7 +229,7 @@ public class GrapplingGun : MonoBehaviour {
 
 
 
-
+   
 
 
 

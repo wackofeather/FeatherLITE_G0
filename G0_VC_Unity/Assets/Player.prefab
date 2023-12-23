@@ -1925,6 +1925,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9170000013213899450}
+  - component: {fileID: 2689464032684229548}
   m_Layer: 7
   m_Name: UI
   m_TagString: Untagged
@@ -1948,3 +1949,19 @@ Transform:
   m_Father: {fileID: 2920028746863420629}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2689464032684229548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9176002160699643285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 831d5103234df5040b2c5e621a3c2f6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grappleScript: {fileID: 1199171846237049367}
+  GrappleIndicator: {fileID: 7735608024073846780}
+  NoGrappleColor: {r: 0, g: 0, b: 0, a: 0.5176471}
+  GrappleColor: {r: 0.34362757, g: 0.59607846, b: 0.26666668, a: 0.5176471}

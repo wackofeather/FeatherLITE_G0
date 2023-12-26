@@ -47,9 +47,7 @@ public class GrapplingGun : NetworkBehaviour {
     [SerializeField] Transform viewport_gunTip;
     private Transform ropeGunTip;
     private float ropeScaleFactor;
-    [SerializeField] GameObject exterior_grappleHand;
-    [SerializeField] GameObject viewport_grappleHand;
-    private GameObject grappleHand;
+    [SerializeField] GameObject grappleHand;
     //method overloading with multiple versions of bool
     private bool CanGrapple(out RaycastHit hit)
     {
@@ -102,15 +100,13 @@ public class GrapplingGun : NetworkBehaviour {
         if (IsOwner)
         {
             Debug.Log("yipeeeeeeeeeeeeeeeeeeee");
-            lr.gameObject.layer = LayerMask.NameToLayer("VIEWPORT");
+            //lr.gameObject.layer = LayerMask.NameToLayer("VIEWPORT");
             ropeGunTip = viewport_gunTip;
-            grappleHand = viewport_grappleHand;
         }
         else
         {
-            lr.gameObject.layer = LayerMask.NameToLayer("EXTERIOR");
+            //lr.gameObject.layer = LayerMask.NameToLayer("EXTERIOR");
             ropeGunTip = exterior_gunTip;
-            grappleHand = exterior_grappleHand;
         }
         grappleHand.SetActive(false);
 
@@ -268,106 +264,46 @@ public class GrapplingGun : NetworkBehaviour {
 
             float oldFOV = cam.fieldOfView;
 
-
-
-            // Project the world point to the viewport
-            Vector3 viewportPoint = cam.WorldToViewportPoint(currentGrapplePosition);
-
-            // Calculate the distance from the camera to the world point
-            float distance = Vector3.Distance(cam.transform.position, currentGrapplePosition);
-
-            // Change the FOV of the camera to a hypothetical value
             cam.fieldOfView = 40;
 
+            // Project the world point to the viewport
+            Vector3 viewportPoint = cam.WorldToViewportPoint(ropeGunTip.position);
+
+            // Calculate the distance from the camera to the world point
+            float distance = Vector3.Distance(cam.transform.position, ropeGunTip.position);
+
+            // Change the FOV of the camera to a hypothetical value
+
+            cam.fieldOfView = oldFOV;
+
             // Convert the viewport point back to the world with the new FOV
-            Vector3 convertedGrapplePosition = cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
+            Vector3 convertedGunTip = cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
 
 /*            // Print the results
             Debug.Log("Old world point: " + currentGrapplePosition);
             Debug.Log("New world point: " + convertedGrapplePosition);*/
 
             // Restore the original FOV of the camera
-            cam.fieldOfView = oldFOV;
+            
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            /*            Vector3 localPos = cam.transform.InverseTransformPoint(currentGrapplePosition);
-
-                        // Convert the FOV from degrees to radians
-                        float fov = Mathf.Deg2Rad * 60f;
-
-                        // Calculate the viewport coordinates of the target using the formula
-                        float x = 0.5f + 0.5f * localPos.x / localPos.z * 1f / Mathf.Tan(fov / 2f);
-                        float y = 0.5f + 0.5f * localPos.y / localPos.z * 1f / Mathf.Tan(fov / 2f);
-
-                        // Create a vector with the viewport coordinates
-                        Vector3 viewportPos = new Vector3(x, y, 0f);*//*
-
-            Vector4 worldPos = new Vector4(currentGrapplePosition.x, currentGrapplePosition.y, currentGrapplePosition.z, 1); // get the world position of the point as a Vector4
-            Matrix4x4 projMatrix = cam.projectionMatrix; // get the projection matrix of the camera
-            Vector4 ndcPos = projMatrix * worldPos; // multiply the world position by the projection matrix
-            ndcPos /= ndcPos.w; // divide by the w component to get the NDC
-
-
-
-
-            float horizontalFOV = 90f; // desired horizontal FOV in degrees
-            float aspectRatio = 16f / 9f; // camera's aspect ratio
-            float verticalFOV = 2f * Mathf.Atan(Mathf.Tan(horizontalFOV * Mathf.Deg2Rad / 2f) / aspectRatio) * Mathf.Rad2Deg; // calculated vertical FOV in degrees
-            Matrix4x4 invProjMatrix = Matrix4x4.Perspective(verticalFOV, aspectRatio, cam.nearClipPlane, cam.farClipPlane).inverse; // get the inverse projection matrix of the hypothetical camera
-            Vector4 worldPos_1 = invProjMatrix * ndcPos; // multiply the NDC by the inverse projection matrix
-            worldPos_1 *= ndcPos.w; // multiply by the w component to get the world position
-            Vector3 convertedGrapplePoint = worldPos_1;
-
-            Debug.Log(convertedGrapplePoint);
-
-
-
-
-            *//*  ropeconvertCamera.transform.position = Playercamera.transform.position;
-
-              //Debug.Log(ropeconvertCamera.transform.eulerAngles - Playercamera.transform.eulerAngles);
-              ropeconvertCamera.transform.rotation = Playercamera.transform.rotation;
-              Vector2 grapplePoint_viewport = Playercamera.gameObject.GetComponent<Camera>().WorldToViewportPoint(currentGrapplePosition);
-              float distance = Vector3.Distance(Playercamera.gameObject.GetComponent<Camera>().ViewportToWorldPoint(new Vector3(grapplePoint_viewport.x, grapplePoint_viewport.y, 0)), currentGrapplePosition);
-              Vector2 new_viewportVector = new Vector2(grapplePoint_viewport.x + ropeScaleFactor - 1, grapplePoint_viewport.y + ropeScaleFactor - 1);
-              Debug.Log(ropeconvertCamera.fieldOfView);
-              Vector3 convertedGrapplePoint = ropeconvertCamera.ViewportToWorldPoint(new Vector3(new_viewportVector.x, new_viewportVector.y, distance));
-  */
             for (var i = 0; i < quality + 1; i++)
             {
 
                 var delta = i / (float)quality;
                 var offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
 
-                lr.SetPosition(i, Vector3.Lerp(ropeGunTip.position, convertedGrapplePosition, delta) + offset);
+                lr.SetPosition(i, Vector3.Lerp(convertedGunTip, currentGrapplePosition, delta) + offset);
             }
 
 
             grappleHand.transform.position = lr.GetPosition(quality);
-            Debug.Log(grappleHand.transform.position - convertedGrapplePosition);
+
+
             return;
         }
 
-        
+        //else
 
         for (var i = 0; i < quality + 1; i++)
         {
@@ -377,41 +313,9 @@ public class GrapplingGun : NetworkBehaviour {
 
             lr.SetPosition(i, Vector3.Lerp(ropeGunTip.position, currentGrapplePosition, delta) + offset);
         }
-
+        
         grappleHand.transform.position = lr.GetPosition(quality);
 
-
-
-
-
-
-
-        /* if (lr.positionCount == 0)
-         {
-             spring.SetVelocity(velocity);
-             lr.positionCount = quality + 1;
-         }
-
-         spring.SetDamper(damper);
-         spring.SetStrength(strength);
-         spring.Update(Time.deltaTime);
-
-         var grapplePoint = GetGrapplePoint();
-         var gunTipPosition = gunTip.position;
-         var up = Quaternion.LookRotation((grapplePoint - gunTipPosition).normalized) * Vector3.up;
-
-         currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 12f);
-
-         for (var i = 0; i < quality + 1; i++)
-         {
-             var delta = i / (float)quality;
-             var offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value *
-                          affectCurve.Evaluate(delta);
-
-             lr.SetPosition(i, Vector3.Lerp(gunTipPosition, currentGrapplePosition, delta) + offset);
-         }
-
-         grappleHand.transform.position = currentGrapplePosition;*/
     }
 
 

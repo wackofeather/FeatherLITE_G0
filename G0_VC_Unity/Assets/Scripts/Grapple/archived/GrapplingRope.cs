@@ -27,9 +27,9 @@ public class GrapplingRope : MonoBehaviour {
     }
 
     void DrawRope() {
-        //If not grappling, don't draw rope
+/*        //If not grappling, don't draw rope
         if (!grapplingGun.IsGrappling()) {
-            currentGrapplePosition = grapplingGun.gunTip.position;
+            //currentGrapplePosition = grapplingGun.gunTip.position; (needed for script but causes errors, deprecated script anyways)
             spring.Reset();
             if (lr.positionCount > 0)
                 lr.positionCount = 0;
@@ -48,7 +48,7 @@ public class GrapplingRope : MonoBehaviour {
         spring.Update(Time.deltaTime);
 
         var grapplePoint = grapplingGun.GetGrapplePoint();
-        var gunTipPosition = grapplingGun.gunTip.position;
+        //var gunTipPosition = grapplingGun.gunTip.position;
         var up = Quaternion.LookRotation((grapplePoint - gunTipPosition).normalized) * Vector3.up;
 
         currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 12f);
@@ -61,6 +61,6 @@ public class GrapplingRope : MonoBehaviour {
             lr.SetPosition(i, Vector3.Lerp(gunTipPosition, currentGrapplePosition, delta) + offset);
         }
 
-        grappleHand.position = currentGrapplePosition;
+        grappleHand.position = currentGrapplePosition;*/
     }
 }

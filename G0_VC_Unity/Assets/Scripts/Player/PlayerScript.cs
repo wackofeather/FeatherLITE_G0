@@ -82,7 +82,9 @@ public class PlayerScript : NetworkBehaviour
         else
         {
             foreach (GameObject t in DummyOnlyObjects) t.SetActive(false);
-            foreach (Transform child in Exterior) child.gameObject.SetActive(false);
+            //foreach (Transform child in Exterior) child.gameObject.SetActive(false);
+            Debug.Log("host joined");
+            Exterior.GetComponent<ExteriorShadowSwitch>().ShadowsOnly(true);
         }
 
     }

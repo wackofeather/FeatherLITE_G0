@@ -42,12 +42,13 @@ public class GrapplingGun : NetworkBehaviour {
     private Spring spring;
     [SerializeField] LineRenderer lr;
     private Vector3 currentGrapplePosition;
-    private Camera ropeconvertCamera;
     [SerializeField] Transform exterior_gunTip;
     [SerializeField] Transform viewport_gunTip;
     private Transform ropeGunTip;
-    private float ropeScaleFactor;
     [SerializeField] GameObject grappleHand;
+
+    [Header("VERY IMPORTANT")]
+    [SerializeField] float ViewportFOV;
     //method overloading with multiple versions of bool
     private bool CanGrapple(out RaycastHit hit)
     {
@@ -80,12 +81,7 @@ public class GrapplingGun : NetworkBehaviour {
         
         spring = new Spring();
         spring.SetTarget(0);
-        float fov_cache = Playercamera.GetComponent<Camera>().fieldOfView;
-        Playercamera.GetComponent<Camera>().fieldOfView = 40f;
-        ropeconvertCamera = Playercamera.GetComponent<Camera>();
-        Playercamera.GetComponent<Camera>().fieldOfView = fov_cache;
 
-        ropeScaleFactor = 1 / Mathf.Sqrt(fov_cache / 40f);
     }
 
     private void Start()
@@ -260,11 +256,15 @@ public class GrapplingGun : NetworkBehaviour {
         currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * ropeSpeed);
         if (IsOwner)
         {
+
+            ///NOTE: to optimize try using localPos and caching the converted gun tip so no need for calculation every frame. You have to use local pos so it works properly when reused over time tho
+
+
             Camera cam = Playercamera.GetComponent<Camera>();
 
             float oldFOV = cam.fieldOfView;
 
-            cam.fieldOfView = 40;
+            cam.fieldOfView = ViewportFOV;
 
             // Project the world point to the viewport
             Vector3 viewportPoint = cam.WorldToViewportPoint(ropeGunTip.position);

@@ -43,8 +43,35 @@
                 },
                 {
                     "name": "Grapple",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "0c9d27e3-f691-43ed-8708-60eb359495aa",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SwitchWeapon",
+                    "type": "Value",
+                    "id": "d50a7a15-d2e2-4070-8aaa-7a3a90f487e3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "4003e3d2-e592-4ed1-af6b-bc40fb99f0ae",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Unpause",
+                    "type": "Button",
+                    "id": "3e675512-3ede-4f68-aae4-aa4555a25cc2",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -194,6 +221,61 @@
                     "action": "Grapple",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "23cfb1fa-0af6-407e-9c53-d3a0c5da23fd",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b5584768-910a-4f68-a8ac-10146d208e87",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Unpause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "8da662f3-3e8b-4b06-aaa2-a3d3213f2bb4",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchWeapon",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Positive",
+                    "id": "a39b54f8-4a86-4d54-b285-2f44f763de9d",
+                    "path": "<Mouse>/scroll/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Negative",
+                    "id": "461147b2-fef8-46df-83d9-2c30d8056bf8",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SwitchWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }

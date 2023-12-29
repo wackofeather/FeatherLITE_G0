@@ -44,7 +44,7 @@ public class GrapplingGun : NetworkBehaviour {
     private Vector3 currentGrapplePosition;
     [SerializeField] Transform exterior_gunTip;
     [SerializeField] Transform viewport_gunTip;
-    private Transform ropeGunTip;
+    public Transform ropeGunTip;
     [SerializeField] GameObject grappleHand;
 
     [Header("VERY IMPORTANT")]
@@ -88,23 +88,19 @@ public class GrapplingGun : NetworkBehaviour {
     {
         if (!IsOwner)
         {
+            Debug.Log("wahahahahahah");
+            ropeGunTip = exterior_gunTip;
             return;
         }
 
         isGrappling = false;
 
-        if (IsOwner)
-        {
-            Debug.Log("yipeeeeeeeeeeeeeeeeeeee");
-            //lr.gameObject.layer = LayerMask.NameToLayer("VIEWPORT");
-            ropeGunTip = viewport_gunTip;
-        }
-        else
-        {
-            //lr.gameObject.layer = LayerMask.NameToLayer("EXTERIOR");
-            ropeGunTip = exterior_gunTip;
-        }
-        grappleHand.SetActive(false);
+
+        ropeGunTip = viewport_gunTip;
+             
+
+        
+
 
     }
 
@@ -155,8 +151,6 @@ public class GrapplingGun : NetworkBehaviour {
 
             isGrappling = true;
 
-            grappleHand.SetActive(true);
-
             StartCoroutine(GrappleCoroutine());
         }
     }
@@ -206,7 +200,6 @@ public class GrapplingGun : NetworkBehaviour {
         spring.Reset();
         spring.SetVelocity(velocity);
         isGrappling = false;
-        grappleHand.SetActive(false);
     }
 
     public bool IsGrappling() {
@@ -230,6 +223,7 @@ public class GrapplingGun : NetworkBehaviour {
 
     void DrawRope()
     {
+        grappleHand.SetActive(isGrappling);
         //If not grappling, don't draw rope
         if (!isGrappling)
         {
@@ -245,7 +239,6 @@ public class GrapplingGun : NetworkBehaviour {
             spring.SetVelocity(velocity);
             lr.positionCount = quality + 1;
         }
-
 
         spring.SetDamper(damper);
         spring.SetStrength(strength);

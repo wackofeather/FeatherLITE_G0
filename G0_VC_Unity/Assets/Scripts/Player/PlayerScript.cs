@@ -10,6 +10,8 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] InputActionReference move;
     [SerializeField] InputActionReference fire;
     [SerializeField] InputActionReference scope;
+    [SerializeField] InputActionReference pause;
+    [SerializeField] InputActionReference Unpause;
 
     [SerializeField] Transform Rotatables;
     [SerializeField] Transform PlayerCamera;
@@ -24,9 +26,9 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] float mouseSens;
     [SerializeField] float accel;
     [SerializeField] float tooFastaccel;
-    [SerializeField] float MaxSpeed;
+    [SerializeField] float BreakNeckSpeed;
 
-    [SerializeField] float grappleLeniency;
+
 
 
 
@@ -54,21 +56,21 @@ public class PlayerScript : NetworkBehaviour
 
     
 
-    [SerializeField] InputActionReference Grapple;
-    [SerializeField] Transform GrapplePoint;
+
+
     [SerializeField] UnityEngine.LineRenderer lineRenderer;
-    [SerializeField] Rigidbody grappleHand;
-
-    [SerializeField] float grappleSpeed;
-
-    [SerializeField] LayerMask grappleLayerMask;
-
-    public Vector3 grappleHit;
+   
 
 
-    public bool isGrappling;
 
-    private ConfigurableJoint grappleJoint;
+
+
+
+
+
+
+
+
 
     public override void OnNetworkSpawn()
     {
@@ -104,7 +106,7 @@ public class PlayerScript : NetworkBehaviour
     void Start()
     {
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
 
@@ -143,6 +145,11 @@ public class PlayerScript : NetworkBehaviour
         Rotatables.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
         PlayerCamera.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
 
+        if (pause.action.triggered) Cursor.lockState = CursorLockMode.None;
+        if(Unpause.action.triggered) Cursor.lockState = CursorLockMode.Confined;
+
+        //Debug.Log(rb.velocity.magnitude);
+
     }
 
     private void FixedUpdate()
@@ -157,22 +164,23 @@ public class PlayerScript : NetworkBehaviour
         {
             if (!grapplingGunScript.IsGrappling())
             {
-                if (rb.velocity.magnitude > MaxSpeed)
+                if (rb.velocity.magnitude > BreakNeckSpeed)
                 {
+                    Debug.Log("ahhhhhhhhhhhhhh");
                     Vector3 inputVelocity = inputVector * speed;
                     Vector3 relativeVelocity = PlayerCamera.transform.InverseTransformVector(rb.velocity);
 
 
 
-                    if ((Mathf.Abs(inputVelocity.x) > Mathf.Abs(relativeVelocity.x) + grappleLeniency) | (Mathf.Sign(inputVelocity.x) != Mathf.Sign(relativeVelocity.x))) putTogetherVelocity.x = (inputVelocity.x - relativeVelocity.x);
+                    if ((Mathf.Abs(inputVelocity.x) > Mathf.Abs(relativeVelocity.x)) | (Mathf.Sign(inputVelocity.x) != Mathf.Sign(relativeVelocity.x))) putTogetherVelocity.x = (inputVelocity.x - relativeVelocity.x);
                     else putTogetherVelocity.x = 0;
-                    if ((Mathf.Abs(inputVelocity.y) > Mathf.Abs(relativeVelocity.y) + grappleLeniency) | (Mathf.Sign(inputVelocity.y) != Mathf.Sign(relativeVelocity.y))) putTogetherVelocity.y = (inputVelocity.y - relativeVelocity.y);
+                    if ((Mathf.Abs(inputVelocity.y) > Mathf.Abs(relativeVelocity.y)) | (Mathf.Sign(inputVelocity.y) != Mathf.Sign(relativeVelocity.y))) putTogetherVelocity.y = (inputVelocity.y - relativeVelocity.y);
                     else putTogetherVelocity.y = 0;
-                    if ((Mathf.Abs(inputVelocity.z) > Mathf.Abs(relativeVelocity.z) + grappleLeniency) | (Mathf.Sign(inputVelocity.z) != Mathf.Sign(relativeVelocity.z))) putTogetherVelocity.z = (inputVelocity.z - relativeVelocity.z);
+                    if ((Mathf.Abs(inputVelocity.z) > Mathf.Abs(relativeVelocity.z)) | (Mathf.Sign(inputVelocity.z) != Mathf.Sign(relativeVelocity.z))) putTogetherVelocity.z = (inputVelocity.z - relativeVelocity.z);
                     else
                     {
                         putTogetherVelocity.z = 0;
-                        Debug.Log("bwaaragagahagahsfghjaklsjsjskjsjsjsj");
+                        //Debug.Log("bwaaragagahagahsfghjaklsjsjskjsjsjsj");
                     }
 
                     rb.AddForce(PlayerCamera.transform.rotation * putTogetherVelocity * tooFastaccel);
@@ -183,7 +191,7 @@ public class PlayerScript : NetworkBehaviour
 
             if (grapplingGunScript.IsGrappling())
             {
-                if (rb.velocity.magnitude < MaxSpeed) rb.AddForce((PlayerCamera.transform.rotation * inputVector * speed));
+                if (rb.velocity.magnitude < BreakNeckSpeed) rb.AddForce((PlayerCamera.transform.rotation * inputVector * speed));
             }
 
         }

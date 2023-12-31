@@ -40,12 +40,14 @@ public class GrapplingGun : NetworkBehaviour {
     [Range(0,1)]
     [SerializeField] float lookAwayLeniency;    
     private Spring spring;
-    [SerializeField] LineRenderer lr;
-    private Vector3 currentGrapplePosition;
+    [SerializeField] LineRenderer VIEWPORT_lr;
+    [SerializeField] LineRenderer EXTERIOR_lr;
+    private Vector3 EXTERIOR_currentGrapplePosition;
+    private Vector3 VIEWPORT_currentGrapplePosition;
     [SerializeField] Transform exterior_gunTip;
     [SerializeField] Transform viewport_gunTip;
-    public Transform ropeGunTip;
-    [SerializeField] GameObject grappleHand;
+    [SerializeField] GameObject VIEWPORT_grappleHand;
+    [SerializeField] GameObject EXTERIOR_grappleHand;
 
     [Header("VERY IMPORTANT")]
     [SerializeField] float ViewportFOV;
@@ -88,20 +90,16 @@ public class GrapplingGun : NetworkBehaviour {
     {
         if (!IsOwner)
         {
-            Debug.Log("wahahahahahah");
-            ropeGunTip = exterior_gunTip;
+            VIEWPORT_lr.gameObject.SetActive(false);
             return;
         }
 
+        VIEWPORT_lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        EXTERIOR_lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+
+
         isGrappling = false;
-
-
-        ropeGunTip = viewport_gunTip;
-             
-
-        
-
-
+       
     }
 
     void Update() 
@@ -223,32 +221,38 @@ public class GrapplingGun : NetworkBehaviour {
 
     void DrawRope()
     {
-        grappleHand.SetActive(isGrappling);
-        //If not grappling, don't draw rope
-        if (!isGrappling)
-        {
-            currentGrapplePosition = ropeGunTip.position;
-            spring.Reset();
-            if (lr.positionCount > 0)
-                lr.positionCount = 0;
-            return;
-        }
 
-        if (lr.positionCount == 0)
-        {
-            spring.SetVelocity(velocity);
-            lr.positionCount = quality + 1;
-        }
-
-        spring.SetDamper(damper);
-        spring.SetStrength(strength);
-        spring.Update(Time.deltaTime);
-
-        var up = Quaternion.LookRotation((grapplePoint - ropeGunTip.position).normalized) * Vector3.up;
-
-        currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * ropeSpeed);
         if (IsOwner)
         {
+            VIEWPORT_grappleHand.SetActive(isGrappling);
+            EXTERIOR_grappleHand.SetActive(isGrappling);
+            if (!isGrappling)
+            {
+                EXTERIOR_currentGrapplePosition = exterior_gunTip.position;
+                VIEWPORT_currentGrapplePosition = viewport_gunTip.position;
+                spring.Reset();
+                if (VIEWPORT_lr.positionCount > 0)
+                    VIEWPORT_lr.positionCount = 0;
+                if (EXTERIOR_lr.positionCount > 0)
+                    EXTERIOR_lr.positionCount = 0;
+                return;
+            }
+
+            if (EXTERIOR_lr.positionCount == 0)
+            {
+                spring.SetVelocity(velocity);
+                EXTERIOR_lr.positionCount = quality + 1;
+                VIEWPORT_lr.positionCount = quality + 1;
+            }
+
+            spring.SetDamper(damper);
+            spring.SetStrength(strength);
+            spring.Update(Time.deltaTime);
+
+
+            Vector3 VIEWPORT_up = Quaternion.LookRotation((grapplePoint - viewport_gunTip.position).normalized) * Vector3.up;
+
+            VIEWPORT_currentGrapplePosition = Vector3.Lerp(VIEWPORT_currentGrapplePosition, grapplePoint, Time.deltaTime * ropeSpeed);
 
             ///NOTE: to optimize try using localPos and caching the converted gun tip so no need for calculation every frame. You have to use local pos so it works properly when reused over time tho
 
@@ -260,10 +264,10 @@ public class GrapplingGun : NetworkBehaviour {
             cam.fieldOfView = ViewportFOV;
 
             // Project the world point to the viewport
-            Vector3 viewportPoint = cam.WorldToViewportPoint(ropeGunTip.position);
+            Vector3 viewportPoint = cam.WorldToViewportPoint(viewport_gunTip.position);
 
             // Calculate the distance from the camera to the world point
-            float distance = Vector3.Distance(cam.transform.position, ropeGunTip.position);
+            float distance = Vector3.Distance(cam.transform.position, viewport_gunTip.position);
 
             // Change the FOV of the camera to a hypothetical value
 
@@ -272,42 +276,67 @@ public class GrapplingGun : NetworkBehaviour {
             // Convert the viewport point back to the world with the new FOV
             Vector3 convertedGunTip = cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
 
-/*            // Print the results
-            Debug.Log("Old world point: " + currentGrapplePosition);
-            Debug.Log("New world point: " + convertedGrapplePosition);*/
+            /*            // Print the results
+                        Debug.Log("Old world point: " + currentGrapplePosition);
+                        Debug.Log("New world point: " + convertedGrapplePosition);*/
 
             // Restore the original FOV of the camera
-            
+
 
 
             for (var i = 0; i < quality + 1; i++)
             {
 
                 var delta = i / (float)quality;
-                var offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
+                var offset = VIEWPORT_up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
 
-                lr.SetPosition(i, Vector3.Lerp(convertedGunTip, currentGrapplePosition, delta) + offset);
+                VIEWPORT_lr.SetPosition(i, Vector3.Lerp(convertedGunTip, VIEWPORT_currentGrapplePosition, delta) + offset);
             }
 
 
-            grappleHand.transform.position = lr.GetPosition(quality);
+            VIEWPORT_grappleHand.transform.position = VIEWPORT_lr.GetPosition(quality);
 
+        }
+        else
+        {
+            EXTERIOR_grappleHand.SetActive(isGrappling);
+            if (!isGrappling)
+            {
+                EXTERIOR_currentGrapplePosition = exterior_gunTip.position;
+                spring.Reset();
+                if (VIEWPORT_lr.positionCount > 0)
+                    VIEWPORT_lr.positionCount = 0;
+                if (EXTERIOR_lr.positionCount > 0)
+                    EXTERIOR_lr.positionCount = 0;
+                return;
+            }
 
-            return;
+            if (EXTERIOR_lr.positionCount == 0)
+            {
+                spring.SetVelocity(velocity);
+                EXTERIOR_lr.positionCount = quality + 1;
+            }
+
+            spring.SetDamper(damper);
+            spring.SetStrength(strength);
+            spring.Update(Time.deltaTime);
+
         }
 
-        //else
+        Vector3 EXTERIOR_up = Quaternion.LookRotation((grapplePoint - exterior_gunTip.position).normalized) * Vector3.up;
+
+        EXTERIOR_currentGrapplePosition = Vector3.Lerp(VIEWPORT_currentGrapplePosition, grapplePoint, Time.deltaTime * ropeSpeed);
 
         for (var i = 0; i < quality + 1; i++)
         {
 
             var delta = i / (float)quality;
-            var offset = up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
+            var offset = EXTERIOR_up * waveHeight * Mathf.Sin(delta * waveCount * Mathf.PI) * spring.Value * affectCurve.Evaluate(delta);
 
-            lr.SetPosition(i, Vector3.Lerp(ropeGunTip.position, currentGrapplePosition, delta) + offset);
+            EXTERIOR_lr.SetPosition(i, Vector3.Lerp(exterior_gunTip.position, EXTERIOR_currentGrapplePosition, delta) + offset);
         }
         
-        grappleHand.transform.position = lr.GetPosition(quality);
+        EXTERIOR_grappleHand.transform.position = EXTERIOR_lr.GetPosition(quality);
 
     }
 

@@ -92,7 +92,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5337036994444817845}
-  - component: {fileID: 527829570802693708}
+  - component: {fileID: 6520297417153422447}
   m_Layer: 0
   m_Name: AR
   m_TagString: Untagged
@@ -116,7 +116,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &527829570802693708
+--- !u!114 &6520297417153422447
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -128,8 +128,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45b5b5ae217611047a71caf1eddf20f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player_animatorOverrideController: {fileID: 0}
-  Gun_animatorOverrideController: {fileID: 0}
-  maxAmmo_Mag: 150
-  maxAmmo_Inventory: 600
-  BPS: 10
+  FireInput: {fileID: 1203331415346767575, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  VM_Player_animatorOverrideController: {fileID: 0}
+  VM_Weapon_animatorOverrideController: {fileID: 0}
+  EXT_Player_animatorOverrideController: {fileID: 0}
+  EXT_Weapon_animatorOverrideController: {fileID: 0}
+  maxAmmo_Mag: 0
+  maxAmmo_Inventory: 0
+  BPS: 0

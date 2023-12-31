@@ -8,11 +8,14 @@ using UnityEngine.InputSystem;
 public class Player_Inventory : MonoBehaviour
 {
     [SerializeField] int MaxWeapons;
-    public List<GameObject> Weapon_Inventory;
-    private GameObject currentWeapon;
+    public List<WeaponClass> Weapon_Inventory;
+    //private GameObject currentWeapon;
     private int current_Index;
-    [SerializeField] GameObject testWeapon;
+    [SerializeField] WeaponClass testWeapon;
     [SerializeField] InputActionReference SwitchWeapon;
+    [SerializeField] WeaponManager WeaponManager;
+
+    private WeaponClass currentWeapon;
 
     // Start is called before the first frame update
     void Awake()
@@ -27,7 +30,7 @@ public class Player_Inventory : MonoBehaviour
     private void Update()
     {
         ChangeCurrentWeapon((int)SwitchWeapon.action.ReadValue<float>());;
-        Debug.Log(current_Index);
+        //Debug.Log(current_Index);
        // if ( != 0) Debug.Log(SwitchWeapon.action.ReadValue<float>());
     }
 
@@ -48,7 +51,7 @@ public class Player_Inventory : MonoBehaviour
 
 
 
-    public void GiveWeapon(GameObject weapon)
+    public void GiveWeapon(WeaponClass weapon)
     {
         if (Weapon_Inventory.Count >= MaxWeapons)
         {
@@ -74,5 +77,11 @@ public class Player_Inventory : MonoBehaviour
         currentWeapon = Weapon_Inventory[index];
         current_Index = index;
 
+    }
+
+
+    public WeaponClass GetCurrentWeapon()
+    {
+        return currentWeapon;
     }
 }

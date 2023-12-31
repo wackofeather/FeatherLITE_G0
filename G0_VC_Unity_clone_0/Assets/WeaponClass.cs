@@ -1,42 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class WeaponClass : MonoBehaviour
 {
-    [SerializeField] AnimatorOverrideController Player_animatorOverrideController;
-    [SerializeField] AnimatorOverrideController Gun_animatorOverrideController;
-    private Vector3 position;
-    private int array_spot;
+    [SerializeField] protected InputActionReference FireInput;
+    [Header("ViewModel")]
+    [SerializeField] protected AnimatorOverrideController VM_Player_animatorOverrideController;
+    [SerializeField] protected AnimatorOverrideController VM_Weapon_animatorOverrideController;
+    [Header("Exterior")]
+    [SerializeField] protected AnimatorOverrideController EXT_Player_animatorOverrideController;
+    [SerializeField] protected AnimatorOverrideController EXT_Weapon_animatorOverrideController;
 
 
-
-
-
-
-
-    public int ArraySpot()
-    {
-        return array_spot;
-    }
-
-
-
-
-
-    public WeaponClass clone(int arraySpot)
-    {
-        WeaponClass clone = new WeaponClass();
-        clone.setAttributes(Player_animatorOverrideController, Gun_animatorOverrideController, position, arraySpot);
-        return clone;
-    }    
+    public virtual void UseWeapon() { }
     
-    
-    void setAttributes(AnimatorOverrideController Player_animatorOverrideController_input, AnimatorOverrideController Gun_animatorOverrideController_input, Vector3 position_input, int array_spot_input)
-    {
-        Player_animatorOverrideController = Player_animatorOverrideController_input;
-        Gun_animatorOverrideController = Gun_animatorOverrideController_input;
-        position = position_input;
-        array_spot = array_spot_input;
-    }
 }

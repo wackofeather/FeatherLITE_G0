@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class ExteriorShadowSwitch : MonoBehaviour
 {
-    public List<MeshRenderer> renderers = new List<MeshRenderer>();
+    public List<Renderer> renderers = new List<Renderer>();
 
     private void Awake()
     {
-        renderers = GetComponentsInChildren<MeshRenderer>().ToList();
+        renderers = GetComponentsInChildren<Renderer>().ToList();
     }
     public void ShadowsOnly(bool boolean)
     {

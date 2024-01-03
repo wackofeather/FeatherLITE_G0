@@ -128,11 +128,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45b5b5ae217611047a71caf1eddf20f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FireInput: {fileID: 1203331415346767575, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  fireInput: {fileID: 1203331415346767575, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  scope: {fileID: -2653568425862354484, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   VM_Player_animatorOverrideController: {fileID: 0}
   VM_Weapon_animatorOverrideController: {fileID: 0}
   EXT_Player_animatorOverrideController: {fileID: 0}
   EXT_Weapon_animatorOverrideController: {fileID: 0}
+  isShooting: 0
+  isScoping: 0
   maxAmmo_Mag: 0
   maxAmmo_Inventory: 0
   BPS: 0

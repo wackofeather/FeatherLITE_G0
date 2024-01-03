@@ -162,7 +162,8 @@ public class GrapplingGun : NetworkBehaviour {
     {
         while (true)
         {
-            
+            if (!isGrappling) yield break;
+
             float ClampedDistance = (player.position - grapplePoint).magnitude / maxDistance;
             float Angle = Vector3.Angle(Playercamera.transform.forward, (grapplePoint - Playercamera.position));
 

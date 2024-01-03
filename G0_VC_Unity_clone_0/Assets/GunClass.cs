@@ -12,6 +12,27 @@ public class GunClass : WeaponClass
     public override void UseWeapon()
     {
         base.UseWeapon();
-        if (FireInput.action.IsPressed()) Debug.Log("pew pew");
+        if (fireInput.action.IsPressed()) isShooting = true;
+        else isShooting = false;
+        Debug.Log(isShooting);
+    }
+
+    public override void Scope()
+    {
+        base.Scope();
+
+        if (scope.action.IsPressed()) isScoping = true;
+        else isScoping = false;
+
+    }
+
+
+    public override void Animate()
+    {
+        base.Animate();
+
+        test_animator.SetBool("Scoping", isScoping);
+
+        test_animator.SetBool("Firing", isShooting);
     }
 }

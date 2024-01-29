@@ -848,6 +848,7 @@ GameObject:
   - component: {fileID: 2920028746863420631}
   - component: {fileID: -3036239568206950947}
   - component: {fileID: 1564597625595317825}
+  - component: {fileID: 7369457806054413757}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -971,6 +972,7 @@ MonoBehaviour:
   BreakNeckSpeed: 10
   grapplingGunScript: {fileID: 1199171846237049367}
   lineRenderer: {fileID: 8217942930679748817}
+  CanMove: 0
 --- !u!114 &-3036239568206950947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1010,6 +1012,21 @@ MonoBehaviour:
   rotatables: {fileID: 3205671146708248980}
   playerScript: {fileID: 2920028746863420631}
   grapplingScript: {fileID: 1199171846237049367}
+--- !u!114 &7369457806054413757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2920028746863420624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0002326aeee43749805f34115ff05d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grappleScript: {fileID: 1199171846237049367}
+  playerScript: {fileID: 2920028746863420631}
+  MeleeAction: {fileID: -5764667613011676199, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
 --- !u!1 &3511650414507195146
 GameObject:
   m_ObjectHideFlags: 0
@@ -1604,10 +1621,10 @@ MonoBehaviour:
   jointMassScale: 4.5
   quality: 500
   damper: 14
-  strength: 700
+  strength: 600
   velocity: 15
   waveCount: 3
-  waveHeight: 9.2
+  waveHeight: 17.12
   ropeSpeed: 10
   affectCurve:
     serializedVersion: 2
@@ -1622,13 +1639,22 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0.14782113
     - serializedVersion: 3
-      time: 1
-      value: 0
+      time: 0.6690055
+      value: -0.010148662
       inSlope: 0
       outSlope: 0
-      tangentMode: 34
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0.052498102
+      outSlope: 0.052498102
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.40282643
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1667,6 +1693,7 @@ MonoBehaviour:
   VIEWPORT_grappleHand: {fileID: 5975438975082879522}
   EXTERIOR_grappleHand: {fileID: 9119124232412013355}
   ViewportFOV: 40
+  allowedToGrapple: 0
 --- !u!114 &5184948639662322760
 MonoBehaviour:
   m_ObjectHideFlags: 0

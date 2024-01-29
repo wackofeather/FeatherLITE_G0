@@ -59,11 +59,11 @@ public class PlayerScript : NetworkBehaviour
 
 
     [SerializeField] UnityEngine.LineRenderer lineRenderer;
-   
 
 
 
 
+    public bool CanMove;
 
 
 
@@ -156,7 +156,7 @@ public class PlayerScript : NetworkBehaviour
     {
        
 
-        if (!IsOwner) return;
+        if (!IsOwner | !CanMove) return;
 
         //Debug.Log(grapplingGunScript.IsGrappling());
 

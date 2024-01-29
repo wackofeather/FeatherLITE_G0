@@ -21,8 +21,8 @@ public class GunClass : WeaponClass
     {
         base.Scope();
 
-        if (scope.action.IsPressed()) isScoping = true;
-        else isScoping = false;
+        if (scope.action.IsPressed()) StartScope();
+        else StopScope();
 
     }
 
@@ -35,4 +35,7 @@ public class GunClass : WeaponClass
 
         test_animator.SetBool("Firing", isShooting);
     }
+
+    public void StartScope() { isScoping = true; }
+    public void StopScope() { isScoping = false; }
 }

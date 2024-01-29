@@ -51,10 +51,12 @@ public class GrapplingGun : NetworkBehaviour {
 
     [Header("VERY IMPORTANT")]
     [SerializeField] float ViewportFOV;
+
+    public bool allowedToGrapple;
     //method overloading with multiple versions of bool
     private bool CanGrapple(out RaycastHit hit)
     {
-        if (isGrappling)
+        if (isGrappling | !allowedToGrapple)
         {
             hit = default;
             return false;
@@ -193,6 +195,8 @@ public class GrapplingGun : NetworkBehaviour {
 
     public void StopGrapple()
     {
+        if (!isGrappling) return;
+
         Destroy(joint);
 
 

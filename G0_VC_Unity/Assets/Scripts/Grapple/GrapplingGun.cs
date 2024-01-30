@@ -6,101 +6,27 @@ using Unity.Netcode;
 using static UnityEngine.GraphicsBuffer;
 using System.Drawing;
 
+public partial class  PlayerBase
+{
+    
+}
 public class GrapplingGun : NetworkBehaviour {
 
-    [Header("Rope Logic")]
 
-    public Vector3 grapplePoint;
-    public LayerMask whatIsGrappleable;
-    public Transform Playercamera;
-    public Rigidbody player;
-    private float maxDistance = 100f;
-    private SpringJoint joint;
-    [SerializeField] InputActionReference Grapple;
-    [Range(0f, 100f)]
-    [SerializeField] float grappleSpeed;
-    [SerializeField] float jointDamper;
-    [SerializeField] float jointSpring;
-    [SerializeField] float jointMassScale;
-
-    [Header("Rope Graphics")]
-
-
-    public int quality;
-    public float damper;
-    public float strength;
-    public float velocity;
-    public float waveCount;
-    public float waveHeight;
-    [SerializeField] float ropeSpeed;
-    public AnimationCurve affectCurve;
-    public AnimationCurve retractCurve;
-    [SerializeField] float retractSpeed;
-    public bool isGrappling;
-    [Range(0,1)]
-    [SerializeField] float lookAwayLeniency;    
-    private Spring spring;
-    [SerializeField] LineRenderer VIEWPORT_lr;
-    [SerializeField] LineRenderer EXTERIOR_lr;
-    private Vector3 EXTERIOR_currentGrapplePosition;
-    private Vector3 VIEWPORT_currentGrapplePosition;
-    [SerializeField] Transform exterior_gunTip;
-    [SerializeField] Transform viewport_gunTip;
-    [SerializeField] GameObject VIEWPORT_grappleHand;
-    [SerializeField] GameObject EXTERIOR_grappleHand;
-
-    [Header("VERY IMPORTANT")]
-    [SerializeField] float ViewportFOV;
-
-    public bool allowedToGrapple;
     //method overloading with multiple versions of bool
-    private bool CanGrapple(out RaycastHit hit)
-    {
-        if (isGrappling | !allowedToGrapple)
-        {
-            hit = default;
-            return false;
-        }
-        else
-        {
-            RaycastHit hitinfo;
-            bool canGrapple = Physics.Raycast(Playercamera.position, Playercamera.forward, out hitinfo, maxDistance, whatIsGrappleable);
-            hit = hitinfo;
-            return canGrapple;
-        }
-        
-    }
-    public bool CanGrapple()
-    {
-        if (isGrappling)
-        {
-            return false;
-        }
-        else return Physics.Raycast(Playercamera.position, Playercamera.forward, maxDistance, whatIsGrappleable);
-    }
+
 
 
     void Awake()
     {
         
-        spring = new Spring();
-        spring.SetTarget(0);
+        
 
     }
 
     private void Start()
     {
-        if (!IsOwner)
-        {
-            VIEWPORT_lr.gameObject.SetActive(false);
-            return;
-        }
-
-        VIEWPORT_lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        EXTERIOR_lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
-
-
-        isGrappling = false;
+       
        
     }
 

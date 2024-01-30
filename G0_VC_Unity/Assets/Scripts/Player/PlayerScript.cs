@@ -2,75 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class PlayerScript : NetworkBehaviour
+public class PlayerScript : PlayerBase, IPlayerInterface
 {
-    [SerializeField] Rigidbody rb;
-    [SerializeField] InputActionReference move;
-    [SerializeField] InputActionReference fire;
-    [SerializeField] InputActionReference scope;
-    [SerializeField] InputActionReference pause;
-    [SerializeField] InputActionReference Unpause;
 
-    [SerializeField] Transform Rotatables;
-    [SerializeField] Transform PlayerCamera;
-    [SerializeField] Transform CameraHolder;
-    [SerializeField] Transform Exterior;
-    [SerializeField] Transform Viewport;
-
-    [SerializeField] List<GameObject> OwnerOnlyObjects;
-    [SerializeField] List<GameObject> DummyOnlyObjects;
-
-    [SerializeField] float speed;
-    [SerializeField] float mouseSens;
-    [SerializeField] float accel;
-    [SerializeField] float tooFastaccel;
-    [SerializeField] float BreakNeckSpeed;
-
-
-
-
-
-
-    Vector3 inputVector;
-
-    float xRotation = 0;
-    float yRotation = 0;
-
-    private Vector3 putTogetherVelocity;
-
-
-
-
-
-
-
-    /// <summary>
-    /// grapple
-    /// </summary>
-
-
-
-    [SerializeField] GrapplingGun grapplingGunScript;
-
-    
-
-
-
-    [SerializeField] UnityEngine.LineRenderer lineRenderer;
-
-
-
-
-    public bool CanMove;
-
-
-
-
-
-
-
+    public PlayerStateMachine StateMachine;
+    public RegularState RegularState;
+    public GrapplingState GrapplingState;
+    public MeleeState MeleeState;
 
     public override void OnNetworkSpawn()
     {
@@ -87,6 +28,11 @@ public class PlayerScript : NetworkBehaviour
             //foreach (Transform child in Exterior) child.gameObject.SetActive(false);
             Debug.Log("host joined");
             Exterior.GetComponent<ExteriorShadowSwitch>().ShadowsOnly(true);
+
+            RegularState = new RegularState(this, StateMachine);
+            GrapplingState = new GrapplingState(this, StateMachine);
+            MeleeState = new MeleeState(this, StateMachine);
+
         }
 
     }
@@ -107,6 +53,8 @@ public class PlayerScript : NetworkBehaviour
     {
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
+
+        StateMachine.Initialize(RegularState);
     }
 
 
@@ -126,27 +74,11 @@ public class PlayerScript : NetworkBehaviour
         }
 
 
-        
+
         ///if isOwner
+        ///
 
-        inputVector = move.action.ReadValue<Vector3>();
-        float mouseX = Input.GetAxis("Mouse X") * mouseSens;
-
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSens;
-
-
-
-        xRotation -= mouseY;
-        yRotation += mouseX;
-
-        xRotation = Mathf.Clamp(xRotation, -90, 90);
-
-
-        Rotatables.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
-        PlayerCamera.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
-
-        if (pause.action.triggered) Cursor.lockState = CursorLockMode.None;
-        if(Unpause.action.triggered) Cursor.lockState = CursorLockMode.Confined;
+        StateMachine.CurrentPlayerState.Update();
 
         //Debug.Log(rb.velocity.magnitude);
 
@@ -157,6 +89,8 @@ public class PlayerScript : NetworkBehaviour
        
 
         if (!IsOwner | !CanMove) return;
+
+        StateMachine.CurrentPlayerState.FixedUpdate();
 
         //Debug.Log(grapplingGunScript.IsGrappling());
 
@@ -197,4 +131,6 @@ public class PlayerScript : NetworkBehaviour
         }
 
     }
+
+
 }

@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class PlayerStateMachine
 {
-    public PlayerBase.BasePlayerState CurrentPlayerState { get; private set; }
+    public PlayerBase.BasePlayerState CurrentPlayerState;
 
     public void Initialize(PlayerBase.BasePlayerState startingState)
     {
         CurrentPlayerState = startingState;
         CurrentPlayerState.EnterState();
+        Debug.Log("STAAAAAAAAAAAAAAAAAAAAAAAAAARRRRRRRRRRRRRRRRTTTTTIIIINNNNNNGGGGGGGGG");
     }
 
     public void ChangeState(PlayerBase.BasePlayerState newState)

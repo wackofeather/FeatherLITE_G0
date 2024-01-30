@@ -25,6 +25,7 @@ public partial class PlayerBase
         }
         public virtual void Update()
         {
+
             player.inputVector = player.move.action.ReadValue<Vector3>();
             float mouseX = Input.GetAxis("Mouse X") * player.mouseSens;
 

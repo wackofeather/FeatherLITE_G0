@@ -1571,6 +1571,7 @@ GameObject:
   - component: {fileID: 5230236037117931691}
   - component: {fileID: 1199171846237049367}
   - component: {fileID: 5184948639662322760}
+  - component: {fileID: 3524589570143911055}
   m_Layer: 0
   m_Name: Grappler
   m_TagString: Untagged
@@ -1737,6 +1738,30 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   grappleHand: {fileID: 7461241620872723705}
+--- !u!114 &3524589570143911055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8052138231561209821}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 133523389af84924ea4332586b15e54b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  GrapplePoint: {fileID: 0}
+  Camera: {fileID: 5087725685347788842}
+  lineRenderer: {fileID: 8217942930679748817}
+  grappleHand: {fileID: 7461241620872723705}
+  player: {fileID: 2920028746863420625}
+  grappleSpeed: 1
+  grappleLayerMask:
+    serializedVersion: 2
+    m_Bits: 127
+  grappleHit: {x: 0, y: 0, z: 0}
+  isGrappling: 0
 --- !u!1 &8815168177392360592
 GameObject:
   m_ObjectHideFlags: 0

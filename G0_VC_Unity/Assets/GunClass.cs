@@ -14,7 +14,7 @@ public class GunClass : WeaponClass
         base.UseWeapon();
         if (fireInput.action.IsPressed()) isShooting = true;
         else isShooting = false;
-        //Debug.Log(isShooting);
+        Debug.Log(isShooting);
     }
 
     public override void Scope()

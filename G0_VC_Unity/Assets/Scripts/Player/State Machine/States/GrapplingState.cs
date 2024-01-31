@@ -6,7 +6,7 @@ public partial class PlayerBase
 {
     public class GrapplingState : BasePlayerState
     {
-        public GrapplingState(PlayerScript player, PlayerStateMachine playerStateMachine) : base(player, playerStateMachine)
+        public GrapplingState(PlayerBase player, PlayerStateMachine playerStateMachine) : base(player, playerStateMachine)
         {
         }
 
@@ -28,6 +28,7 @@ public partial class PlayerBase
         public override void FixedUpdate()
         {
             base.FixedUpdate();
+            if (player.rb.velocity.magnitude < player.BreakNeckSpeed) player.rb.AddForce((player.PlayerCamera.transform.rotation * player.inputVector * player.speed));
         }
 
         public override void Update()

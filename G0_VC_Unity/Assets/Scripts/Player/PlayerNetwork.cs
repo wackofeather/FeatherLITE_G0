@@ -15,8 +15,7 @@ public class PlayerNetwork : NetworkBehaviour
     [SerializeField] private GameObject Exterior;
     [SerializeField] private GameObject Viewport;
     [SerializeField] Transform rotatables;
-    [SerializeField] PlayerScript playerScript;
-    [SerializeField] GrapplingGun grapplingScript;
+    [SerializeField] PlayerStateMachine playerStateMachine;
     private NetworkVariable<PlayerNetworkState> _playerState;
     private Rigidbody _rb;
 
@@ -42,8 +41,8 @@ public class PlayerNetwork : NetworkBehaviour
         {
             Position = _rb.position,
             Rotation = rotatables.transform.rotation.eulerAngles,
-            isGrappling_internal = grapplingScript.isGrappling,
-            GrapplePosition = grapplingScript.grapplePoint
+            isGrappling_internal = playerStateMachine.isGrappling,
+            GrapplePosition = playerStateMachine.grapplePoint
         };
 
         if (IsServer || !_serverAuth)
@@ -81,8 +80,8 @@ public class PlayerNetwork : NetworkBehaviour
 
 
 
-        grapplingScript.grapplePoint = _playerState.Value.GrapplePosition;
-        grapplingScript.isGrappling = _playerState.Value.isGrappling_internal;
+        playerStateMachine.grapplePoint = _playerState.Value.GrapplePosition;
+        playerStateMachine.isGrappling = _playerState.Value.isGrappling_internal;
     }
 
     #endregion

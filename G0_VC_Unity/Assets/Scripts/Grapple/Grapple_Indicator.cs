@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Grapple_Indicator : MonoBehaviour
 {
-    [SerializeField] GrapplingGun grappleScript;
+    [SerializeField] PlayerStateMachine playerStateMachine;
     [SerializeField] Image GrappleIndicator;
     [SerializeField] Color NoGrappleColor;
     [SerializeField] Color GrappleColor;
@@ -13,7 +13,7 @@ public class Grapple_Indicator : MonoBehaviour
 
     void Update()
     {
-        if (grappleScript.CanGrapple()) GrappleIndicator.color = GrappleColor;
+        if (playerStateMachine.CanGrapple()) GrappleIndicator.color = GrappleColor;
         else GrappleIndicator.color = NoGrappleColor;
     }
 }

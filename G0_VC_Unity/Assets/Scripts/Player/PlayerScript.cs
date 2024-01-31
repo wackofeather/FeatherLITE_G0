@@ -9,9 +9,69 @@ public class PlayerScript : PlayerBase, IPlayerInterface
 {
 
     public PlayerStateMachine StateMachine;
-    public new RegularState RegularState;
-    public new GrapplingState GrapplingState;
-    public new MeleeState MeleeState;
+    public RegularState RegularState;
+    public GrapplingState GrapplingState;
+    public MeleeState MeleeState;
+
+
+    public Rigidbody rb;
+    public InputActionReference move;
+    public InputActionReference fire;
+    public InputActionReference scope;
+    public InputActionReference pause;
+    public InputActionReference Unpause;
+
+    public Transform Rotatables;
+    public Transform PlayerCamera;
+    public Transform CameraHolder;
+    public Transform Exterior;
+    public Transform Viewport;
+
+    public List<GameObject> OwnerOnlyObjects;
+    public List<GameObject> DummyOnlyObjects;
+
+    public float speed;
+    public float mouseSens;
+    public float accel;
+    public float tooFastaccel;
+    public float BreakNeckSpeed;
+
+
+
+
+
+
+    [DoNotSerialize] public Vector3 inputVector;
+
+    [DoNotSerialize] public float xRotation = 0;
+    [DoNotSerialize] public float yRotation = 0;
+
+    [DoNotSerialize] public Vector3 putTogetherVelocity;
+
+
+
+
+
+
+
+    /// <summary>
+    /// grapple
+    /// </summary>
+
+
+
+    public GrapplingGun grapplingGunScript;
+
+
+
+
+
+    public UnityEngine.LineRenderer lineRenderer;
+
+
+
+
+    public bool CanMove;
 
     public override void OnNetworkSpawn()
     {
@@ -30,10 +90,7 @@ public class PlayerScript : PlayerBase, IPlayerInterface
             Exterior.GetComponent<ExteriorShadowSwitch>().ShadowsOnly(true);
 
 
-            StateMachine = new PlayerStateMachine();
-            RegularState = new RegularState(this as PlayerBase, StateMachine);
-            GrapplingState = new GrapplingState(this as PlayerBase, StateMachine);
-            MeleeState = new MeleeState(this as PlayerBase, StateMachine);
+
 
         }
 
@@ -56,20 +113,6 @@ public class PlayerScript : PlayerBase, IPlayerInterface
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
 
-        spring = new Spring();
-        spring.SetTarget(0);
-
-        if (!IsOwner)
-        {
-            VIEWPORT_lr.gameObject.SetActive(false);
-            return;
-        }
-
-        VIEWPORT_lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        EXTERIOR_lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
-
-
-        isGrappling = false;
 
         StateMachine.Initialize(RegularState);
     }
@@ -90,7 +133,21 @@ public class PlayerScript : PlayerBase, IPlayerInterface
             return;
         }
 
+        inputVector = move.action.ReadValue<Vector3>();
+        float mouseX = Input.GetAxis("Mouse X") * mouseSens;
 
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSens;
+
+
+
+        xRotation -= mouseY;
+        yRotation += mouseX;
+
+        xRotation = Mathf.Clamp(xRotation, -90, 90);
+
+
+        Rotatables.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+        PlayerCamera.localRotation = Quaternion.Euler(xRotation,  yRotation, 0);
 
         ///if isOwner
         ///

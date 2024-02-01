@@ -58,7 +58,7 @@ public class RegularState : BasePlayerState
     public override void Update()
     {
         base.Update();
-        Debug.Log(player.quality);
+        //Debug.Log(player.quality);
         if (player.Grapple.action.triggered)
         {
             if (player.CanGrapple()) player.ChangeState(player.GrapplingState);

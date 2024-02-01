@@ -434,7 +434,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5268612320518702280}
   - component: {fileID: 8217942930679748817}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Viewport_GrapplingLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1475,7 +1475,7 @@ GameObject:
   - component: {fileID: 4095384570556374330}
   - component: {fileID: 2938498487372246078}
   - component: {fileID: 2687621510525421848}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Viewport_GrappleHand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1717,7 +1717,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8052138231561209821}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f9b388e793956f4ea083828bd957179, type: 3}
   m_Name: 

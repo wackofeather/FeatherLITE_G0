@@ -20,7 +20,11 @@ public class GrapplingState : BasePlayerState
     {
         base.EnterState();
 
+        player.EXTERIOR_currentGrapplePosition = player.exterior_gunTip.position;
+
         player.EXTERIOR_grappleHand.SetActive(true);
+        
+        player.EXTERIOR_grappleHand.transform.position = player.exterior_gunTip.position;
         player.EXTERIOR_lr.positionCount = player.quality + 1;
         player.spring.SetVelocity(player.velocity);
 
@@ -29,7 +33,7 @@ public class GrapplingState : BasePlayerState
             return;
         }
 
-
+        player.VIEWPORT_currentGrapplePosition = player.viewport_gunTip.position;
 
         RaycastHit hit = player.GrappleCheck();
         player.grapplePoint = hit.point;
@@ -54,6 +58,7 @@ public class GrapplingState : BasePlayerState
         player.isGrappling = true;
 
         player.VIEWPORT_grappleHand.SetActive(true);
+        player.VIEWPORT_grappleHand.transform.position = player.viewport_gunTip.position;
         //player.lineRenderer.enabled = true;
         player.VIEWPORT_lr.positionCount = player.quality + 1;
 
@@ -67,6 +72,7 @@ public class GrapplingState : BasePlayerState
         base.ExitState();
         if (!player.IsOwner)
         {
+            player.EXTERIOR_grappleHand.transform.position = player.exterior_gunTip.position;
             player.EXTERIOR_grappleHand.SetActive(false);
            // player.lineRenderer.enabled = false;
             player.EXTERIOR_currentGrapplePosition = player.exterior_gunTip.position;
@@ -85,6 +91,12 @@ public class GrapplingState : BasePlayerState
         player.spring.Reset();
         player.VIEWPORT_lr.positionCount = 0;
         player.EXTERIOR_lr.positionCount = 0;
+
+
+        player.EXTERIOR_grappleHand.transform.position = player.exterior_gunTip.position;
+        player.VIEWPORT_grappleHand.transform.position = player.viewport_gunTip.position;
+        player.EXTERIOR_grappleHand.SetActive(false);
+        player.VIEWPORT_grappleHand.SetActive(false);
 
         player.isGrappling = false;
         

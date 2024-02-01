@@ -215,12 +215,6 @@ public class PlayerStateMachine : NetworkBehaviour
         }
 
 
-        Initialize(RegularState);
-
-    }
-
-    private void Start()
-    {
         VIEWPORT_lr.positionCount = 0;
         EXTERIOR_lr.positionCount = 0;
         if (!IsOwner)
@@ -234,6 +228,14 @@ public class PlayerStateMachine : NetworkBehaviour
 
 
         isGrappling = false;
+
+        Initialize(RegularState);
+
+    }
+
+    private void Start()
+    {
+
     }
 
     private void Update()

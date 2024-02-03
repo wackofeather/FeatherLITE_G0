@@ -1671,9 +1671,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StateMachine: {fileID: 0}
-  RegularState: {fileID: 0}
-  GrapplingState: {fileID: 0}
-  MeleeState: {fileID: 0}
   rb: {fileID: 2920028747988176637}
   move: {fileID: -2513984626473278120, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   fire: {fileID: 1203331415346767575, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}

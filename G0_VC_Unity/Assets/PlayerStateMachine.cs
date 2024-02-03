@@ -235,7 +235,8 @@ public class PlayerStateMachine : NetworkBehaviour
 
     private void Start()
     {
-
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     private void Update()

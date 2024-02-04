@@ -1088,6 +1088,9 @@ MonoBehaviour:
   viewport_gunTip: {fileID: 2803622966508885609}
   VIEWPORT_grappleHand: {fileID: 5975438975082879522}
   EXTERIOR_grappleHand: {fileID: 9119124232412013355}
+  player_anim_controller: {fileID: 8585395096242110883}
+  isGrappling: 0
+  isScoping: 0
   ViewportFOV: 40
 --- !u!114 &-3036239568206950947
 MonoBehaviour:

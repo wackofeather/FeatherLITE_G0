@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static PlayerBase;
+//using static PlayerBase;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
 using Unity.Netcode;
+using UnityEditor.Animations;
 
 public class PlayerStateMachine : NetworkBehaviour
 {
@@ -117,7 +118,6 @@ public class PlayerStateMachine : NetworkBehaviour
     public AnimationCurve affectCurve;
     public AnimationCurve retractCurve;
     public float retractSpeed;
-    [System.NonSerialized] public bool isGrappling;
     [Range(0, 1)]
     public float lookAwayLeniency;
     [System.NonSerialized] public Spring spring;
@@ -129,6 +129,11 @@ public class PlayerStateMachine : NetworkBehaviour
     public Transform viewport_gunTip;
     public GameObject VIEWPORT_grappleHand;
     public GameObject EXTERIOR_grappleHand;
+
+    [Header("Animation")]
+    public Animator player_anim_controller;
+    public bool isGrappling;
+    public bool isScoping;
 
     [Header("VERY IMPORTANT")]
     public float ViewportFOV;
@@ -236,12 +241,19 @@ public class PlayerStateMachine : NetworkBehaviour
     private void Start()
     {
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Locked;
+
+        isGrappling = false;
+        isScoping = false;
     }
 
     private void Update()
     {
         CurrentPlayerState.Update();
+
+        //animator
+        player_anim_controller.SetBool("Grappling", isGrappling);
+        player_anim_controller.SetBool("Scoping", isScoping);
     }
 
     private void FixedUpdate()

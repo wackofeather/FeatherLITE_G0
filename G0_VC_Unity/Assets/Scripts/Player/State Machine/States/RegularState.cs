@@ -9,11 +9,16 @@ public class RegularState : BasePlayerState
     public override void AnimationTriggerEvent()
     {
         base.AnimationTriggerEvent();
+        player.player_anim_controller.SetBool("Grappling", player.isGrappling);
+        player.player_anim_controller.SetBool("Scoping", player.isScoping);
     }
 
     public override void EnterState()
     {
         base.EnterState();
+
+
+        AnimationTriggerEvent();
     }
 
     public override void ExitState()

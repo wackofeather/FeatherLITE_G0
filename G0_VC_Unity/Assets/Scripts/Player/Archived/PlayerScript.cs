@@ -5,7 +5,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class PlayerScript : PlayerBase, IPlayerInterface
+public class PlayerScript : NetworkBehaviour, IPlayerInterface
 {
 
     public PlayerStateMachine StateMachine;

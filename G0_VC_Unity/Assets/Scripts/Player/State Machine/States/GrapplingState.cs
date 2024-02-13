@@ -70,6 +70,7 @@ public class GrapplingState : BasePlayerState
     public override void ExitState()
     {
         base.ExitState();
+
         if (!player.IsOwner)
         {
             player.EXTERIOR_grappleHand.transform.position = player.exterior_gunTip.position;
@@ -105,6 +106,11 @@ public class GrapplingState : BasePlayerState
     public override void FixedUpdate()
     {
         base.FixedUpdate();
+        if (Vector3.Distance(player.rb.position, player.grapplePoint) > 0.25f)
+        {
+            //if (Vector3.Distance(player.position, grapplePoint) < joint.maxDistance - grappleSpeed * Time.deltaTime) joint.maxDistance = Vector3.Distance(player.position, grapplePoint);
+            player.joint.maxDistance -= player.grappleSpeed * Time.fixedDeltaTime;
+        }
 
     }
 
@@ -221,16 +227,9 @@ public class GrapplingState : BasePlayerState
 
             if (player.Grapple.action.WasReleasedThisFrame()) break;
 
-
-            if (Vector3.Distance(player.rb.position, player.grapplePoint) > 0.25f)
-            {
-                //if (Vector3.Distance(player.position, grapplePoint) < joint.maxDistance - grappleSpeed * Time.deltaTime) joint.maxDistance = Vector3.Distance(player.position, grapplePoint);
-                player.joint.maxDistance -= player.grappleSpeed * Time.deltaTime;
-            }
-
             yield return null;
         }
-        Debug.Log("exitingigngigngingigngign");
+        //Debug.Log("exitingigngigngingigngign");
         player.ChangeState(player.RegularState);
         yield break;
     }

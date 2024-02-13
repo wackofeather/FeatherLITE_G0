@@ -1,3 +1,4 @@
+using System.Threading;
 using UnityEngine;
 
 public class RegularState : BasePlayerState
@@ -9,16 +10,11 @@ public class RegularState : BasePlayerState
     public override void AnimationTriggerEvent()
     {
         base.AnimationTriggerEvent();
-        player.player_anim_controller.SetBool("Grappling", player.isGrappling);
-        player.player_anim_controller.SetBool("Scoping", player.isScoping);
     }
 
     public override void EnterState()
     {
         base.EnterState();
-
-
-        AnimationTriggerEvent();
     }
 
     public override void ExitState()
@@ -37,7 +33,7 @@ public class RegularState : BasePlayerState
 
         if (player.rb.velocity.magnitude > player.BreakNeckSpeed)
         {
-            Debug.Log("ahhhhhhhhhhhhhh");
+            //Debug.Log("ahhhhhhhhhhhhhh");
             Vector3 inputVelocity = player.inputVector * player.speed;
             Vector3 relativeVelocity = player.PlayerCamera.transform.InverseTransformVector(player.rb.velocity);
 
@@ -55,9 +51,9 @@ public class RegularState : BasePlayerState
             }
 
             player.rb.AddForce(player.PlayerCamera.transform.rotation * player.putTogetherVelocity * player.tooFastaccel);
-
+            Debug.Log("nababajinidsjhdjhdjhdsjkfhsdfhsadfhasdkjfhasdfhadsjfjladsfhjladslf");
         }
-        else player.rb.AddForce((player.PlayerCamera.transform.rotation * player.inputVector * player.speed - player.rb.velocity) * player.accel);
+        else player.rb.velocity = (player.PlayerCamera.transform.rotation * player.inputVector * player.speed - player.rb.velocity) * player.accel * Time.fixedDeltaTime; //player.rb.AddForce((player.PlayerCamera.transform.rotation * player.inputVector * player.speed - player.rb.velocity) * player.accel);
     }
 
     public override void Update()

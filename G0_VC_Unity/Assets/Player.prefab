@@ -997,6 +997,7 @@ MonoBehaviour:
   scope: {fileID: -2653568425862354484, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   pause: {fileID: -3210920384054898338, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   Unpause: {fileID: 522131853969190471, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  melee: {fileID: -5764667613011676199, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   Rotatables: {fileID: 3205671146708248980}
   PlayerCamera: {fileID: 5087725685347788842}
   CameraHolder: {fileID: 2904342871602623982}
@@ -1088,6 +1089,8 @@ MonoBehaviour:
   viewport_gunTip: {fileID: 2803622966508885609}
   VIEWPORT_grappleHand: {fileID: 5975438975082879522}
   EXTERIOR_grappleHand: {fileID: 9119124232412013355}
+  meleeAnim: {fileID: 7400000, guid: 957db48580edfaf4989fa303268a875e, type: 2}
+  meleeSpeed: 15
   player_anim_controller: {fileID: 8585395096242110883}
   isGrappling: 0
   isScoping: 0

@@ -28,6 +28,7 @@ public class PlayerStateMachine : NetworkBehaviour
     public InputActionReference scope;
     public InputActionReference pause;
     public InputActionReference Unpause;
+    public InputActionReference melee;
 
     public Transform Rotatables;
     public Transform PlayerCamera;
@@ -129,6 +130,9 @@ public class PlayerStateMachine : NetworkBehaviour
     public Transform viewport_gunTip;
     public GameObject VIEWPORT_grappleHand;
     public GameObject EXTERIOR_grappleHand;
+    public AnimationClip meleeAnim;
+    public float meleeSpeed;
+
 
     [Header("Animation")]
     public Animator player_anim_controller;
@@ -250,10 +254,6 @@ public class PlayerStateMachine : NetworkBehaviour
     private void Update()
     {
         CurrentPlayerState.Update();
-
-        //animator
-        player_anim_controller.SetBool("Grappling", isGrappling);
-        player_anim_controller.SetBool("Scoping", isScoping);
     }
 
     private void FixedUpdate()

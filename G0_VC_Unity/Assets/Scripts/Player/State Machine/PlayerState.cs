@@ -14,11 +14,11 @@ public class BasePlayerState
 
     public virtual void EnterState()
     {
-        //Debug.Log("entered state");
+        AnimationTriggerEvent();
     }
     public virtual void ExitState()
     {
-        Debug.Log("exit state");
+        //Debug.Log("exit state");
     }
     public virtual void Update()
     {
@@ -37,6 +37,8 @@ public class BasePlayerState
 
         player.Rotatables.localRotation = Quaternion.Euler(player.xRotation, player.yRotation, 0);
         player.PlayerCamera.localRotation = Quaternion.Euler(player.xRotation, player.yRotation, 0);
+
+        if (player.melee.action.triggered && player.CurrentPlayerState != player.MeleeState) player.ChangeState(player.MeleeState);
     }
     public virtual void FixedUpdate()
     {
@@ -50,7 +52,8 @@ public class BasePlayerState
 
     public virtual void AnimationTriggerEvent()
     {
-
+        player.player_anim_controller.SetBool("Grappling", player.isGrappling);
+        player.player_anim_controller.SetBool("Scoping", player.isScoping);
     }
 }
 

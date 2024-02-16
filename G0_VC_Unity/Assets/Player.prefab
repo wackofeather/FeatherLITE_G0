@@ -1008,11 +1008,11 @@ MonoBehaviour:
   - {fileID: 9176002160699643285}
   - {fileID: 2778609347163075243}
   DummyOnlyObjects: []
-  speed: 10
+  speed: 13
   mouseSens: 1
   accel: 3
   tooFastaccel: 1
-  BreakNeckSpeed: 10
+  BreakNeckSpeed: 13
   grapplingGunScript: {fileID: 1199171846237049367}
   lineRenderer: {fileID: 8217942930679748817}
   CanMove: 0
@@ -1090,7 +1090,40 @@ MonoBehaviour:
   VIEWPORT_grappleHand: {fileID: 5975438975082879522}
   EXTERIOR_grappleHand: {fileID: 9119124232412013355}
   meleeAnim: {fileID: 7400000, guid: 957db48580edfaf4989fa303268a875e, type: 2}
-  meleeSpeed: 15
+  meleeSpeed: 11
+  meleeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 5.6607795
+      outSlope: 5.6607795
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.06948565
+    - serializedVersion: 3
+      time: 0.28314987
+      value: 0.92068374
+      inSlope: 0.23367311
+      outSlope: 0.23367311
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.16837007
+      outWeight: 0.29087922
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   player_anim_controller: {fileID: 8585395096242110883}
   isGrappling: 0
   isScoping: 0

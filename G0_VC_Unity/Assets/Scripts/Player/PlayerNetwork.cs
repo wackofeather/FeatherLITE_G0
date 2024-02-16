@@ -1,3 +1,4 @@
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -42,13 +43,16 @@ public class PlayerNetwork : NetworkBehaviour
             Position = _rb.position,
             Rotation = rotatables.transform.rotation.eulerAngles,
             isGrappling_internal = playerStateMachine.isGrappling,
-            GrapplePosition = playerStateMachine.grapplePoint
+            GrapplePosition = playerStateMachine.grapplePoint,
+            currentPlayerState_fl_internal = playerStateMachine.CurrentPlayerState.key
         };
 
         if (IsServer || !_serverAuth)
             _playerState.Value = state;
         else
             TransmitStateServerRpc(state);
+
+        //Debug.Log(_playerState.Value.currentPlayerState_fl_internal);
     }
 
     [ServerRpc]
@@ -78,8 +82,8 @@ public class PlayerNetwork : NetworkBehaviour
         Viewport.transform.rotation = Quaternion.Lerp(Viewport.transform.rotation, Quaternion.Euler(_playerState.Value.Rotation.x, _playerState.Value.Rotation.y, 0), 0.3f);*/
         rotatables.transform.rotation = Quaternion.Lerp(rotatables.transform.rotation, Quaternion.Euler(_playerState.Value.Rotation.x, _playerState.Value.Rotation.y, 0), 0.3f);
 
-
-
+      //  Debug.Log(_playerState.Value.currentPlayerState_fl_internal);
+        if (_playerState.Value.currentPlayerState_fl_internal != 0) playerStateMachine.internal_CurrentState = _playerState.Value.currentPlayerState_fl_internal;
         playerStateMachine.grapplePoint = _playerState.Value.GrapplePosition;
         playerStateMachine.isGrappling = _playerState.Value.isGrappling_internal;
     }
@@ -95,6 +99,8 @@ public class PlayerNetwork : NetworkBehaviour
         private float _rotX, _rotY;
 
         private bool isGrappling;
+
+        private float currentPlayerState_fl;
 
         internal Vector3 Position
         {
@@ -138,6 +144,15 @@ public class PlayerNetwork : NetworkBehaviour
         }
 
 
+        internal float currentPlayerState_fl_internal
+        {
+            get => currentPlayerState_fl;
+            set
+            {
+                currentPlayerState_fl = value;
+            }
+        }
+
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref _posX);
@@ -149,6 +164,7 @@ public class PlayerNetwork : NetworkBehaviour
             serializer.SerializeValue(ref G_posX);
             serializer.SerializeValue(ref G_posY);
             serializer.SerializeValue(ref G_posZ);
+            serializer.SerializeValue(ref currentPlayerState_fl);
         }
     }
 }

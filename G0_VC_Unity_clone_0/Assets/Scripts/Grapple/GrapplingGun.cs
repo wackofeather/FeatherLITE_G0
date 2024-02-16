@@ -5,56 +5,68 @@ using UnityEngine.InputSystem;
 using Unity.Netcode;
 using static UnityEngine.GraphicsBuffer;
 using System.Drawing;
-
 public class GrapplingGun : NetworkBehaviour {
+
+
+    //method overloading with multiple versions of bool
+
+    [Space(5)]
+    [Header("GRAPPLE STUFF")]
+    [Space(5)]
+
 
     [Header("Rope Logic")]
 
-    public Vector3 grapplePoint;
-    public LayerMask whatIsGrappleable;
-    public Transform Playercamera;
-    public Rigidbody player;
-    private float maxDistance = 100f;
-    private SpringJoint joint;
-    [SerializeField] InputActionReference Grapple;
+    protected Vector3 grapplePoint;
+    protected LayerMask whatIsGrappleable;
+    protected Transform Playercamera;
+    protected Rigidbody player;
+    protected float maxDistance = 100f;
+    protected SpringJoint joint;
+    [SerializeField] protected InputActionReference Grapple;
     [Range(0f, 100f)]
-    [SerializeField] float grappleSpeed;
-    [SerializeField] float jointDamper;
-    [SerializeField] float jointSpring;
-    [SerializeField] float jointMassScale;
+    [SerializeField] protected float grappleSpeed;
+    [SerializeField] protected float jointDamper;
+    [SerializeField] protected float jointSpring;
+    [SerializeField] protected float jointMassScale;
 
     [Header("Rope Graphics")]
 
 
-    public int quality;
-    public float damper;
-    public float strength;
-    public float velocity;
-    public float waveCount;
-    public float waveHeight;
-    [SerializeField] float ropeSpeed;
-    public AnimationCurve affectCurve;
-    public AnimationCurve retractCurve;
-    [SerializeField] float retractSpeed;
-    public bool isGrappling;
-    [Range(0,1)]
-    [SerializeField] float lookAwayLeniency;    
-    private Spring spring;
-    [SerializeField] LineRenderer VIEWPORT_lr;
-    [SerializeField] LineRenderer EXTERIOR_lr;
-    private Vector3 EXTERIOR_currentGrapplePosition;
-    private Vector3 VIEWPORT_currentGrapplePosition;
-    [SerializeField] Transform exterior_gunTip;
-    [SerializeField] Transform viewport_gunTip;
-    [SerializeField] GameObject VIEWPORT_grappleHand;
-    [SerializeField] GameObject EXTERIOR_grappleHand;
+    protected int quality;
+    protected float damper;
+    protected float strength;
+    protected float velocity;
+    protected float waveCount;
+    protected float waveHeight;
+    [SerializeField] protected float ropeSpeed;
+    protected AnimationCurve affectCurve;
+    protected AnimationCurve retractCurve;
+    [SerializeField] protected float retractSpeed;
+    protected bool isGrappling;
+    [Range(0, 1)]
+    [SerializeField] protected float lookAwayLeniency;
+    protected Spring spring;
+    [SerializeField] protected LineRenderer VIEWPORT_lr;
+    [SerializeField] protected LineRenderer EXTERIOR_lr;
+    protected Vector3 EXTERIOR_currentGrapplePosition;
+    protected Vector3 VIEWPORT_currentGrapplePosition;
+    [SerializeField] protected Transform exterior_gunTip;
+    [SerializeField] protected Transform viewport_gunTip;
+    [SerializeField] protected GameObject VIEWPORT_grappleHand;
+    [SerializeField] protected GameObject EXTERIOR_grappleHand;
 
     [Header("VERY IMPORTANT")]
     [SerializeField] float ViewportFOV;
 
-    public bool allowedToGrapple;
-    //method overloading with multiple versions of bool
-    private bool CanGrapple(out RaycastHit hit)
+    protected bool allowedToGrapple;
+
+
+
+
+
+
+    protected bool CanGrapple(out RaycastHit hit)
     {
         if (isGrappling | !allowedToGrapple)
         {
@@ -68,9 +80,9 @@ public class GrapplingGun : NetworkBehaviour {
             hit = hitinfo;
             return canGrapple;
         }
-        
+
     }
-    public bool CanGrapple()
+    protected bool CanGrapple()
     {
         if (isGrappling)
         {
@@ -79,10 +91,9 @@ public class GrapplingGun : NetworkBehaviour {
         else return Physics.Raycast(Playercamera.position, Playercamera.forward, maxDistance, whatIsGrappleable);
     }
 
-
     void Awake()
     {
-        
+
         spring = new Spring();
         spring.SetTarget(0);
 
@@ -90,6 +101,8 @@ public class GrapplingGun : NetworkBehaviour {
 
     private void Start()
     {
+
+
         if (!IsOwner)
         {
             VIEWPORT_lr.gameObject.SetActive(false);
@@ -101,7 +114,7 @@ public class GrapplingGun : NetworkBehaviour {
 
 
         isGrappling = false;
-       
+
     }
 
     void Update() 

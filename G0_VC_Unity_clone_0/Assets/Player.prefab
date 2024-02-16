@@ -449,7 +449,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1408450032278799960}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.439}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -846,6 +846,7 @@ GameObject:
   - component: {fileID: 2920028746863420625}
   - component: {fileID: 2920028746863420630}
   - component: {fileID: 2920028746863420631}
+  - component: {fileID: 58085483968552630}
   - component: {fileID: -3036239568206950947}
   - component: {fileID: 1564597625595317825}
   - component: {fileID: 7369457806054413757}
@@ -944,11 +945,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2920028746863420624}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7cb15766206401c41933677815ec6af9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StateMachine: {fileID: 0}
   rb: {fileID: 2920028746863420625}
   move: {fileID: -2513984626473278120, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   fire: {fileID: 1203331415346767575, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
@@ -970,9 +972,162 @@ MonoBehaviour:
   accel: 3
   tooFastaccel: 1
   BreakNeckSpeed: 10
+  inputVector: {x: 0, y: 0, z: 0}
+  xRotation: 0
+  yRotation: 0
+  putTogetherVelocity: {x: 0, y: 0, z: 0}
   grapplingGunScript: {fileID: 1199171846237049367}
   lineRenderer: {fileID: 8217942930679748817}
   CanMove: 0
+--- !u!114 &58085483968552630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2920028746863420624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 600b6ec760a933546800044834df670a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 2920028746863420625}
+  move: {fileID: -2513984626473278120, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  fire: {fileID: 1203331415346767575, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  scope: {fileID: -2653568425862354484, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  pause: {fileID: -3210920384054898338, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  Unpause: {fileID: 522131853969190471, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  melee: {fileID: -5764667613011676199, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  Rotatables: {fileID: 3205671146708248980}
+  PlayerCamera: {fileID: 5087725685347788842}
+  CameraHolder: {fileID: 2904342871602623982}
+  Exterior: {fileID: 7549162662110132104}
+  Viewport: {fileID: 4029365067287448490}
+  OwnerOnlyObjects:
+  - {fileID: 9005852761526138014}
+  - {fileID: 9176002160699643285}
+  - {fileID: 2778609347163075243}
+  DummyOnlyObjects: []
+  speed: 13
+  mouseSens: 1
+  accel: 3
+  tooFastaccel: 1
+  BreakNeckSpeed: 13
+  grapplingGunScript: {fileID: 1199171846237049367}
+  lineRenderer: {fileID: 8217942930679748817}
+  CanMove: 0
+  whatIsGrappleable:
+    serializedVersion: 2
+    m_Bits: 1
+  Playercamera: {fileID: 5087725685347788842}
+  maxDistance: 100
+  Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  grappleSpeed: 53.2
+  jointDamper: 7
+  jointSpring: 4.5
+  jointMassScale: 4.5
+  quality: 500
+  damper: 14
+  strength: 800
+  velocity: 15
+  waveCount: 3
+  waveHeight: 8.63
+  ropeSpeed: 10
+  affectCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.47474134
+      outSlope: 0.47474134
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.12916666
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  retractCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  retractSpeed: 130
+  lookAwayLeniency: 0.128
+  VIEWPORT_lr: {fileID: 8217942930679748817}
+  EXTERIOR_lr: {fileID: 930950947033205134}
+  exterior_gunTip: {fileID: 7461241620872723705}
+  viewport_gunTip: {fileID: 2803622966508885609}
+  VIEWPORT_grappleHand: {fileID: 5975438975082879522}
+  EXTERIOR_grappleHand: {fileID: 9119124232412013355}
+  meleeAnim: {fileID: 7400000, guid: 957db48580edfaf4989fa303268a875e, type: 2}
+  meleeSpeed: 11
+  meleeCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 5.6607795
+      outSlope: 5.6607795
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.06948565
+    - serializedVersion: 3
+      time: 0.28314987
+      value: 0.92068374
+      inSlope: 0.23367311
+      outSlope: 0.23367311
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.16837007
+      outWeight: 0.29087922
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  player_anim_controller: {fileID: 8585395096242110883}
+  isGrappling: 0
+  isScoping: 0
+  ViewportFOV: 40
 --- !u!114 &-3036239568206950947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1010,8 +1165,7 @@ MonoBehaviour:
   Exterior: {fileID: 5188508671892663284}
   Viewport: {fileID: 23794732989468060}
   rotatables: {fileID: 3205671146708248980}
-  playerScript: {fileID: 2920028746863420631}
-  grapplingScript: {fileID: 1199171846237049367}
+  playerStateMachine: {fileID: 58085483968552630}
 --- !u!114 &7369457806054413757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1019,7 +1173,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2920028746863420624}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0002326aeee43749805f34115ff05d3, type: 3}
   m_Name: 
@@ -1571,7 +1725,6 @@ GameObject:
   - component: {fileID: 5230236037117931691}
   - component: {fileID: 1199171846237049367}
   - component: {fileID: 5184948639662322760}
-  - component: {fileID: 3524589570143911055}
   m_Layer: 0
   m_Name: Grappler
   m_TagString: Untagged
@@ -1603,88 +1756,18 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8052138231561209821}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2f9b388e793956f4ea083828bd957179, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grapplePoint: {x: 0, y: 0, z: 0}
-  whatIsGrappleable:
-    serializedVersion: 2
-    m_Bits: 127
-  Playercamera: {fileID: 5087725685347788842}
-  player: {fileID: 2920028746863420625}
   Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   grappleSpeed: 53.2
   jointDamper: 7
   jointSpring: 4.5
   jointMassScale: 4.5
-  quality: 500
-  damper: 14
-  strength: 600
-  velocity: 15
-  waveCount: 3
-  waveHeight: 17.12
   ropeSpeed: 10
-  affectCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0.16345313
-      outSlope: 0.16345313
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.14782113
-    - serializedVersion: 3
-      time: 0.6690055
-      value: -0.010148662
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0.052498102
-      outSlope: 0.052498102
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.40282643
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  retractCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
   retractSpeed: 130
-  isGrappling: 0
   lookAwayLeniency: 0.128
   VIEWPORT_lr: {fileID: 8217942930679748817}
   EXTERIOR_lr: {fileID: 930950947033205134}
@@ -1693,7 +1776,6 @@ MonoBehaviour:
   VIEWPORT_grappleHand: {fileID: 5975438975082879522}
   EXTERIOR_grappleHand: {fileID: 9119124232412013355}
   ViewportFOV: 40
-  allowedToGrapple: 0
 --- !u!114 &5184948639662322760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1738,30 +1820,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   grappleHand: {fileID: 7461241620872723705}
---- !u!114 &3524589570143911055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8052138231561209821}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 133523389af84924ea4332586b15e54b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
-  GrapplePoint: {fileID: 0}
-  Camera: {fileID: 5087725685347788842}
-  lineRenderer: {fileID: 8217942930679748817}
-  grappleHand: {fileID: 7461241620872723705}
-  player: {fileID: 2920028746863420625}
-  grappleSpeed: 1
-  grappleLayerMask:
-    serializedVersion: 2
-    m_Bits: 127
-  grappleHit: {x: 0, y: 0, z: 0}
-  isGrappling: 0
 --- !u!1 &8815168177392360592
 GameObject:
   m_ObjectHideFlags: 0
@@ -2185,7 +2243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 831d5103234df5040b2c5e621a3c2f6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grappleScript: {fileID: 1199171846237049367}
+  playerStateMachine: {fileID: 58085483968552630}
   GrappleIndicator: {fileID: 7735608024073846780}
   NoGrappleColor: {r: 0, g: 0, b: 0, a: 0.5176471}
   GrappleColor: {r: 0.34362757, g: 0.59607846, b: 0.26666668, a: 0.5176471}

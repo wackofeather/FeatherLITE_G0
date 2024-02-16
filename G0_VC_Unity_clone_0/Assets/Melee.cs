@@ -18,7 +18,7 @@ public class Melee : NetworkBehaviour
         {
             timer = 3;
             grappleScript.StopGrapple();
-            grappleScript.allowedToGrapple = false;
+            //grappleScript.allowedToGrapple = false;
             playerScript.CanMove = false;
         }
 
@@ -26,7 +26,7 @@ public class Melee : NetworkBehaviour
 
         if (timer < 0)
         {
-            if (!grappleScript.allowedToGrapple) grappleScript.allowedToGrapple = true;
+            //if (!grappleScript.allowedToGrapple) grappleScript.allowedToGrapple = true;
             if (!playerScript.CanMove) playerScript.CanMove = true;
         }
     }

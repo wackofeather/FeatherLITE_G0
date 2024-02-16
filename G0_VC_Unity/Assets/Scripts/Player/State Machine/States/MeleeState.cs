@@ -12,6 +12,8 @@ public class MeleeState : BasePlayerState
     private Vector3 startingVelocity;
     private Vector3 endVelocity;
 
+    private int test_int;
+    private AnimationCurve testCurve;
     public MeleeState(PlayerStateMachine player) : base(player)
     {
         key = 3;
@@ -32,7 +34,10 @@ public class MeleeState : BasePlayerState
 
         base.EnterState();
 
-
+        test_int += 1;
+        Debug.Log(test_int % 2);
+        if (test_int % 2 == 0) { testCurve = player.meleeCurve; }
+        else { testCurve = player.meleeCurve_2; }
 
         player.player_anim_controller.SetTrigger("Melee");
 
@@ -77,7 +82,7 @@ public class MeleeState : BasePlayerState
         base.FixedUpdate();
 
 
-        player.rb.velocity = Vector3.Lerp(startingVelocity, endVelocity, player.meleeCurve.Evaluate(1-timer));
+        player.rb.velocity = Vector3.Lerp(startingVelocity, endVelocity, testCurve.Evaluate(1-timer));
         //if ((player.meleeSpeed > player.speed) && (player.PlayerCamera.transform.InverseTransformVector(player.rb.velocity).z < player.BreakNeckSpeed)) player.rb.velocity = ((meleeRotation.normalized * Vector3.forward * (((player.meleeSpeed - player.speed) * (timer / timerVal)) + player.speed - 1f)) - player.rb.velocity) * 40 * Time.fixedDeltaTime;
     }
 

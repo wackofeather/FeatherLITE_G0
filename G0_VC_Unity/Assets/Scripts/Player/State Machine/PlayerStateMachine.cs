@@ -134,7 +134,7 @@ public class PlayerStateMachine : NetworkBehaviour
     public AnimationClip meleeAnim;
     public float meleeSpeed;
     public AnimationCurve meleeCurve;
-
+    public AnimationCurve meleeCurve_2;
 
     [Header("Animation")]
     public Animator player_anim_controller;

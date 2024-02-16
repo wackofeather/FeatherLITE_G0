@@ -1124,6 +1124,39 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  meleeCurve_2:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 5.6607795
+      outSlope: 5.6607795
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.06948565
+    - serializedVersion: 3
+      time: 0.6263859
+      value: 1.2016509
+      inSlope: 0.003109842
+      outSlope: 0.003109842
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.74795604
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -1.3699951
+      outSlope: -1.3699951
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07916665
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   player_anim_controller: {fileID: 8585395096242110883}
   isGrappling: 0
   isScoping: 0

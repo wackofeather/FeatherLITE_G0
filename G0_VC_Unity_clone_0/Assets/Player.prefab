@@ -1008,18 +1008,17 @@ MonoBehaviour:
   - {fileID: 9176002160699643285}
   - {fileID: 2778609347163075243}
   DummyOnlyObjects: []
-  speed: 13
+  speed: 10
   mouseSens: 1
   accel: 3
   tooFastaccel: 1
-  BreakNeckSpeed: 13
+  BreakNeckSpeed: 10
   grapplingGunScript: {fileID: 1199171846237049367}
   lineRenderer: {fileID: 8217942930679748817}
   CanMove: 0
   whatIsGrappleable:
     serializedVersion: 2
     m_Bits: 1
-  Playercamera: {fileID: 5087725685347788842}
   maxDistance: 100
   Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   grappleSpeed: 53.2
@@ -1089,70 +1088,75 @@ MonoBehaviour:
   viewport_gunTip: {fileID: 2803622966508885609}
   VIEWPORT_grappleHand: {fileID: 5975438975082879522}
   EXTERIOR_grappleHand: {fileID: 9119124232412013355}
+  ViewportRenderers:
+  - {fileID: 7527854428169008231, guid: 54c0c00f2f325824485ca6163526c946, type: 2}
+  - {fileID: 4824327859454418076, guid: 54c0c00f2f325824485ca6163526c946, type: 2}
+  - {fileID: 70103111058914546, guid: 54c0c00f2f325824485ca6163526c946, type: 2}
+  - {fileID: -1650954301849073151, guid: 54c0c00f2f325824485ca6163526c946, type: 2}
   meleeAnim: {fileID: 7400000, guid: 957db48580edfaf4989fa303268a875e, type: 2}
-  meleeSpeed: 11
+  meleeSpeed: 9
   meleeCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 5.6607795
-      outSlope: 5.6607795
+      inSlope: 4.65376
+      outSlope: 4.65376
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.06948565
+      outWeight: 0.029166667
     - serializedVersion: 3
-      time: 0.28314987
-      value: 0.92068374
-      inSlope: 0.23367311
-      outSlope: 0.23367311
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.16837007
-      outWeight: 0.29087922
-    - serializedVersion: 3
-      time: 1
-      value: 1
+      time: 0.25533953
+      value: 1.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -1.4282798
+      outSlope: -1.4282798
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.058333337
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  meleeCurve_2:
+  meleeFOV_curve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 5.6607795
-      outSlope: 5.6607795
-      tangentMode: 0
+      inSlope: 0.16494478
+      outSlope: 0.16494478
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.06948565
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.6263859
-      value: 1.2016509
-      inSlope: 0.003109842
-      outSlope: 0.003109842
+      time: 0.22047214
+      value: 0.03636573
+      inSlope: -0.019970775
+      outSlope: -0.019970775
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.74795604
+      inWeight: 0.8887102
+      outWeight: 0.19929789
     - serializedVersion: 3
       time: 1
-      value: 1
-      inSlope: -1.3699951
-      outSlope: -1.3699951
+      value: 0
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.07916665
+      inWeight: 0.3546734
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -1160,6 +1164,7 @@ MonoBehaviour:
   player_anim_controller: {fileID: 8585395096242110883}
   isGrappling: 0
   isScoping: 0
+  isMelee: 0
   ViewportFOV: 40
 --- !u!114 &-3036239568206950947
 MonoBehaviour:

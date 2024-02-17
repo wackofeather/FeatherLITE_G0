@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 using Unity.VisualScripting;
 using Unity.Netcode;
 using UnityEditor.Animations;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class PlayerStateMachine : NetworkBehaviour
 {
@@ -97,7 +99,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
     [System.NonSerialized] public Vector3 grapplePoint;
     public LayerMask whatIsGrappleable;
-    public Transform Playercamera;
+    //public Transform Playercamera;
     public float maxDistance = 100f;
     [System.NonSerialized] public SpringJoint joint;
     public InputActionReference Grapple;
@@ -131,15 +133,20 @@ public class PlayerStateMachine : NetworkBehaviour
     public Transform viewport_gunTip;
     public GameObject VIEWPORT_grappleHand;
     public GameObject EXTERIOR_grappleHand;
+    public List<RenderObjects> ViewportRenderers;
+
+    [Header("Melee")]
+
     public AnimationClip meleeAnim;
     public float meleeSpeed;
     public AnimationCurve meleeCurve;
-    public AnimationCurve meleeCurve_2;
+    public AnimationCurve meleeFOV_curve;
 
     [Header("Animation")]
     public Animator player_anim_controller;
     public bool isGrappling;
     public bool isScoping;
+    public bool isMelee;
 
     [Header("VERY IMPORTANT")]
     public float ViewportFOV;
@@ -153,7 +160,7 @@ public class PlayerStateMachine : NetworkBehaviour
     public RaycastHit GrappleCheck()
     {
         RaycastHit hitinfo;
-        Physics.Raycast(Playercamera.position, Playercamera.forward, out hitinfo, maxDistance, whatIsGrappleable);
+        Physics.Raycast(PlayerCamera.position, PlayerCamera.forward, out hitinfo, maxDistance, whatIsGrappleable);
         return hitinfo;
 
     }
@@ -163,7 +170,7 @@ public class PlayerStateMachine : NetworkBehaviour
         {
             return false;
         }
-        else return Physics.Raycast(Playercamera.position, Playercamera.forward, maxDistance, whatIsGrappleable);
+        else return Physics.Raycast(PlayerCamera.position, PlayerCamera.forward, maxDistance, whatIsGrappleable);
     }
 
 
@@ -244,6 +251,9 @@ public class PlayerStateMachine : NetworkBehaviour
         stateDictionary.Add(RegularState.key, RegularState);
         stateDictionary.Add(GrapplingState.key, GrapplingState);
         stateDictionary.Add(MeleeState.key, MeleeState);
+        //RegularState.Start_Init();
+        //GrapplingState.Start_Init();
+        //MeleeState.Start_Init();
 
         VIEWPORT_lr.positionCount = 0;
         EXTERIOR_lr.positionCount = 0;
@@ -264,6 +274,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
         isGrappling = false;
         isScoping = false;
+        isMelee = false;
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -320,4 +331,12 @@ public class PlayerStateMachine : NetworkBehaviour
         CurrentPlayerState = newState;
         CurrentPlayerState.EnterState();
     }
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        CurrentPlayerState.OnCollisionEnter(collision);
+    }
+
+
 }

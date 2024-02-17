@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
-
+using UnityEngine.Rendering.Universal;
 
 public class MeleeState : BasePlayerState
 {
@@ -12,12 +15,28 @@ public class MeleeState : BasePlayerState
     private Vector3 startingVelocity;
     private Vector3 endVelocity;
 
-    private int test_int;
-    private AnimationCurve testCurve;
+    private float meleeDistance;
+
+    private Camera cam;
+    private float camFOV;
+
+    private float viewportCamFOV;
+
+
+
     public MeleeState(PlayerStateMachine player) : base(player)
     {
         key = 3;
+        cam = player.PlayerCamera.GetComponent<Camera>();
+        camFOV = cam.fieldOfView;
+        timerVal = player.meleeAnim.length;
+
+        viewportCamFOV = player.ViewportFOV;
     }
+
+
+
+
 
     public override void AnimationTriggerEvent()
     {
@@ -32,28 +51,28 @@ public class MeleeState : BasePlayerState
         if (!player.IsOwner) return;
 
 
-        base.EnterState();
-
-        test_int += 1;
-        Debug.Log(test_int % 2);
-        if (test_int % 2 == 0) { testCurve = player.meleeCurve; }
-        else { testCurve = player.meleeCurve_2; }
-
-        player.player_anim_controller.SetTrigger("Melee");
 
 
-        timer = player.meleeAnim.length;
-        timerVal = player.meleeAnim.length;
+        
+        player.isMelee = true;
+
+
+        timer = timerVal;
 
         player.isGrappling = false;
         player.isScoping = false;
 
 
-        meleeRotation = player.Playercamera.rotation;
+        meleeRotation = player.PlayerCamera.rotation;
+
+
 
 
         startingVelocity = player.rb.velocity;
         endVelocity = meleeRotation.normalized * Vector3.forward * player.meleeSpeed;
+
+        base.EnterState();
+
         //player.rb.velocity = meleeRotation.normalized * Vector3.forward * player.meleeSpeed;
         //Debug.Log("whahahahahahaahahah");
         //player.rb.AddForce(meleeRotation.normalized * Vector3.forward * player.meleeSpeed, ForceMode.VelocityChange);
@@ -65,12 +84,18 @@ public class MeleeState : BasePlayerState
         
         if (!player.IsOwner) return;
 
+        cam.fieldOfView = camFOV;
+        for (int i = 0; i < player.ViewportRenderers.Count; i++)
+        {
+            player.ViewportRenderers[i].settings.cameraSettings.cameraFieldOfView = viewportCamFOV;
+            EditorUtility.SetDirty(player.ViewportRenderers[i]);
+        }
+
+
+
+        player.isMelee = false;
 
         base.ExitState();
-
-        
-
-        player.player_anim_controller.ResetTrigger("Melee");
 
        
     }
@@ -82,7 +107,11 @@ public class MeleeState : BasePlayerState
         base.FixedUpdate();
 
 
-        player.rb.velocity = Vector3.Lerp(startingVelocity, endVelocity, testCurve.Evaluate(1-timer));
+        Vector3 velocityVector = startingVelocity + (endVelocity - startingVelocity) * player.meleeCurve.Evaluate(1-timer);
+
+        player.rb.AddForce((velocityVector - player.rb.velocity), ForceMode.VelocityChange);
+
+        //if (Physics.Raycast(player.rb.position, new Vector3(meleeRotation.x, meleeRotation.y, meleeRotation.z), player.rb.velocity.magnitude))
         //if ((player.meleeSpeed > player.speed) && (player.PlayerCamera.transform.InverseTransformVector(player.rb.velocity).z < player.BreakNeckSpeed)) player.rb.velocity = ((meleeRotation.normalized * Vector3.forward * (((player.meleeSpeed - player.speed) * (timer / timerVal)) + player.speed - 1f)) - player.rb.velocity) * 40 * Time.fixedDeltaTime;
     }
 
@@ -95,11 +124,50 @@ public class MeleeState : BasePlayerState
 
         if (!player.IsOwner) return;
 
+        float fov_calc = viewportCamFOV * (1 + player.meleeFOV_curve.Evaluate(1 - timer));
+
+        for (int i  = 0; i < player.ViewportRenderers.Count; i++)
+        {
+            player.ViewportRenderers[i].settings.cameraSettings.cameraFieldOfView = fov_calc;
+            EditorUtility.SetDirty(player.ViewportRenderers[i]);
+        }
+
+        cam.fieldOfView = camFOV * (1 + player.meleeFOV_curve.Evaluate(1 - timer));
+
         timer -= Time.deltaTime;
 
 
 
         if (timer < 0) player.ChangeState(player.RegularState);
     }
+
+    public override void OnCollisionEnter(Collision col)
+    {
+        base.OnCollisionEnter(col);
+
+        if (!player.IsOwner) return;
+
+        if (col.contacts.Length > 1)
+        {
+            player.ChangeState(player.RegularState);
+            return;
+        }
+
+        if (Vector3.Angle((col.contacts[0].point - player.rb.position), meleeRotation.eulerAngles) < 90) player.ChangeState(player.RegularState);
+    }
+
+
+
+
+    public static float IntegrateCurve(AnimationCurve curve, float startTime, float endTime, int steps)
+    {
+        float val = 0;
+        for (int i = 0; i < steps; i++)
+        {
+            val += curve.Evaluate(startTime + (endTime - startTime) * i/steps) * ( (endTime - startTime) / steps );
+        }
+        return val;
+    }
+
 }
 

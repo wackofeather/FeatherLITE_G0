@@ -37,15 +37,15 @@ public class GrapplingState : BasePlayerState
             return;
         }
         
-        base.EnterState();
+        
 
         player.VIEWPORT_currentGrapplePosition = player.viewport_gunTip.position;
 
         RaycastHit hit = player.GrappleCheck();
         player.grapplePoint = hit.point;
-        Vector3 relativeVelocity = player.Playercamera.InverseTransformVector(player.rb.velocity);
+        Vector3 relativeVelocity = player.PlayerCamera.InverseTransformVector(player.rb.velocity);
         if (relativeVelocity.z < 0) relativeVelocity.z = 0f;
-        player.rb.velocity = player.Playercamera.rotation * relativeVelocity;
+        player.rb.velocity = player.PlayerCamera.rotation * relativeVelocity;
         player.joint = player.gameObject.AddComponent<SpringJoint>();
         player.joint.autoConfigureConnectedAnchor = false;
         player.joint.connectedAnchor = player.grapplePoint;
@@ -70,12 +70,14 @@ public class GrapplingState : BasePlayerState
 
         player._StartCoroutine(GrappleCoroutine());
 
-        
+        base.EnterState();
+
+
     }
 
     public override void ExitState()
     {
-        base.ExitState();
+        
 
         if (!player.IsOwner)
         {
@@ -108,7 +110,9 @@ public class GrapplingState : BasePlayerState
         player.isGrappling = false;
 
         player.grappleWiggle_Timer = 0;
-        
+
+        base.ExitState();
+
     }
 
     public override void FixedUpdate()
@@ -159,7 +163,7 @@ public class GrapplingState : BasePlayerState
             ///NOTE: to optimize try using localPos and caching the converted gun tip so no need for calculation every frame. You have to use local pos so it works properly when reused over time tho
 
 
-            Camera cam = player.Playercamera.GetComponent<Camera>();
+            Camera cam = player.PlayerCamera.GetComponent<Camera>();
 
             float oldFOV = cam.fieldOfView;
 
@@ -224,13 +228,13 @@ public class GrapplingState : BasePlayerState
         {
 
             float ClampedDistance = (player.rb.position - player.grapplePoint).magnitude / player.maxDistance;
-            float Angle = Vector3.Angle(player.Playercamera.transform.forward, (player.grapplePoint - player.Playercamera.position));
+            float Angle = Vector3.Angle(player.PlayerCamera.transform.forward, (player.grapplePoint - player.PlayerCamera.position));
 
             RaycastHit hit;
-            Physics.Raycast(player.Playercamera.position, (player.grapplePoint - player.Playercamera.position), out hit, player.maxDistance, player.whatIsGrappleable);
+            Physics.Raycast(player.PlayerCamera.position, (player.grapplePoint - player.PlayerCamera.position), out hit, player.maxDistance, player.whatIsGrappleable);
 
 
-            if (Angle > player.Playercamera.GetComponent<Camera>().fieldOfView * (1 + player.lookAwayLeniency)) break;
+            if (Angle > player.PlayerCamera.GetComponent<Camera>().fieldOfView * (1 + player.lookAwayLeniency)) break;
 
             if ((player.grapplePoint - hit.point).magnitude >= 0.1f) break;
 

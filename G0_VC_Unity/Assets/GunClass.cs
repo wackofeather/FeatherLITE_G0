@@ -9,19 +9,19 @@ public class GunClass : WeaponClass
     [Space]
     [SerializeField] float BPS;
 
-    public override void UseWeapon()
+    public override void UseWeapon(PlayerStateMachine player)
     {
-        base.UseWeapon();
-        if (fireInput.action.IsPressed()) isShooting = true;
+        base.UseWeapon(player);
+        if (fireInput.action.IsPressed() && !player.isMelee) isShooting = true;
         else isShooting = false;
         //Debug.Log(isShooting);
     }
 
-    public override void Scope()
+    public override void Scope(PlayerStateMachine player)
     {
-        base.Scope();
+        base.Scope(player);
 
-        if (scope.action.IsPressed()) StartScope();
+        if (scope.action.IsPressed() && !player.isMelee) StartScope();
         else StopScope();
 
     }

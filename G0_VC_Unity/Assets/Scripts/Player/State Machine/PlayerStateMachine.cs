@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
 using Unity.Netcode;
-using UnityEditor.Animations;
+
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Experimental.Rendering.Universal;
 
@@ -32,6 +32,7 @@ public class PlayerStateMachine : NetworkBehaviour
     public InputActionReference pause;
     public InputActionReference Unpause;
     public InputActionReference melee;
+    public InputActionReference testInput;
 
     public Transform Rotatables;
     public Transform PlayerCamera;
@@ -134,6 +135,7 @@ public class PlayerStateMachine : NetworkBehaviour
     public GameObject VIEWPORT_grappleHand;
     public GameObject EXTERIOR_grappleHand;
     public List<RenderObjects> ViewportRenderers;
+    public ScriptableRendererFeature rendererData;
 
     [Header("Melee")]
 
@@ -141,6 +143,10 @@ public class PlayerStateMachine : NetworkBehaviour
     public float meleeSpeed;
     public AnimationCurve meleeCurve;
     public AnimationCurve meleeFOV_curve;
+    public bool whichMelee;
+    [Range(0,1)] public float meleeWeight_Input;
+    [Range(0, 1)] public float meleeWeight_Velocity;
+
 
     [Header("Animation")]
     public Animator player_anim_controller;
@@ -297,6 +303,8 @@ public class PlayerStateMachine : NetworkBehaviour
         {
             grappleWiggle_Timer -= Time.deltaTime;
         }
+
+        if (testInput.action.triggered) whichMelee = !whichMelee;
     }
 
     private void FixedUpdate()

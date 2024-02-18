@@ -9,7 +9,7 @@ public class WeaponManager : NetworkBehaviour
 {
     [SerializeField] Player_Inventory inventory;
     [SerializeField] Animator animator;
-
+    [SerializeField] PlayerStateMachine player;
 
 
     public override void OnNetworkSpawn()
@@ -27,8 +27,8 @@ public class WeaponManager : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        inventory.GetCurrentWeapon().UseWeapon();
-        inventory.GetCurrentWeapon().Scope();
+        inventory.GetCurrentWeapon().UseWeapon(player);
+        inventory.GetCurrentWeapon().Scope(player);
         inventory.GetCurrentWeapon().Animate();
         
     }

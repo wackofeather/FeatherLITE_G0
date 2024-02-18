@@ -17,9 +17,9 @@ public class WeaponClass : MonoBehaviour
     [SerializeField] protected bool isScoping;
     public Animator test_animator;
 
-    public virtual void UseWeapon() { }
+    public virtual void UseWeapon(PlayerStateMachine player) { }
 
-    public virtual void Scope() { }
+    public virtual void Scope(PlayerStateMachine player) { }
 
     public virtual void Animate() { }
     

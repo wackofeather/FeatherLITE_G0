@@ -136,6 +136,8 @@ MonoBehaviour:
   EXT_Weapon_animatorOverrideController: {fileID: 0}
   isShooting: 0
   isScoping: 0
+  test_animator: {fileID: 0}
   maxAmmo_Mag: 0
   maxAmmo_Inventory: 0
   BPS: 0
+  player: {fileID: 0}

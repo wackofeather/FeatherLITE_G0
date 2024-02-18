@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class MeleeState : BasePlayerState
 {
-    private Quaternion meleeRotation;
+    private Vector3 meleeVector;
     private float timer;
     private float timerVal;
 
@@ -29,7 +30,7 @@ public class MeleeState : BasePlayerState
         key = 3;
         cam = player.PlayerCamera.GetComponent<Camera>();
         camFOV = cam.fieldOfView;
-        timerVal = player.meleeAnim.length;
+        timerVal = player.meleeAnim.length; //0.75f * player.meleeAnim.length;
 
         viewportCamFOV = player.ViewportFOV;
     }
@@ -62,14 +63,18 @@ public class MeleeState : BasePlayerState
         player.isGrappling = false;
         player.isScoping = false;
 
+        //Vector3 vectorweight = new Vector3(player.inputVector.x * player.meleeWeight_Input + player.PlayerCamera.transform.InverseTransformDirection(player.rb.velocity).x * player.meleeWeight_Velocity, 0, 0);
+        //Debug.Log(vectorweight);
 
-        meleeRotation = player.PlayerCamera.rotation;
+        Vector3 vectorweight = new Vector3(player.inputVector.x * player.meleeWeight_Input,0,0);
+
+        meleeVector = player.PlayerCamera.transform.forward + (player.PlayerCamera.transform.rotation * vectorweight);
 
 
 
 
         startingVelocity = player.rb.velocity;
-        endVelocity = meleeRotation.normalized * Vector3.forward * player.meleeSpeed;
+        endVelocity = meleeVector.normalized * player.meleeSpeed;
 
         base.EnterState();
 
@@ -88,7 +93,7 @@ public class MeleeState : BasePlayerState
         for (int i = 0; i < player.ViewportRenderers.Count; i++)
         {
             player.ViewportRenderers[i].settings.cameraSettings.cameraFieldOfView = viewportCamFOV;
-            EditorUtility.SetDirty(player.ViewportRenderers[i]);
+           // player.ViewportRenderers[i].SetDirty();
         }
 
 
@@ -106,10 +111,16 @@ public class MeleeState : BasePlayerState
 
         base.FixedUpdate();
 
+        float meleeProgress = player.meleeCurve.Evaluate(1 - timer);
+        Vector3 velocityVector;
 
-        Vector3 velocityVector = startingVelocity + (endVelocity - startingVelocity) * player.meleeCurve.Evaluate(1-timer);
 
-        player.rb.AddForce((velocityVector - player.rb.velocity), ForceMode.VelocityChange);
+        if (meleeProgress <= 1) velocityVector = startingVelocity + (endVelocity - startingVelocity) * player.meleeCurve.Evaluate(1 - timer);
+        else velocityVector = endVelocity * meleeProgress;
+
+        player.rb.velocity = velocityVector;
+
+        //player.rb.AddForce(velocityVector, ForceMode.VelocityChange);
 
         //if (Physics.Raycast(player.rb.position, new Vector3(meleeRotation.x, meleeRotation.y, meleeRotation.z), player.rb.velocity.magnitude))
         //if ((player.meleeSpeed > player.speed) && (player.PlayerCamera.transform.InverseTransformVector(player.rb.velocity).z < player.BreakNeckSpeed)) player.rb.velocity = ((meleeRotation.normalized * Vector3.forward * (((player.meleeSpeed - player.speed) * (timer / timerVal)) + player.speed - 1f)) - player.rb.velocity) * 40 * Time.fixedDeltaTime;
@@ -129,7 +140,7 @@ public class MeleeState : BasePlayerState
         for (int i  = 0; i < player.ViewportRenderers.Count; i++)
         {
             player.ViewportRenderers[i].settings.cameraSettings.cameraFieldOfView = fov_calc;
-            EditorUtility.SetDirty(player.ViewportRenderers[i]);
+           // player.ViewportRenderers[i].SetDirty();
         }
 
         cam.fieldOfView = camFOV * (1 + player.meleeFOV_curve.Evaluate(1 - timer));
@@ -153,7 +164,7 @@ public class MeleeState : BasePlayerState
             return;
         }
 
-        if (Vector3.Angle((col.contacts[0].point - player.rb.position), meleeRotation.eulerAngles) < 90) player.ChangeState(player.RegularState);
+        if (Vector3.Angle((col.contacts[0].point - player.rb.position), meleeVector) < 90) player.ChangeState(player.RegularState);
     }
 
 

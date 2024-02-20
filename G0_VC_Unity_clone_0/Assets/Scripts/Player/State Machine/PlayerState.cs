@@ -61,9 +61,9 @@ public class BasePlayerState
 
     public virtual void AnimationTriggerEvent()
     {
-        player.player_anim_controller.SetBool("Grappling", player.isGrappling);
+        player.player_VP_anim_controller.SetBool("Grappling", player.isGrappling);
         //player.player_anim_controller.SetBool("Scoping", player.isScoping);
-        player.player_anim_controller.SetBool("Melee", player.isMelee);
+        player.player_VP_anim_controller.SetBool("Melee", player.isMelee);
     }
 
     public virtual void Start_Init()

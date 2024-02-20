@@ -8,8 +8,6 @@ using UnityEngine.InputSystem;
 public class WeaponManager : NetworkBehaviour
 {
     [SerializeField] Player_Inventory inventory;
-    [SerializeField] Animator animator;
-    [SerializeField] PlayerStateMachine player;
 
 
     public override void OnNetworkSpawn()
@@ -17,8 +15,6 @@ public class WeaponManager : NetworkBehaviour
         base.OnNetworkSpawn();
 
         if (!IsOwner) return;
-            
-        inventory.GetCurrentWeapon().test_animator = animator;
 
     }
 
@@ -27,9 +23,9 @@ public class WeaponManager : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        inventory.GetCurrentWeapon().UseWeapon(player);
-        inventory.GetCurrentWeapon().Scope(player);
-        inventory.GetCurrentWeapon().Animate();
+        Debug.Log(inventory.GetCurrentWeapon().GetType());
+
+        //inventory.GetCurrentWeapon().Weapon_Update();
         
     }
 }

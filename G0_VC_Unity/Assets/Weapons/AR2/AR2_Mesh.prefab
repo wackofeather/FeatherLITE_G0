@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3fdeeaf6f3572e6428ce97a62cc56b51, type: 2}
+  - {fileID: 2100000, guid: f778c61d1e8bbea4c9960447e811ba90, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,7 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5337036994444817845}
   m_Layer: 0
-  m_Name: AR
+  m_Name: AR2_Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

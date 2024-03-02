@@ -2,17 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
+
+[CreateAssetMenu]
 public class GunClass : WeaponClass
 {
-    [SerializeField] float maxAmmo_Mag;
+    [HideInInspector] float maxAmmo_Mag;
     [SerializeField] float maxAmmo_Inventory;
     [Space]
     [SerializeField] float BPS;
-
-
-    public GunClass(PlayerStateMachine player, Player_Inventory inventory, WeaponData weaponData) : base(player, inventory, weaponData)
+    
+    public bursh getClass()
     {
-
+        return new bursh();
     }
 
     public override void Weapon_Update()
@@ -34,4 +36,10 @@ public class GunClass : WeaponClass
 
     public void StartScope() { isScoping = true; }
     public void StopScope() { isScoping = false; }
+
+
+    public class bursh
+    {
+
+    }
 }

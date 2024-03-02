@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+
 public class WeaponManager : NetworkBehaviour
 {
     [SerializeField] Player_Inventory inventory;
@@ -23,7 +24,7 @@ public class WeaponManager : NetworkBehaviour
     {
         if (!IsOwner) return;
 
-        Debug.Log(inventory.GetCurrentWeapon().GetType());
+        //Debug.Log(inventory.GetCurrentWeapon());
 
         //inventory.GetCurrentWeapon().Weapon_Update();
         

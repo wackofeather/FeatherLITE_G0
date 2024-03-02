@@ -744,10 +744,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25769e7927e9edd4bb401b7a2fe83509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxWeapons: 2
-  Test_List:
-  - {fileID: 11400000, guid: 629825ea64fc92443a981341272a8b51, type: 2}
-  - {fileID: 11400000, guid: 0da8e39d8acea7e4abc5cb11a0a6b1bd, type: 2}
+  WeaponLookup: {fileID: 11400000, guid: 4680a5b2f4b245547989f38d1116cf2e, type: 2}
+  MaxWeapons: 10
+  Weapon_Inventory: []
   SwitchWeapon: {fileID: -2707839242528048958, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   WeaponManager: {fileID: 3671482692137962517}
   player: {fileID: 58085483968552630}

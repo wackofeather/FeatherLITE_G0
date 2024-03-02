@@ -1,3 +1,4 @@
+using Steamworks.Ugc;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,12 +9,13 @@ using UnityEngine.InputSystem;
 
 public class Player_Inventory : NetworkBehaviour
 {
+    [SerializeField] WeaponLookup WeaponLookup;
     [SerializeField] int MaxWeapons;
     public List<WeaponClass> Weapon_Inventory = new List<WeaponClass>();
     //private GameObject currentWeapon;
     private int current_Index;
     // [SerializeField] WeaponClass testWeapon;
-    public List<WeaponData> Test_List;
+    //public List<WeaponClass> Test_List;
     [SerializeField] InputActionReference SwitchWeapon;
     [SerializeField] WeaponManager WeaponManager;
 
@@ -28,12 +30,13 @@ public class Player_Inventory : NetworkBehaviour
 
         if (!IsOwner) return;
 
-        foreach (WeaponData weapon in Test_List)
+        for (int i = 0; i < WeaponLookup.weaponLookup.Count; i++)
         {
-            GiveWeapon(weapon);
+            GiveWeapon(WeaponLookup.weaponLookup[i]);
+            Debug.Log("ahhhhh");
         }
       //  currentWeapon = Weapon_Inventory[0];
-        ChangeCurrentWeapon_INDEX(0);
+        //ChangeCurrentWeapon_INDEX(0);
     }
     // Start is called before the first frame update
     void Awake()
@@ -75,30 +78,14 @@ public class Player_Inventory : NetworkBehaviour
         }
 
         current_Index = Weapon_Inventory.Count - 1;
-        Weapon_Inventory.Add(weapon_class);//weapon.clone(Weapon_Inventory.Count + 1));
-        changeWeapon_Internal(weapon_class);
 
-        /* for (int i = 0; i < Weapon_Inventory.Count; i++)
-         {
-             if (Weapon_Inventory[i] == null)
-             {
-                 Weapon_Inventory[i] = weapon;
-                 ChangeCurrentWeapon_INDEX(i);
-                 break;
-             }
-         }*/
-    }
+        WeaponClass weapon_copy = Instantiate(weapon_class);
 
-    public void GiveWeapon(WeaponData weapon)
-    {
-        if (Weapon_Inventory.Count >= MaxWeapons)
-        {
-            return; //eventually do swapping weapons
-        }
+        weapon_copy.player = player;
+        weapon_copy.inventory = this;
 
-        current_Index = Weapon_Inventory.Count - 1;
-        WeaponClass weapon_class = new WeaponClass(player, this, weapon);//= weapon.weaponClass;
-        Weapon_Inventory.Add(weapon_class);//weapon.clone(Weapon_Inventory.Count + 1));
+        Weapon_Inventory.Add(weapon_copy);//weapon.clone(Weapon_Inventory.Count + 1));
+        changeWeapon_Internal(weapon_copy);
 
         /* for (int i = 0; i < Weapon_Inventory.Count; i++)
          {

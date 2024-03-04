@@ -11,7 +11,7 @@ public class GunData : WeaponData
     [SerializeField] float BPS;
 
 
-    public class GunLogic : WeaponLogic
+   /* public class GunLogic : WeaponLogic
     {
         float currentAmmo;
         GunData gunData;
@@ -49,5 +49,5 @@ public class GunData : WeaponData
     public override IWeaponable GetClass()
     {
         return new GunLogic(this);
-    }
+    }*/
 }

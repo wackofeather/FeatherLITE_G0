@@ -95,6 +95,7 @@ public class PlayerStateMachine : NetworkBehaviour
     [Header("GRAPPLE STUFF")]
     [Space(5)]
 
+    [SerializeField] private float grappleLenience_Time;
 
     [Header("Rope Logic")]
 
@@ -295,7 +296,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
         if (Grapple.action.triggered)
         {
-            grappleWiggle_Timer = 1;
+            grappleWiggle_Timer = grappleLenience_Time;
         }
         else
         {

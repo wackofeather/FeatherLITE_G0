@@ -16,12 +16,15 @@ public class Player_Inventory : NetworkBehaviour
     private int current_Index;
     // [SerializeField] WeaponClass testWeapon;
     //public List<WeaponClass> Test_List;
-    [SerializeField] InputActionReference SwitchWeapon;
+    public InputActionReference SwitchWeapon;
     [SerializeField] WeaponManager WeaponManager;
 
     private WeaponClass currentWeapon;
 
     [SerializeField] PlayerStateMachine player;
+
+    public GameObject player_WeaponMesh;
+
 
 
     public override void OnNetworkSpawn()
@@ -47,7 +50,7 @@ public class Player_Inventory : NetworkBehaviour
 
     private void Update()
     {
-        ChangeCurrentWeapon((int)SwitchWeapon.action.ReadValue<float>());;
+        //ChangeCurrentWeapon((int)SwitchWeapon.action.ReadValue<float>());;
        // Debug.Log(Weapon_Inventory.Count);
        // if ( != 0) Debug.Log(SwitchWeapon.action.ReadValue<float>());
     }

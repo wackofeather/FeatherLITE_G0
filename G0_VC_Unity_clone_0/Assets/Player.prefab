@@ -750,6 +750,8 @@ MonoBehaviour:
   SwitchWeapon: {fileID: -2707839242528048958, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   WeaponManager: {fileID: 3671482692137962517}
   player: {fileID: 58085483968552630}
+  player_WeaponMesh: {fileID: 3511650414507195146}
+  player_weaponHolder: {fileID: 6033237497826677244}
 --- !u!1 &2844048075828827684
 GameObject:
   m_ObjectHideFlags: 0
@@ -1017,6 +1019,7 @@ MonoBehaviour:
   grapplingGunScript: {fileID: 1199171846237049367}
   lineRenderer: {fileID: 8217942930679748817}
   CanMove: 0
+  grappleLenience_Time: 0.1
   whatIsGrappleable:
     serializedVersion: 2
     m_Bits: 1

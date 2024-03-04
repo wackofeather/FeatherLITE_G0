@@ -18,3 +18,4 @@ MonoBehaviour:
   VM_animatorOverrideController: {fileID: 22100000, guid: 222f2547e061a5a4c87d856538cc92e1, type: 2}
   EXT_Player_animatorOverrideController: {fileID: 0}
   EXT_Weapon_animatorOverrideController: {fileID: 0}
+  enterStateTime: 0.8

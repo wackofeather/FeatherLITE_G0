@@ -16,18 +16,22 @@ public class WeaponData : ScriptableObject
     public AnimatorOverrideController EXT_Player_animatorOverrideController;
     public AnimatorOverrideController EXT_Weapon_animatorOverrideController;
 
-    public class WeaponLogic : IWeaponable
-    {
-        public virtual void Weapon_Update() { }
+    public float enterStateTime;
 
-        public virtual void EnterWeapon()
+/*    public class WeaponLogic : IWeaponable
+    {
+        protected bool isShooting;
+        protected bool isScoping;
+        public virtual void Weapon_Update(PlayerStateMachine player, Player_Inventory inventory) { }
+
+        public virtual void EnterWeapon(PlayerStateMachine player, Player_Inventory inventory)
         {
-            /*        player.player_VP_anim_controller.runtimeAnimatorController = weaponData.VM_animatorOverrideController;
+            *//*        player.player_VP_anim_controller.runtimeAnimatorController = weaponData.VM_animatorOverrideController;
                     player.player_VP_anim_controller.SetTrigger("SwitchWeapon");
-                    Debug.Log("weapon switched");*/
+                    Debug.Log("weapon switched");*//*
         }
 
-        public virtual void ExitWeapon()
+        public virtual void ExitWeapon(PlayerStateMachine player, Player_Inventory inventory)
         {
             //  player.player_VP_anim_controller.ResetTrigger("SwitchWeapon");
         }
@@ -36,6 +40,6 @@ public class WeaponData : ScriptableObject
     public virtual IWeaponable GetClass()
     {
         return null;
-    }
+    }*/
 
 }

@@ -47,15 +47,17 @@ public class MeleeState : BasePlayerState
     }
 
     public override void EnterState()
-    {        
-        
+    {
+
+        player.isMelee = true;
+
         if (!player.IsOwner) return;
 
 
 
 
         
-        player.isMelee = true;
+        
 
 
         timer = timerVal;
@@ -87,7 +89,11 @@ public class MeleeState : BasePlayerState
     {
         
         
-        if (!player.IsOwner) return;
+        if (!player.IsOwner)
+        {
+            player.isMelee = false;
+            return;
+        }
 
         cam.fieldOfView = camFOV;
         for (int i = 0; i < player.ViewportRenderers.Count; i++)

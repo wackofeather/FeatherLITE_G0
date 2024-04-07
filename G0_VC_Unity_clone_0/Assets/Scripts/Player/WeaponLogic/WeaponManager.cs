@@ -22,10 +22,10 @@ public class WeaponManager : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!IsOwner) return;
+
 
         //Debug.Log(inventory.GetCurrentWeapon());
-
+        if (inventory.GetCurrentWeapon() == null) { return; }
         inventory.GetCurrentWeapon().Weapon_Update();
         
     }

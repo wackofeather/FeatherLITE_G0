@@ -14,8 +14,8 @@ public class WeaponData : ScriptableObject
     public AnimatorOverrideController VM_ARM_animatorOverrideController;
     public AnimatorOverrideController VM_GUN_animatorOverrideController;
     [Header("Exterior")]
-    public AnimatorOverrideController EXT_Player_animatorOverrideController;
-    public AnimatorOverrideController EXT_Weapon_animatorOverrideController;
+    public AnimatorOverrideController EXT_ARM_animatorOverrideController;
+    public AnimatorOverrideController EXT_GUN_animatorOverrideController;
 
     public float enterStateTime;
 

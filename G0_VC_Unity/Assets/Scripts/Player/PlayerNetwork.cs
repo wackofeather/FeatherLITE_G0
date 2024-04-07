@@ -17,6 +17,7 @@ public class PlayerNetwork : NetworkBehaviour
     [SerializeField] private GameObject Viewport;
     [SerializeField] Transform rotatables;
     [SerializeField] PlayerStateMachine playerStateMachine;
+    [SerializeField] Player_Inventory inventory;
     private NetworkVariable<PlayerNetworkState> _playerState;
     private Rigidbody _rb;
 
@@ -30,8 +31,8 @@ public class PlayerNetwork : NetworkBehaviour
 
     private void Update()
     {
-        if (IsOwner) TransmitState();
-        else ConsumeState();
+        //if (IsOwner) TransmitState();
+        //else ConsumeState();
     }
 
     #region Transmit State
@@ -42,9 +43,11 @@ public class PlayerNetwork : NetworkBehaviour
         {
             Position = _rb.position,
             Rotation = rotatables.transform.rotation.eulerAngles,
-            isGrappling_internal = playerStateMachine.isGrappling,
+            isScoping_internal = inventory.isScoping,
+            isShooting_internal = inventory.isShooting,
             GrapplePosition = playerStateMachine.grapplePoint,
-            currentPlayerState_fl_internal = playerStateMachine.CurrentPlayerState.key
+            currentPlayerState_fl_internal = playerStateMachine.CurrentPlayerState.key,
+            currentWeapon_fl_internal = inventory.currentWeapon.key
         };
 
         if (IsServer || !_serverAuth)
@@ -80,12 +83,15 @@ public class PlayerNetwork : NetworkBehaviour
 
         /*Exterior.transform.rotation = Quaternion.Lerp(Exterior.transform.rotation, Quaternion.Euler(_playerState.Value.Rotation.x, _playerState.Value.Rotation.y, 0), 0.3f);
         Viewport.transform.rotation = Quaternion.Lerp(Viewport.transform.rotation, Quaternion.Euler(_playerState.Value.Rotation.x, _playerState.Value.Rotation.y, 0), 0.3f);*/
-        rotatables.transform.rotation = Quaternion.Lerp(rotatables.transform.rotation, Quaternion.Euler(_playerState.Value.Rotation.x, 0, 0), 0.3f);
+        rotatables.transform.rotation = Quaternion.Lerp(rotatables.transform.rotation, Quaternion.Euler(0, _playerState.Value.Rotation.y, 0), 0.3f);
 
       //  Debug.Log(_playerState.Value.currentPlayerState_fl_internal);
         if (_playerState.Value.currentPlayerState_fl_internal != 0) playerStateMachine.internal_CurrentState = _playerState.Value.currentPlayerState_fl_internal;
+        if (_playerState.Value.currentWeapon_fl_internal != 0) inventory.internal_CurrentWeapon = _playerState.Value.currentWeapon_fl_internal;
+        inventory.isScoping = _playerState.Value.isScoping_internal;
+        inventory.isShooting = _playerState.Value.isShooting_internal;
         playerStateMachine.grapplePoint = _playerState.Value.GrapplePosition;
-        playerStateMachine.isGrappling = _playerState.Value.isGrappling_internal;
+        //playerStateMachine.isGrappling = _playerState.Value.isGrappling_internal;
     }
 
     #endregion
@@ -98,9 +104,15 @@ public class PlayerNetwork : NetworkBehaviour
 
         private float _rotX, _rotY;
 
-        private bool isGrappling;
+        //private bool isGrappling;
+
+        private bool isScoping;
+
+        private bool isShooting;
 
         private float currentPlayerState_fl;
+
+        private float currentWeapon_fl;
 
         internal Vector3 Position
         {
@@ -123,12 +135,30 @@ public class PlayerNetwork : NetworkBehaviour
             }
         }
 
-        internal bool isGrappling_internal
+/*        internal bool isGrappling_internal
         {
             get => isGrappling;
             set
             {
                 isGrappling = value;
+            }
+        }*/
+
+        internal bool isScoping_internal
+        {
+            get => isScoping;
+            set
+            {
+                isScoping = value;
+            }
+        }
+
+        internal bool isShooting_internal
+        {
+            get => isShooting;
+            set
+            {
+                isShooting = value;
             }
         }
 
@@ -153,6 +183,15 @@ public class PlayerNetwork : NetworkBehaviour
             }
         }
 
+        internal float currentWeapon_fl_internal
+        {
+            get => currentWeapon_fl;
+            set
+            {
+                currentWeapon_fl = value;
+            }
+        }
+
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref _posX);
@@ -160,11 +199,14 @@ public class PlayerNetwork : NetworkBehaviour
             serializer.SerializeValue(ref _posZ);
             serializer.SerializeValue(ref _rotX);
             serializer.SerializeValue(ref _rotY);
-            serializer.SerializeValue(ref isGrappling);
+            //serializer.SerializeValue(ref isGrappling);
+            serializer.SerializeValue(ref isScoping);
+            serializer.SerializeValue(ref isShooting);
             serializer.SerializeValue(ref G_posX);
             serializer.SerializeValue(ref G_posY);
             serializer.SerializeValue(ref G_posZ);
             serializer.SerializeValue(ref currentPlayerState_fl);
+            serializer.SerializeValue(ref currentWeapon_fl);
         }
     }
 }

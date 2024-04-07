@@ -13,14 +13,15 @@ public class WeaponClass : ScriptableObject , IWeaponable
 
 
     //just the dynamic data is declared here
-    
-    protected bool isShooting;
-    protected bool isScoping;
     [HideInInspector] public PlayerStateMachine player;
     [HideInInspector] public Player_Inventory inventory;
     protected float shootingTimer;
     public virtual void Weapon_Update() 
     {
+
+
+        if (!player.IsOwner) return;
+
         if (shootingTimer > 0) shootingTimer -= Time.deltaTime;
         //Debug.Log(isShooting);
 
@@ -29,17 +30,25 @@ public class WeaponClass : ScriptableObject , IWeaponable
 
     public virtual void EnterWeapon()
     {
-        isShooting = false;
-        isScoping = false;
+
+        player.player_EXT_ARM_anim_controller.runtimeAnimatorController = weaponData.EXT_ARM_animatorOverrideController;
+        player.player_EXT_ARM_anim_controller.SetTrigger("SwitchWeapon");
+        inventory.EXT_GetCurrentWeaponAnimator().SetTrigger("SwitchWeapon");
+
+        if (!player.IsOwner) return;
+
+
+        inventory.isShooting = false;
+        inventory.isScoping = false;
 
         player.player_VP_ARM_anim_controller.runtimeAnimatorController = weaponData.VM_ARM_animatorOverrideController;
         player.player_VP_ARM_anim_controller.SetTrigger("SwitchWeapon");
 
         //player.player_VP_GUN_anim_controller.runtimeAnimatorController = weaponData.VM_GUN_animatorOverrideController;
-        inventory.GetCurrentWeaponAnimator().SetTrigger("SwitchWeapon");
+        inventory.VP_GetCurrentWeaponAnimator().SetTrigger("SwitchWeapon");
 
-        inventory.player_WeaponMesh.GetComponent<MeshFilter>().sharedMesh = weaponData.weaponMesh.GetComponentInChildren<MeshFilter>().sharedMesh;
-        inventory.player_WeaponMesh.GetComponent<MeshRenderer>().sharedMaterial = weaponData.weaponMesh.GetComponentInChildren<MeshRenderer>().sharedMaterial;
+        //inventory.player_WeaponMesh.GetComponent<MeshFilter>().sharedMesh = weaponData.weaponMesh.GetComponentInChildren<MeshFilter>().sharedMesh;
+        //inventory.player_WeaponMesh.GetComponent<MeshRenderer>().sharedMaterial = weaponData.weaponMesh.GetComponentInChildren<MeshRenderer>().sharedMaterial;
 
         shootingTimer = weaponData.enterStateTime;
 
@@ -50,8 +59,14 @@ public class WeaponClass : ScriptableObject , IWeaponable
 
     public virtual void ExitWeapon() 
     {
+
+        player.player_EXT_ARM_anim_controller.ResetTrigger("SwitchWeapon");
+        inventory.EXT_GetCurrentWeaponAnimator().ResetTrigger("SwitchWeapon");
+
+        if (!player.IsOwner) return;
+
         player.player_VP_ARM_anim_controller.ResetTrigger("SwitchWeapon");
-        inventory.GetCurrentWeaponAnimator().ResetTrigger("SwitchWeapon");
+        inventory.VP_GetCurrentWeaponAnimator().ResetTrigger("SwitchWeapon");
     }
     
 }

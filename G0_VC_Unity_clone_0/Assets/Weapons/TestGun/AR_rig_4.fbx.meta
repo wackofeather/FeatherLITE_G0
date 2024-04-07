@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 088a3b715a46c8642b2142be01c8ee0a
+guid: dd7dfaf65911fe749be709dabffd4ce7
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -12,7 +12,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    resampleCurves: 1
+    resampleCurves: 0
     optimizeGameObjects: 0
     removeConstantScaleCurves: 1
     motionNodeName: 
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|ArmatureAction
-      takeName: Armature|ArmatureAction
-      internalID: 4781951162920444690
+      name: Armature.001|Armature.001Action
+      takeName: Armature.001|Armature.001Action
+      internalID: 2264077025236624520
       firstFrame: 0
-      lastFrame: 390
+      lastFrame: 570
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -62,9 +62,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ARM_idle
-      takeName: Armature|ArmatureAction
-      internalID: -2674958278859614444
+      name: GUN_idle
+      takeName: Armature.001|Armature.001Action
+      internalID: -1759345954821661573
       firstFrame: 0
       lastFrame: 60
       wrapMode: 0
@@ -91,9 +91,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ARM_shoot
-      takeName: Armature|ArmatureAction
-      internalID: -1713325850127434092
+      name: GUN_shoot
+      takeName: Armature.001|Armature.001Action
+      internalID: 2410413157427569987
       firstFrame: 100
       lastFrame: 104
       wrapMode: 0
@@ -120,9 +120,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ARM_reload
-      takeName: Armature|ArmatureAction
-      internalID: -4574417121280339507
+      name: GUN_reload
+      takeName: Armature.001|Armature.001Action
+      internalID: -2235887830007816415
       firstFrame: 120
       lastFrame: 187
       wrapMode: 0
@@ -131,8 +131,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -149,9 +149,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ARM_scopeIdle
-      takeName: Armature|ArmatureAction
-      internalID: 4112734611506483818
+      name: GUN_scopeIdle
+      takeName: Armature.001|Armature.001Action
+      internalID: -4062070754446940457
       firstFrame: 220
       lastFrame: 280
       wrapMode: 0
@@ -178,9 +178,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ARM_scopeShoot
-      takeName: Armature|ArmatureAction
-      internalID: 8569247068082238595
+      name: GUN_scopeShoot
+      takeName: Armature.001|Armature.001Action
+      internalID: 4957387397743252073
       firstFrame: 280
       lastFrame: 284
       wrapMode: 0
@@ -207,9 +207,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ARM_grappleIdle
-      takeName: Armature|ArmatureAction
-      internalID: 9092962451484864858
+      name: GUN_grappleIdle
+      takeName: Armature.001|Armature.001Action
+      internalID: 5393574150197556121
       firstFrame: 300
       lastFrame: 320
       wrapMode: 0
@@ -236,9 +236,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ARM_grappleShoot
-      takeName: Armature|ArmatureAction
-      internalID: -6331418236113696352
+      name: GUN_grappleShoot
+      takeName: Armature.001|Armature.001Action
+      internalID: 4661337213272327550
       firstFrame: 320
       lastFrame: 324
       wrapMode: 0
@@ -265,9 +265,9 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ARM_switch
-      takeName: Armature|ArmatureAction
-      internalID: 1399966608071545209
+      name: GUN_switch
+      takeName: Armature.001|Armature.001Action
+      internalID: -5948358994231021658
       firstFrame: 148
       lastFrame: 187
       wrapMode: 0
@@ -277,6 +277,64 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: GUN_melee
+      takeName: Armature.001|Armature.001Action
+      internalID: 5821056900623373487
+      firstFrame: 340
+      lastFrame: 390
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: EXT_GUN_idleUp
+      takeName: Armature.001|Armature.001Action
+      internalID: 6198534996732317095
+      firstFrame: 400
+      lastFrame: 405
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
       loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -294,11 +352,11 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: ARM_melee
-      takeName: Armature|ArmatureAction
-      internalID: 1652825913084231784
-      firstFrame: 340
-      lastFrame: 390
+      name: EXT_GUN_idleDown
+      takeName: Armature.001|Armature.001Action
+      internalID: -3281548268755557624
+      firstFrame: 410
+      lastFrame: 415
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -307,6 +365,35 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 1
       loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: GUN_Base
+      takeName: Armature.001|Armature.001Action
+      internalID: -575623343654925752
+      firstFrame: 60
+      lastFrame: 61
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0
@@ -379,15 +466,15 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: chest
+    rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: c9f44d9d2d652034e9552703ef420a1e, type: 3}
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 2
   humanoidOversampling: 1
-  avatarSetup: 2
+  avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0

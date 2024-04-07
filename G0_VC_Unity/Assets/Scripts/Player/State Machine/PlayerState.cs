@@ -61,6 +61,19 @@ public class BasePlayerState
 
     public virtual void AnimationTriggerEvent()
     {
+        player.player_EXT_ARM_anim_controller.SetBool("Grappling", player.isGrappling);
+        //player.player_anim_controller.SetBool("Scoping", player.isScoping);
+        player.player_EXT_ARM_anim_controller.SetBool("Melee", player.isMelee);
+
+        if (player.inventory.EXT_GetCurrentWeaponAnimator() != null)
+        {
+            player.inventory.EXT_GetCurrentWeaponAnimator().SetBool("Grappling", player.isGrappling);
+
+            player.inventory.EXT_GetCurrentWeaponAnimator().SetBool("Melee", player.isMelee);
+        }
+
+        if (!player.IsOwner) return;
+
         player.player_VP_ARM_anim_controller.SetBool("Grappling", player.isGrappling);
         //player.player_anim_controller.SetBool("Scoping", player.isScoping);
         player.player_VP_ARM_anim_controller.SetBool("Melee", player.isMelee);
@@ -68,11 +81,14 @@ public class BasePlayerState
 
         //Debug.Log(player.inventory.GetCurrentWeaponAnimator());
 
-        if (player.inventory.GetCurrentWeaponAnimator() == null) return;
+        if (player.inventory.VP_GetCurrentWeaponAnimator() != null)
+        {
+            player.inventory.VP_GetCurrentWeaponAnimator().SetBool("Grappling", player.isGrappling);
 
-        player.inventory.GetCurrentWeaponAnimator().SetBool("Grappling", player.isGrappling);
+            player.inventory.VP_GetCurrentWeaponAnimator().SetBool("Melee", player.isMelee);
+        }
 
-        player.inventory.GetCurrentWeaponAnimator().SetBool("Melee", player.isMelee);
+       
     }
 
     public virtual void Start_Init()

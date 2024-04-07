@@ -34,6 +34,7 @@ public class GrapplingState : BasePlayerState
 
         if (!player.IsOwner)
         {
+            player.isGrappling = true;
             return;
         }
         
@@ -88,6 +89,7 @@ public class GrapplingState : BasePlayerState
             player.spring.Reset();
             player.VIEWPORT_lr.positionCount = 0;
             player.EXTERIOR_lr.positionCount = 0;
+            player.isGrappling = true;
             return;
         }
         player._StopCoroutine(GrappleCoroutine());

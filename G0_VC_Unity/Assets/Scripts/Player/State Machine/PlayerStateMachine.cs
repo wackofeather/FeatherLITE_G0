@@ -149,7 +149,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
     [Header("Animation")]
     public Animator player_VP_ARM_anim_controller;
-    //public Animator player_VP_GUN_anim_template;
+    public Animator player_EXT_ARM_anim_controller;
     public bool isGrappling;
     public bool isScoping;
     public bool isMelee;

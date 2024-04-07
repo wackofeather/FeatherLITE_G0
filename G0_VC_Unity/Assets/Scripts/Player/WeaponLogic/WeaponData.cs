@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
+[CreateAssetMenu]
 public class WeaponData : ScriptableObject
 {
     //[SerializeField] public WeaponClass weaponClass;
@@ -11,7 +11,8 @@ public class WeaponData : ScriptableObject
     public InputActionReference scope;
     public GameObject weaponMesh;
     [Header("ViewModel")]
-    public AnimatorOverrideController VM_animatorOverrideController;
+    public AnimatorOverrideController VM_ARM_animatorOverrideController;
+    public AnimatorOverrideController VM_GUN_animatorOverrideController;
     [Header("Exterior")]
     public AnimatorOverrideController EXT_Player_animatorOverrideController;
     public AnimatorOverrideController EXT_Weapon_animatorOverrideController;

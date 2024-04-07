@@ -7,7 +7,7 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class WeaponClass : ScriptableObject , IWeaponable
 {
-    [SerializeField] protected WeaponData weaponData;
+    public WeaponData weaponData;
     public float key;
 
 
@@ -22,7 +22,7 @@ public class WeaponClass : ScriptableObject , IWeaponable
     public virtual void Weapon_Update() 
     {
         if (shootingTimer > 0) shootingTimer -= Time.deltaTime;
-        Debug.Log(isShooting);
+        //Debug.Log(isShooting);
 
         if (!player.isMelee) inventory.ChangeCurrentWeapon((int)inventory.SwitchWeapon.action.ReadValue<float>());
     }
@@ -32,20 +32,26 @@ public class WeaponClass : ScriptableObject , IWeaponable
         isShooting = false;
         isScoping = false;
 
-        player.player_VP_anim_controller.runtimeAnimatorController = weaponData.VM_animatorOverrideController;
-        player.player_VP_anim_controller.SetTrigger("SwitchWeapon");
+        player.player_VP_ARM_anim_controller.runtimeAnimatorController = weaponData.VM_ARM_animatorOverrideController;
+        player.player_VP_ARM_anim_controller.SetTrigger("SwitchWeapon");
+
+        //player.player_VP_GUN_anim_controller.runtimeAnimatorController = weaponData.VM_GUN_animatorOverrideController;
+        inventory.GetCurrentWeaponAnimator().SetTrigger("SwitchWeapon");
 
         inventory.player_WeaponMesh.GetComponent<MeshFilter>().sharedMesh = weaponData.weaponMesh.GetComponentInChildren<MeshFilter>().sharedMesh;
         inventory.player_WeaponMesh.GetComponent<MeshRenderer>().sharedMaterial = weaponData.weaponMesh.GetComponentInChildren<MeshRenderer>().sharedMaterial;
 
         shootingTimer = weaponData.enterStateTime;
+
+        
         
         Debug.Log("weapon switched");
     }
 
     public virtual void ExitWeapon() 
     {
-        player.player_VP_anim_controller.ResetTrigger("SwitchWeapon");
+        player.player_VP_ARM_anim_controller.ResetTrigger("SwitchWeapon");
+        inventory.GetCurrentWeaponAnimator().ResetTrigger("SwitchWeapon");
     }
     
 }

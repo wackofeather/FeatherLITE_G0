@@ -19,9 +19,13 @@ public class GunClass : WeaponClass
         
         base.Weapon_Update();
 
-        player.player_VP_anim_controller.SetBool("Scoping", isScoping);
+        player.player_VP_ARM_anim_controller.SetBool("Scoping", isScoping);
 
-        player.player_VP_anim_controller.SetBool("Firing", isShooting);
+        player.player_VP_ARM_anim_controller.SetBool("Firing", isShooting);
+
+        inventory.GetCurrentWeaponAnimator().SetBool("Scoping", isScoping);
+
+        inventory.GetCurrentWeaponAnimator().SetBool("Firing", isShooting);
 
 
         if (shootingTimer > 0) return;

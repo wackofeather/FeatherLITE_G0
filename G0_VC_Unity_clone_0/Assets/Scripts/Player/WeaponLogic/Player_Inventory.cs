@@ -4,8 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.VisualScripting;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.HID;
 
 public class Player_Inventory : NetworkBehaviour
 {
@@ -20,12 +22,16 @@ public class Player_Inventory : NetworkBehaviour
     [SerializeField] WeaponManager WeaponManager;
 
     private WeaponClass currentWeapon;
+    private Animator currentAnimator;
 
     [SerializeField] PlayerStateMachine player;
 
     public GameObject player_WeaponMesh;
 
+    private Dictionary<float, GameObject> weapon_Dict = new Dictionary<float, GameObject>();
 
+    [SerializeField] GameObject GunParent;
+    [SerializeField] string viewport_Layer;
 
     public override void OnNetworkSpawn()
     {
@@ -33,12 +39,15 @@ public class Player_Inventory : NetworkBehaviour
 
         if (!IsOwner) return;
 
+
+
+        IntitializeWeapons(GunParent);
         for (int i = 0; i < WeaponLookup.weaponLookup.Count; i++)
         {
             GiveWeapon(WeaponLookup.weaponLookup[i]);
             Debug.Log("ahhhhh");
         }
-      //  currentWeapon = Weapon_Inventory[0];
+        //  currentWeapon = Weapon_Inventory[0];
         //ChangeCurrentWeapon_INDEX(0);
     }
     // Start is called before the first frame update
@@ -51,15 +60,15 @@ public class Player_Inventory : NetworkBehaviour
     private void Update()
     {
         //ChangeCurrentWeapon((int)SwitchWeapon.action.ReadValue<float>());;
-       // Debug.Log(Weapon_Inventory.Count);
-       // if ( != 0) Debug.Log(SwitchWeapon.action.ReadValue<float>());
+        // Debug.Log(Weapon_Inventory.Count);
+        // if ( != 0) Debug.Log(SwitchWeapon.action.ReadValue<float>());
     }
 
     public void ChangeCurrentWeapon(int direction)
     {
         if (direction == 0 | Weapon_Inventory.Count == 1) return;
         direction = Mathf.Clamp(direction, -1, 1);
-        for (int i = 1;  i < Weapon_Inventory.Count; i++)
+        for (int i = 1; i < Weapon_Inventory.Count; i++)
         {
             int index = Mathf.Abs((current_Index + i * direction)) % Weapon_Inventory.Count;
 
@@ -112,14 +121,57 @@ public class Player_Inventory : NetworkBehaviour
 
     public void changeWeapon_Internal(WeaponClass weapon)
     {
-        if (currentWeapon != null) currentWeapon.ExitWeapon();
+        if (currentWeapon != null)
+        {
+            currentWeapon.ExitWeapon();
+            weapon_Dict[currentWeapon.key].SetActive(false);
+        }
+
         currentWeapon = weapon;
+        currentAnimator = weapon_Dict[currentWeapon.key].GetComponentInChildren<Animator>();
+        weapon_Dict[currentWeapon.key].SetActive(true);
+        currentAnimator.enabled = true;
         currentWeapon.EnterWeapon();
+
     }
+
+    public void IntitializeWeapons(GameObject parent)
+    {
+        foreach (WeaponClass weaponclass in WeaponLookup.weaponLookup)
+        {
+            //Debug.Log(weaponclass.key);
+            GameObject gun = Instantiate(weaponclass.weaponData.weaponMesh);
+            gun.transform.parent = parent.transform;
+            gun.transform.localPosition = Vector3.zero;
+            SetLayerWITHChildren(gun.transform, viewport_Layer);
+            Animator weapon_animator = gun.AddComponent<Animator>();
+            //weapon_animator = player.player_VP_GUN_anim_template;
+            weapon_animator.runtimeAnimatorController = weaponclass.weaponData.VM_GUN_animatorOverrideController;
+            gun.SetActive(false);
+            weapon_Dict.Add(weaponclass.key, gun);
+        }
+    }
+
 
 
     public WeaponClass GetCurrentWeapon()
     {
         return currentWeapon;
+    }
+
+    public Animator GetCurrentWeaponAnimator()
+    {
+        return currentAnimator;
+    }
+
+    void SetLayerWITHChildren(Transform root, string layer)
+    {
+        var children = root.GetComponentsInChildren<Transform>(includeInactive: true);
+        root.gameObject.layer = LayerMask.NameToLayer(layer);
+        foreach (var child in children)
+        {
+            //Debug.Log(child.name);
+            child.gameObject.layer = LayerMask.NameToLayer(layer);
+        }
     }
 }

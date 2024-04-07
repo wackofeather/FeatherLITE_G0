@@ -904,7 +904,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!33 &94007115222630126
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1928,7 +1928,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 8885019593260841064}
-  animator: {fileID: 8585395095985908623}
 --- !u!33 &3853531673490197416
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2887,11 +2886,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25769e7927e9edd4bb401b7a2fe83509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WeaponLookup: {fileID: 0}
   MaxWeapons: 2
   Weapon_Inventory: []
-  testWeapon: {fileID: 6520297417153422447, guid: 4fdcec34c2d39b540b2afa73e1b5673c, type: 3}
   SwitchWeapon: {fileID: -2707839242528048958, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   WeaponManager: {fileID: 3671482691076384313}
+  player: {fileID: 0}
+  player_WeaponMesh: {fileID: 0}
+  GunParent: {fileID: 0}
+  viewport_Layer: 
 --- !u!4 &8896149715685486346
 Transform:
   m_ObjectHideFlags: 0

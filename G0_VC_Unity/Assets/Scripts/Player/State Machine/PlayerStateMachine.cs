@@ -148,13 +148,15 @@ public class PlayerStateMachine : NetworkBehaviour
 
 
     [Header("Animation")]
-    public Animator player_VP_anim_controller;
+    public Animator player_VP_ARM_anim_controller;
+    //public Animator player_VP_GUN_anim_template;
     public bool isGrappling;
     public bool isScoping;
     public bool isMelee;
 
     [Header("VERY IMPORTANT")]
     public float ViewportFOV;
+    public Player_Inventory inventory;
 
     [System.NonSerialized] public bool allowedToGrapple;
 

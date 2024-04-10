@@ -13,7 +13,10 @@ public class BasePlayerState
     {
         this.player = _player;
     }
+    public virtual void InitializeState()
+    {
 
+    }
     public virtual void EnterState()
     {
         AnimationTriggerEvent();
@@ -24,9 +27,14 @@ public class BasePlayerState
     }
     public virtual void Update()
     {
+
+        player.player_EXT_ARM_anim_controller.SetFloat("Y_Look", player.updown_Blendconstant);
+        player.inventory.EXT_GetCurrentWeaponAnimator().SetFloat("Y_Look", player.updown_Blendconstant);
+
         if (!player.IsOwner)
         {
-            //Debug.Log(player.internal_CurrentState);
+
+            
             if (player.internal_CurrentState != key) player.ChangeState(player.stateDictionary[player.internal_CurrentState]);
             return;
         }
@@ -45,7 +53,9 @@ public class BasePlayerState
 
 
         player.Rotatables.localRotation = Quaternion.Euler(player.xRotation, player.yRotation, 0);
+        player.Exterior.localRotation = Quaternion.Euler(0, player.yRotation, 0);
         player.PlayerCamera.localRotation = Quaternion.Euler(player.xRotation, player.yRotation, 0);
+        player.updown_Blendconstant = (player.xRotation + 90) / 180;
 
         if (player.melee.action.triggered && player.CurrentPlayerState != player.MeleeState) player.ChangeState(player.MeleeState);
     }
@@ -71,7 +81,7 @@ public class BasePlayerState
 
             player.inventory.EXT_GetCurrentWeaponAnimator().SetBool("Melee", player.isMelee);
         }
-
+        
         if (!player.IsOwner) return;
 
         player.player_VP_ARM_anim_controller.SetBool("Grappling", player.isGrappling);

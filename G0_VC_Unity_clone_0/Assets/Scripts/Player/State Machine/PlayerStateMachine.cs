@@ -101,6 +101,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
     [System.NonSerialized] public Vector3 grapplePoint;
     public LayerMask whatIsGrappleable;
+    public LayerMask movingGrapplableLayers;
     //public Transform Playercamera;
     public float maxDistance = 100f;
     [System.NonSerialized] public SpringJoint joint;
@@ -153,11 +154,12 @@ public class PlayerStateMachine : NetworkBehaviour
     public bool isGrappling;
     public bool isScoping;
     public bool isMelee;
+    [HideInInspector] public float updown_Blendconstant;
 
     [Header("VERY IMPORTANT")]
     public float ViewportFOV;
     public Player_Inventory inventory;
-
+    public string EnemyLayer;
     [System.NonSerialized] public bool allowedToGrapple;
 
     [System.NonSerialized] public float internal_CurrentState;
@@ -235,6 +237,8 @@ public class PlayerStateMachine : NetworkBehaviour
             //this.enabled = false;
             //Debug.Log("bruhsushsh");
 
+
+            gameObject.layer = LayerMask.NameToLayer(EnemyLayer);
 
         }
         else
@@ -329,6 +333,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
     public void Initialize(BasePlayerState startingState)
     {
+        foreach (BasePlayerState state in stateDictionary.Values) state.InitializeState(); 
         CurrentPlayerState = startingState;
         internal_CurrentState = startingState.key;
         CurrentPlayerState.EnterState();

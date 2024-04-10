@@ -25,8 +25,7 @@ public class WeaponManager : NetworkBehaviour
 
 
         //Debug.Log(inventory.GetCurrentWeapon());
-        if (inventory.GetCurrentWeapon() == null) { return; }
-        inventory.GetCurrentWeapon().Weapon_Update();
+        if (inventory.GetCurrentWeapon() != null) inventory.GetCurrentWeapon().Weapon_Update();
         
     }
 }

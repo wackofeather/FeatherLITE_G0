@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 
 public class WeaponClass : ScriptableObject , IWeaponable
@@ -23,7 +22,7 @@ public class WeaponClass : ScriptableObject , IWeaponable
         if (!player.IsOwner) return;
 
         if (shootingTimer > 0) shootingTimer -= Time.deltaTime;
-        //Debug.Log(isShooting);
+
 
         if (!player.isMelee) inventory.ChangeCurrentWeapon((int)inventory.SwitchWeapon.action.ReadValue<float>());
     }

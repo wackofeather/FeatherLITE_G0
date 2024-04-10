@@ -3,17 +3,31 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 using UnityEngine.Profiling;
-
+using UnityEngine.Rendering.Universal;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class GrapplingState : BasePlayerState
 {
 
-
+    RaycastHit hit;
+    Vector3 local_grapplePoint;
     public GrapplingState(PlayerStateMachine player) : base(player)
     {
         key = 2;
     }
+    public override void InitializeState()
+    {
+        base.InitializeState();
 
+        if (player.IsOwner)
+        {
+            player.EXTERIOR_grappleHand.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+        }
+        else
+        {
+            player.VIEWPORT_grappleHand.SetActive(false);
+        }
+    }
     public override void AnimationTriggerEvent()
     {
         base.AnimationTriggerEvent();
@@ -35,6 +49,7 @@ public class GrapplingState : BasePlayerState
         if (!player.IsOwner)
         {
             player.isGrappling = true;
+            base.EnterState();
             return;
         }
         
@@ -42,7 +57,9 @@ public class GrapplingState : BasePlayerState
 
         player.VIEWPORT_currentGrapplePosition = player.viewport_gunTip.position;
 
-        RaycastHit hit = player.GrappleCheck();
+        hit = player.GrappleCheck();
+
+        if (player.movingGrapplableLayers == (player.movingGrapplableLayers | (1 << hit.transform.gameObject.layer))) local_grapplePoint = hit.transform.gameObject.transform.InverseTransformPoint(hit.point);
         player.grapplePoint = hit.point;
         Vector3 relativeVelocity = player.PlayerCamera.InverseTransformVector(player.rb.velocity);
         if (relativeVelocity.z < 0) relativeVelocity.z = 0f;
@@ -89,7 +106,8 @@ public class GrapplingState : BasePlayerState
             player.spring.Reset();
             player.VIEWPORT_lr.positionCount = 0;
             player.EXTERIOR_lr.positionCount = 0;
-            player.isGrappling = true;
+            player.isGrappling = false;
+            base.ExitState();
             return;
         }
         player._StopCoroutine(GrappleCoroutine());
@@ -138,6 +156,14 @@ public class GrapplingState : BasePlayerState
         base.Update();
 
         if (!player.IsOwner) return;
+
+        if (player.movingGrapplableLayers == (player.movingGrapplableLayers | (1 << hit.transform.gameObject.layer))) 
+        {
+            player.grapplePoint = hit.transform.gameObject.transform.TransformPoint(local_grapplePoint);
+            player.joint.connectedAnchor = player.grapplePoint;
+        }
+            
+            
     }
 
     public override void LateUpdate()
@@ -238,7 +264,7 @@ public class GrapplingState : BasePlayerState
 
             if (Angle > player.PlayerCamera.GetComponent<Camera>().fieldOfView * (1 + player.lookAwayLeniency)) break;
 
-            if ((player.grapplePoint - hit.point).magnitude >= 0.1f) break;
+            if (((player.grapplePoint - hit.point).magnitude >= 0.7f) && hit.collider != null) { Debug.Log(player.grapplePoint - hit.point); break; }
 
 
             if (player.Grapple.action.WasReleasedThisFrame()) break;

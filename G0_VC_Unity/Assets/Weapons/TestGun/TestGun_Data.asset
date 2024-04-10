@@ -18,5 +18,5 @@ MonoBehaviour:
   VM_ARM_animatorOverrideController: {fileID: 22100000, guid: bcfcc0742162c4f4b81d9352cba1b261, type: 2}
   VM_GUN_animatorOverrideController: {fileID: 22100000, guid: ced0d1b20fe13f74e97205ee517ba46d, type: 2}
   EXT_ARM_animatorOverrideController: {fileID: 22100000, guid: 39af5b84ac58f7e48806e02b78095196, type: 2}
-  EXT_GUN_animatorOverrideController: {fileID: 0}
+  EXT_GUN_animatorOverrideController: {fileID: 22100000, guid: 5824359103043c24e8858bc5c9ad3cd5, type: 2}
   enterStateTime: 0.65

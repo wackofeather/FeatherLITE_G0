@@ -11,8 +11,6 @@ public class RegularState : BasePlayerState
 
     public override void AnimationTriggerEvent()
     {
-        if (!player.IsOwner) return;
-
         base.AnimationTriggerEvent();
     }
 

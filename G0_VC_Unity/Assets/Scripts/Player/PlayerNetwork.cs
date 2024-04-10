@@ -31,8 +31,8 @@ public class PlayerNetwork : NetworkBehaviour
 
     private void Update()
     {
-        //if (IsOwner) TransmitState();
-        //else ConsumeState();
+        if (IsOwner) TransmitState();
+        else ConsumeState();
     }
 
     #region Transmit State
@@ -42,7 +42,7 @@ public class PlayerNetwork : NetworkBehaviour
         var state = new PlayerNetworkState
         {
             Position = _rb.position,
-            Rotation = rotatables.transform.rotation.eulerAngles,
+            Rotation = new Vector2(playerStateMachine.xRotation, playerStateMachine.yRotation),
             isScoping_internal = inventory.isScoping,
             isShooting_internal = inventory.isShooting,
             GrapplePosition = playerStateMachine.grapplePoint,
@@ -55,7 +55,7 @@ public class PlayerNetwork : NetworkBehaviour
         else
             TransmitStateServerRpc(state);
 
-        //Debug.Log(_playerState.Value.currentPlayerState_fl_internal);
+        
     }
 
     [ServerRpc]
@@ -83,15 +83,24 @@ public class PlayerNetwork : NetworkBehaviour
 
         /*Exterior.transform.rotation = Quaternion.Lerp(Exterior.transform.rotation, Quaternion.Euler(_playerState.Value.Rotation.x, _playerState.Value.Rotation.y, 0), 0.3f);
         Viewport.transform.rotation = Quaternion.Lerp(Viewport.transform.rotation, Quaternion.Euler(_playerState.Value.Rotation.x, _playerState.Value.Rotation.y, 0), 0.3f);*/
-        rotatables.transform.rotation = Quaternion.Lerp(rotatables.transform.rotation, Quaternion.Euler(0, _playerState.Value.Rotation.y, 0), 0.3f);
+        //rotatables.transform.rotation = Quaternion.Lerp(rotatables.transform.rotation, Quaternion.Euler(0, _playerState.Value.Rotation.y, 0), 0.3f);
+        Exterior.transform.rotation = Quaternion.Lerp(Exterior.transform.rotation, Quaternion.Euler(0, _playerState.Value.Rotation.y, 0), 0.3f);
 
-      //  Debug.Log(_playerState.Value.currentPlayerState_fl_internal);
+        //  Debug.Log(_playerState.Value.currentPlayerState_fl_internal);
         if (_playerState.Value.currentPlayerState_fl_internal != 0) playerStateMachine.internal_CurrentState = _playerState.Value.currentPlayerState_fl_internal;
         if (_playerState.Value.currentWeapon_fl_internal != 0) inventory.internal_CurrentWeapon = _playerState.Value.currentWeapon_fl_internal;
         inventory.isScoping = _playerState.Value.isScoping_internal;
         inventory.isShooting = _playerState.Value.isShooting_internal;
         playerStateMachine.grapplePoint = _playerState.Value.GrapplePosition;
+        playerStateMachine.updown_Blendconstant = Mathf.Lerp(playerStateMachine.updown_Blendconstant, (_playerState.Value.Rotation.x + 90) / 180, 0.3f);
+        //ebug.Log(_playerState.Value.Rotation.x);
+/*        float blendconstant = (playerStateMachine.xRotation + 90) / 180;
+        playerStateMachine.player_EXT_ARM_anim_controller.SetFloat("Y_Look", blendconstant);
+        inventory.EXT_GetCurrentWeaponAnimator().SetFloat("Y_Look", blendconstant);*/
+
         //playerStateMachine.isGrappling = _playerState.Value.isGrappling_internal;
+
+        //Debug.Log(rotatables.transform.rotation.eulerAngles.y);
     }
 
     #endregion

@@ -41,7 +41,6 @@ public class MeleeState : BasePlayerState
 
     public override void AnimationTriggerEvent()
     {
-        if (!player.IsOwner) return;
 
         base.AnimationTriggerEvent();
     }
@@ -51,7 +50,12 @@ public class MeleeState : BasePlayerState
 
         player.isMelee = true;
 
-        if (!player.IsOwner) return;
+
+        if (!player.IsOwner)
+        {
+            base.EnterState();
+            return;
+        }
 
 
 

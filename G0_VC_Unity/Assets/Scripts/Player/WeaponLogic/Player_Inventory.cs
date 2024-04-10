@@ -3,11 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.VisualScripting;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.HID;
 
 public class Player_Inventory : NetworkBehaviour
 {
@@ -53,19 +50,32 @@ public class Player_Inventory : NetworkBehaviour
         if (IsOwner)
         {
             VP_IntitializeWeapons(VP_GunParent);
-            Debug.Log("hgogogogogogogogog");
+            
             for (int i = 0; i < WeaponLookup.weaponLookup.Count; i++)
             {
-                //GiveWeapon(WeaponLookup.weaponLookup[i]);
+                GiveWeapon(WeaponLookup.weaponLookup[i]);
                 Debug.Log("ahhhhh");
+            }
+
+            foreach (WeaponClass weaponclass in WeaponLookup.weaponLookup)
+            {
+                SkinnedMeshRenderer[] ext_meshes = EXT_weapon_Dict[weaponclass.key].GetComponentsInChildren<SkinnedMeshRenderer>();
+                foreach (SkinnedMeshRenderer renderer in ext_meshes) renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
+            }
+            foreach (WeaponClass weaponclass in WeaponLookup.weaponLookup)
+            {
+                SkinnedMeshRenderer[] vp_meshes = VP_weapon_Dict[weaponclass.key].GetComponentsInChildren<SkinnedMeshRenderer>();
+                foreach (SkinnedMeshRenderer renderer in vp_meshes) renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             }
         }
 
 
-
-      
         //  currentWeapon = Weapon_Inventory[0];
         //ChangeCurrentWeapon_INDEX(0);
+    }
+    private void Start()
+    {
+
     }
     // Start is called before the first frame update
     void Awake()
@@ -76,8 +86,10 @@ public class Player_Inventory : NetworkBehaviour
 
     private void Update()
     {
-        if (!player.IsOwner)
+       // Debug.Log(IsOwner);
+        if (!IsOwner)
         {
+            if (internal_CurrentWeapon == 0) return;
             if (GetCurrentWeapon() == null)
             {
                 changeWeapon_Internal(EXT_classDict[internal_CurrentWeapon]);
@@ -86,9 +98,9 @@ public class Player_Inventory : NetworkBehaviour
             {
                 changeWeapon_Internal(EXT_classDict[internal_CurrentWeapon]);
             }
-            return;
+            //Debug.Log(isScoping);
         }
-
+        
         //ChangeCurrentWeapon((int)SwitchWeapon.action.ReadValue<float>());;
         // Debug.Log(Weapon_Inventory.Count);
         // if ( != 0) Debug.Log(SwitchWeapon.action.ReadValue<float>());
@@ -179,7 +191,7 @@ public class Player_Inventory : NetworkBehaviour
         foreach (WeaponClass weaponclass in WeaponLookup.weaponLookup)
         {
             //Debug.Log(weaponclass.key);
-            GameObject gun = Instantiate(weaponclass.weaponData.weaponMesh);
+            GameObject gun = Instantiate(weaponclass.weaponData.weaponMesh, parent.transform);
             gun.transform.parent = parent.transform;
             gun.transform.localPosition = Vector3.zero;
             SetLayerWITHChildren(gun.transform, viewport_Layer);
@@ -211,11 +223,9 @@ public class Player_Inventory : NetworkBehaviour
 
             weapon_copy.player = player;
             weapon_copy.inventory = this;
-            if (IsOwner)
-            {
-                foreach (MeshRenderer renderer in weapon_copy.GetComponentsInChildren<MeshRenderer>()) renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
-            }
+
             EXT_classDict.Add(weaponclass.key, weapon_copy);
+
             
         }
     }
@@ -247,4 +257,6 @@ public class Player_Inventory : NetworkBehaviour
             child.gameObject.layer = LayerMask.NameToLayer(layer);
         }
     }
+
+
 }

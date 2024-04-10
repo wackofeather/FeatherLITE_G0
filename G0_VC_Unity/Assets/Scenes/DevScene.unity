@@ -1247,6 +1247,7 @@ MonoBehaviour:
   Viewport: {fileID: 23794730855196592}
   rotatables: {fileID: 3205671145147270072}
   playerStateMachine: {fileID: 0}
+  inventory: {fileID: 0}
 --- !u!4 &1671833826484777357
 Transform:
   m_ObjectHideFlags: 0
@@ -2893,8 +2894,12 @@ MonoBehaviour:
   WeaponManager: {fileID: 3671482691076384313}
   player: {fileID: 0}
   player_WeaponMesh: {fileID: 0}
-  GunParent: {fileID: 0}
+  VP_GunParent: {fileID: 0}
+  EXT_GunParent: {fileID: 0}
   viewport_Layer: 
+  exterior_layer: 
+  isShooting: 0
+  isScoping: 0
 --- !u!4 &8896149715685486346
 Transform:
   m_ObjectHideFlags: 0

@@ -168,7 +168,7 @@ public class Player_Inventory : NetworkBehaviour
             currentWeapon.ExitWeapon();
             VP_weapon_Dict[currentWeapon.key].SetActive(false);
         }
-        Debug.Log("blahhahaha");
+
         currentWeapon = weapon;
         if (IsOwner)
         {

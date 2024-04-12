@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: VP_TestGun2_Arm_Override
+  m_Controller: {fileID: 9100000, guid: ac0e92488aaaaed479f2a39b74e7b812, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 9092962451484864858, guid: 09ae0b2330e8bcb4b851684c92cb0213, type: 3}
+    m_OverrideClip: {fileID: 5393574150197556121, guid: 2027fe02925648340a6c29b83d79a8c6, type: 3}

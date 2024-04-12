@@ -13,8 +13,8 @@ TagManager:
   - UI
   - VIEWPORT
   - PLAYER
-  - 
-  - 
+  - ENEMY
+  - FRIEND
   - 
   - 
   - 

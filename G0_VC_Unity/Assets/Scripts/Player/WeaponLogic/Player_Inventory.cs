@@ -22,7 +22,7 @@ public class Player_Inventory : NetworkBehaviour
     private Animator VP_currentAnimator;
     private Animator EXT_currentAnimator;
 
-    [SerializeField] PlayerStateMachine player;
+    public PlayerStateMachine player;
 
     public GameObject player_WeaponMesh;
 
@@ -40,6 +40,9 @@ public class Player_Inventory : NetworkBehaviour
 
     [HideInInspector] public bool isShooting;
     [HideInInspector] public bool isScoping;
+    [HideInInspector] public bool isReloading;
+
+    Vector3 OwnerGunTip;
 
     public override void OnNetworkSpawn()
     {
@@ -67,6 +70,25 @@ public class Player_Inventory : NetworkBehaviour
                 SkinnedMeshRenderer[] vp_meshes = VP_weapon_Dict[weaponclass.key].GetComponentsInChildren<SkinnedMeshRenderer>();
                 foreach (SkinnedMeshRenderer renderer in vp_meshes) renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             }
+
+            Camera cam = player.PlayerCamera.GetComponent<Camera>();
+
+            float oldFOV = cam.fieldOfView;
+
+            cam.fieldOfView = player.ViewportFOV;
+
+            // Project the world point to the viewport
+            Vector3 viewportPoint = cam.WorldToViewportPoint(player.viewport_gunTip.position);
+
+            // Calculate the distance from the camera to the world point
+            float distance = Vector3.Distance(cam.transform.position, player.viewport_gunTip.position);
+
+            // Change the FOV of the camera to a hypothetical value
+
+            cam.fieldOfView = oldFOV;
+
+            // Convert the viewport point back to the world with the new FOV
+            OwnerGunTip = cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
         }
 
 
@@ -100,7 +122,7 @@ public class Player_Inventory : NetworkBehaviour
             }
             //Debug.Log(isScoping);
         }
-        
+
         //ChangeCurrentWeapon((int)SwitchWeapon.action.ReadValue<float>());;
         // Debug.Log(Weapon_Inventory.Count);
         // if ( != 0) Debug.Log(SwitchWeapon.action.ReadValue<float>());
@@ -110,15 +132,22 @@ public class Player_Inventory : NetworkBehaviour
     {
         if (direction == 0 | Weapon_Inventory.Count == 1) return;
         direction = Mathf.Clamp(direction, -1, 1);
+        int shiftMultiplier = 0;
+
+        if (direction > 0) shiftMultiplier = 1;
+        if (direction < 0) shiftMultiplier = Weapon_Inventory.Count - 1;
+
+       // Debug.Log(shiftMultiplier);
         for (int i = 1; i < Weapon_Inventory.Count; i++)
         {
-            int index = Mathf.Abs((current_Index + i * direction)) % Weapon_Inventory.Count;
+            int index = (current_Index + i * shiftMultiplier) % Weapon_Inventory.Count;
 
             if ((Weapon_Inventory[index]) == null) return;
 
             current_Index = index;
             changeWeapon_Internal(Weapon_Inventory[index]);
 
+            break;
         }
     }
 
@@ -128,17 +157,27 @@ public class Player_Inventory : NetworkBehaviour
     {
         if (Weapon_Inventory.Count >= MaxWeapons)
         {
-            return; //eventually do swapping weapons
+            Weapon_Inventory.RemoveAt(current_Index);
+            Destroy(currentWeapon);
+
+        }
+        else if (Weapon_Inventory.Count == 0)
+        {
+            current_Index = 0;
+        }
+        else
+        {
+            current_Index = Weapon_Inventory.Count - 1;
         }
 
-        current_Index = Weapon_Inventory.Count - 1;
+
 
         WeaponClass weapon_copy = Instantiate(weapon_class);
 
         weapon_copy.player = player;
         weapon_copy.inventory = this;
 
-        Weapon_Inventory.Add(weapon_copy);//weapon.clone(Weapon_Inventory.Count + 1));
+        Weapon_Inventory.Insert(current_Index, weapon_copy);//weapon.clone(Weapon_Inventory.Count + 1));
         changeWeapon_Internal(weapon_copy);
 
         /* for (int i = 0; i < Weapon_Inventory.Count; i++)
@@ -167,6 +206,7 @@ public class Player_Inventory : NetworkBehaviour
         {
             currentWeapon.ExitWeapon();
             VP_weapon_Dict[currentWeapon.key].SetActive(false);
+            EXT_weapon_Dict[currentWeapon.key].SetActive(false);
         }
 
         currentWeapon = weapon;
@@ -258,5 +298,14 @@ public class Player_Inventory : NetworkBehaviour
         }
     }
 
+    public Vector3 GunTip()
+    {
+        if (IsOwner)
+        {
+            return OwnerGunTip;
+        }
+        else return player.exterior_gunTip.position;
+
+    }
 
 }

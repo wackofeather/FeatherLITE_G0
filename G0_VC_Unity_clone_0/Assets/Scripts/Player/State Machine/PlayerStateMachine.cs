@@ -15,6 +15,7 @@ public class PlayerStateMachine : NetworkBehaviour
     [System.NonSerialized] public RegularState RegularState;
     [System.NonSerialized] public GrapplingState GrapplingState;
     [System.NonSerialized] public MeleeState MeleeState;
+    [System.NonSerialized] public WeaponSwitchState WeaponSwitchState;
 
     public Dictionary<float, BasePlayerState> stateDictionary = new Dictionary<float, BasePlayerState>();
 
@@ -32,7 +33,7 @@ public class PlayerStateMachine : NetworkBehaviour
     public InputActionReference pause;
     public InputActionReference Unpause;
     public InputActionReference melee;
-    public InputActionReference testInput;
+    public InputActionReference interact;
 
     public Transform Rotatables;
     public Transform PlayerCamera;
@@ -166,6 +167,25 @@ public class PlayerStateMachine : NetworkBehaviour
 
     [System.NonSerialized] public float grappleWiggle_Timer;
 
+    [Header("INTERACTABLES")]
+    public LayerMask interactableMask;
+    [HideInInspector] public bool isInteracting;
+    public float interactDistance;
+    public float InteractCoolDownTimer;
+    [HideInInspector] public bool hasPickedUpInteractButton;
+
+    [Header("WEAPON PICKUP PARAMETERS")]
+    public float slowDownRate;
+    [Range(0,1)] public float pushFactor;
+    public float maxPushSpeed;
+    public float pickupCooldownTime;
+    [System.NonSerialized] public GameObject lookAtObject;
+    [System.NonSerialized] public WeaponClass weapon_pickingUp;
+
+
+
+    
+
     public RaycastHit GrappleCheck()
     {
         RaycastHit hitinfo;
@@ -259,9 +279,12 @@ public class PlayerStateMachine : NetworkBehaviour
         RegularState = new RegularState(this);
         GrapplingState = new GrapplingState(this);
         MeleeState = new MeleeState(this);
+        WeaponSwitchState = new WeaponSwitchState(this);
         stateDictionary.Add(RegularState.key, RegularState);
         stateDictionary.Add(GrapplingState.key, GrapplingState);
         stateDictionary.Add(MeleeState.key, MeleeState);
+        stateDictionary.Add(WeaponSwitchState.key, WeaponSwitchState);
+        
         //RegularState.Start_Init();
         //GrapplingState.Start_Init();
         //MeleeState.Start_Init();
@@ -309,6 +332,16 @@ public class PlayerStateMachine : NetworkBehaviour
             grappleWiggle_Timer -= Time.deltaTime;
         }
 
+        if (InteractCoolDownTimer > 0)
+        {
+            InteractCoolDownTimer -= Time.deltaTime;
+        }
+
+        if (hasPickedUpInteractButton == false)
+        {
+            if (!interact.action.IsPressed()) hasPickedUpInteractButton = true;
+        }
+
 
     }
 
@@ -353,4 +386,37 @@ public class PlayerStateMachine : NetworkBehaviour
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+    public void InteractCheck()
+    {
+        if (((InteractCoolDownTimer > 0) && hasPickedUpInteractButton == false) || isInteracting) return;
+        if (interact.action.IsPressed())
+        {
+            if (Physics.Raycast(PlayerCamera.position, PlayerCamera.forward, out RaycastHit hitInfo, 10000, interactableMask))
+            {
+                if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj) && (hitInfo.distance < interactDistance))
+                {
+                    interactObj.Interact(this);
+                }
+            }
+        }
+    }
+
+    public bool IsLookingAtInteractable(GameObject obj)
+    {
+        Physics.Raycast(PlayerCamera.position, PlayerCamera.forward, out RaycastHit raycasthit, 10000, interactableMask);
+        
+        if (raycasthit.collider == null) return false;
+        return (raycasthit.collider.gameObject == obj);
+    }
 }

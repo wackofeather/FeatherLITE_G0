@@ -22,6 +22,8 @@ public class RegularState : BasePlayerState
     public override void ExitState()
     {
         base.ExitState();
+
+        player.isInteracting = false;
         ///Debug.Log("ahhhhhhhhhhhhhhhh");
     }
 
@@ -79,6 +81,8 @@ public class RegularState : BasePlayerState
 
 
         if (player.grappleWiggle_Timer > 0) if (player.CanGrapple()) player.ChangeState(player.GrapplingState);
+
+        player.InteractCheck();
 
     }
 }

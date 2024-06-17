@@ -53,7 +53,7 @@ public class WeaponClass : ScriptableObject , IWeaponable
 
         
         
-        Debug.Log("weapon switched");
+        //Debug.Log("weapon switched");
     }
 
     public virtual void ExitWeapon() 

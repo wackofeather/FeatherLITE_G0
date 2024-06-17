@@ -20,3 +20,4 @@ MonoBehaviour:
   EXT_ARM_animatorOverrideController: {fileID: 22100000, guid: 8b9cdb1cb48b97443ad2dd79f2e98acb, type: 2}
   EXT_GUN_animatorOverrideController: {fileID: 22100000, guid: af12a108c3d5ffb4096429e29e05cce4, type: 2}
   enterStateTime: 0.65
+  pickUpTime: 1

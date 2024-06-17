@@ -8,10 +8,13 @@ using UnityEngine.InputSystem;
 public class GunClass : WeaponClass
 {
     [HideInInspector] float maxAmmo_Mag;
-    [SerializeField] float maxAmmo_Inventory;
-    [Space]
-    [SerializeField] float BPS;
-    
+    [SerializeField] GameObject bullet;
+
+    public override void EnterWeapon()
+    {
+        base.EnterWeapon();
+
+    }
 
 
     public override void Weapon_Update()
@@ -43,7 +46,7 @@ public class GunClass : WeaponClass
 
 
 
-        if (weaponData.fireInput.action.IsPressed() && !player.isMelee) inventory.isShooting = true;
+        if (weaponData.fireInput.action.IsPressed() && !player.isMelee) inventory.StartCoroutine(shootCoroutine());
         else inventory.isShooting = false;
 
         if (weaponData.scope.action.IsPressed() && !player.isMelee) StartScope();
@@ -54,5 +57,19 @@ public class GunClass : WeaponClass
 
     public void StartScope() { inventory.isScoping = true; }
     public void StopScope() { inventory.isScoping = false; }
+
+    public IEnumerator shootCoroutine()
+    {
+        inventory.isShooting = true;
+        while (true)
+        {
+            if (!weaponData.fireInput.action.IsPressed()) break;
+            if (player.isMelee) break;
+            
+            yield return new WaitForSeconds(1/weaponData.BPS);
+        }
+        inventory.isShooting = false;
+        yield break;
+    }
 
 }

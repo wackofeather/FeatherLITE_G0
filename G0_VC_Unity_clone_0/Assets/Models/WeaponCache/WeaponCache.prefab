@@ -31,8 +31,8 @@ Transform:
   m_LocalScale: {x: 1, y: 0.1, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 974816508504119382}
   - {fileID: 1124633002123844479}
+  - {fileID: 974816508504119382}
   m_Father: {fileID: 6866738470661104930}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -109,8 +109,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1124633002123844479}
   - component: {fileID: 5763224747196392228}
+  - component: {fileID: 6723069155996422201}
   m_Layer: 10
-  m_Name: TestGun2
+  m_Name: TestGun1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,7 +131,7 @@ Transform:
   m_Children:
   - {fileID: 5884476125399603589}
   m_Father: {fileID: 6561064408607507521}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &5763224747196392228
 BoxCollider:
@@ -145,6 +146,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.1, y: 1, z: 1.75}
   m_Center: {x: -0.1, y: -0.11, z: -2}
+--- !u!114 &6723069155996422201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7719297705046923321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5ec5e4cabc39094abe40036f08c1519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  correspondingWeapon: {fileID: 11400000, guid: f656973d38ebccb4197ee1bb392d99a5, type: 2}
 --- !u!1 &8858921501582276862
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,6 +168,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6866738470661104930}
+  - component: {fileID: 210151703752813757}
   m_Layer: 0
   m_Name: WeaponCache
   m_TagString: Untagged
@@ -177,6 +192,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &210151703752813757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8858921501582276862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4c531813fdeb404b912531788c0e863, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MyList:
+  - collider: {fileID: 5763224747196392228}
+    weapon: {fileID: 11400000, guid: f656973d38ebccb4197ee1bb392d99a5, type: 2}
+  - collider: {fileID: 6129266944681234878}
+    weapon: {fileID: 11400000, guid: 688d02a82188ee844a29b9814b5d2797, type: 2}
 --- !u!1 &9050356775905029771
 GameObject:
   m_ObjectHideFlags: 0
@@ -187,8 +219,9 @@ GameObject:
   m_Component:
   - component: {fileID: 974816508504119382}
   - component: {fileID: 6129266944681234878}
+  - component: {fileID: 2639472170478178111}
   m_Layer: 10
-  m_Name: TestGun1
+  m_Name: TestGun2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -208,7 +241,7 @@ Transform:
   m_Children:
   - {fileID: 6164911883117949489}
   m_Father: {fileID: 6561064408607507521}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6129266944681234878
 BoxCollider:
@@ -223,6 +256,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.1, y: 1, z: 1.75}
   m_Center: {x: -0.1, y: -0.11, z: 0}
+--- !u!114 &2639472170478178111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9050356775905029771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5ec5e4cabc39094abe40036f08c1519, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  correspondingWeapon: {fileID: 11400000, guid: 688d02a82188ee844a29b9814b5d2797, type: 2}
 --- !u!1001 &5910011118325667290
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -244,7 +290,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2c97ab3ef19111c4baad38a5726e24ea, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.17600003
+      value: -0.17600013
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2c97ab3ef19111c4baad38a5726e24ea, type: 3}
       propertyPath: m_LocalPosition.y
@@ -318,7 +364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dd7dfaf65911fe749be709dabffd4ce7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.17600003
+      value: -0.17600013
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dd7dfaf65911fe749be709dabffd4ce7, type: 3}
       propertyPath: m_LocalPosition.y

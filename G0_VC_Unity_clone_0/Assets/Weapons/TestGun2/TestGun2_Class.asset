@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45b5b5ae217611047a71caf1eddf20f5, type: 3}
   m_Name: TestGun2_Class
   m_EditorClassIdentifier: 
-  weaponData: {fileID: 11400000, guid: d374af7a03ba21c4da5513dcac45d4ee, type: 2}
+  weaponData: {fileID: 11400000, guid: c62414aad15947146b906f87df9ea442, type: 2}
   key: 1925
   player: {fileID: 0}
   inventory: {fileID: 0}

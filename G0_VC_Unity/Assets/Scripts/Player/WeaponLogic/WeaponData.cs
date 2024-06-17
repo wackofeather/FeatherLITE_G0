@@ -18,29 +18,34 @@ public class WeaponData : ScriptableObject
     public AnimatorOverrideController EXT_GUN_animatorOverrideController;
 
     public float enterStateTime;
+    public float pickUpTime;
 
-/*    public class WeaponLogic : IWeaponable
-    {
-        protected bool isShooting;
-        protected bool isScoping;
-        public virtual void Weapon_Update(PlayerStateMachine player, Player_Inventory inventory) { }
-
-        public virtual void EnterWeapon(PlayerStateMachine player, Player_Inventory inventory)
+    public float maxAmmo_Inventory;
+    [Space]
+    public float BPS;
+    public Transform gunTip;
+    /*    public class WeaponLogic : IWeaponable
         {
-            *//*        player.player_VP_anim_controller.runtimeAnimatorController = weaponData.VM_animatorOverrideController;
-                    player.player_VP_anim_controller.SetTrigger("SwitchWeapon");
-                    Debug.Log("weapon switched");*//*
+            protected bool isShooting;
+            protected bool isScoping;
+            public virtual void Weapon_Update(PlayerStateMachine player, Player_Inventory inventory) { }
+
+            public virtual void EnterWeapon(PlayerStateMachine player, Player_Inventory inventory)
+            {
+                *//*        player.player_VP_anim_controller.runtimeAnimatorController = weaponData.VM_animatorOverrideController;
+                        player.player_VP_anim_controller.SetTrigger("SwitchWeapon");
+                        Debug.Log("weapon switched");*//*
+            }
+
+            public virtual void ExitWeapon(PlayerStateMachine player, Player_Inventory inventory)
+            {
+                //  player.player_VP_anim_controller.ResetTrigger("SwitchWeapon");
+            }
         }
 
-        public virtual void ExitWeapon(PlayerStateMachine player, Player_Inventory inventory)
+        public virtual IWeaponable GetClass()
         {
-            //  player.player_VP_anim_controller.ResetTrigger("SwitchWeapon");
-        }
-    }
-
-    public virtual IWeaponable GetClass()
-    {
-        return null;
-    }*/
+            return null;
+        }*/
 
 }

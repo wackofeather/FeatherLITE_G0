@@ -85,6 +85,8 @@ public class PlayerNetwork : NetworkBehaviour
         Viewport.transform.rotation = Quaternion.Lerp(Viewport.transform.rotation, Quaternion.Euler(_playerState.Value.Rotation.x, _playerState.Value.Rotation.y, 0), 0.3f);*/
         //rotatables.transform.rotation = Quaternion.Lerp(rotatables.transform.rotation, Quaternion.Euler(0, _playerState.Value.Rotation.y, 0), 0.3f);
         Exterior.transform.rotation = Quaternion.Lerp(Exterior.transform.rotation, Quaternion.Euler(0, _playerState.Value.Rotation.y, 0), 0.3f);
+        playerStateMachine.xRotation = _playerState.Value.Rotation.x;
+        playerStateMachine.yRotation = _playerState.Value.Rotation.y;
 
         //  Debug.Log(_playerState.Value.currentPlayerState_fl_internal);
         if (_playerState.Value.currentPlayerState_fl_internal != 0) playerStateMachine.internal_CurrentState = _playerState.Value.currentPlayerState_fl_internal;

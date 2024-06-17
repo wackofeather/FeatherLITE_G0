@@ -761,6 +761,7 @@ MonoBehaviour:
   exterior_layer: EXTERIOR
   isShooting: 0
   isScoping: 0
+  isReloading: 0
 --- !u!1 &2844048075828827684
 GameObject:
   m_ObjectHideFlags: 0
@@ -861,6 +862,7 @@ GameObject:
   - component: {fileID: -3036239568206950947}
   - component: {fileID: 1564597625595317825}
   - component: {fileID: 7369457806054413757}
+  - component: {fileID: 2542861758873681554}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -1009,7 +1011,7 @@ MonoBehaviour:
   pause: {fileID: -3210920384054898338, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   Unpause: {fileID: 522131853969190471, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   melee: {fileID: -5764667613011676199, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
-  testInput: {fileID: 484325941126055002, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  interact: {fileID: 484325941126055002, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   Rotatables: {fileID: 3205671146708248980}
   PlayerCamera: {fileID: 5087725685347788842}
   CameraHolder: {fileID: 2904342871602623982}
@@ -1187,6 +1189,17 @@ MonoBehaviour:
   ViewportFOV: 40
   inventory: {fileID: 5251551333770687422}
   EnemyLayer: ENEMY
+  interactableMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  isInteracting: 0
+  interactDistance: 5.01
+  InteractCoolDownTimer: 0
+  hasPickedUpInteractButton: 0
+  slowDownRate: 3.63
+  pushFactor: 0.148
+  maxPushSpeed: 3.12
+  pickupCooldownTime: 0.59
 --- !u!114 &-3036239568206950947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1241,6 +1254,19 @@ MonoBehaviour:
   grappleScript: {fileID: 1199171846237049367}
   playerScript: {fileID: 2920028746863420631}
   MeleeAction: {fileID: -5764667613011676199, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+--- !u!114 &2542861758873681554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2920028746863420624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0debbc053f821f4683401445ab9b8c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStateMachine: {fileID: 0}
 --- !u!1 &3511650414507195146
 GameObject:
   m_ObjectHideFlags: 0
@@ -1490,7 +1516,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3817843117350672968
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1526,7 +1552,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4605052037917512198}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 

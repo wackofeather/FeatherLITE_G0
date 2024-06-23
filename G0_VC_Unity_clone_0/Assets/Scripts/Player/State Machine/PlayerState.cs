@@ -66,7 +66,7 @@ public class BasePlayerState
 
     public virtual void LateUpdate()
     {
-
+        Game_UI_Manager.instance.UpdateGrappleIndicator(player.CanGrapple());
     }
 
     public virtual void AnimationTriggerEvent()

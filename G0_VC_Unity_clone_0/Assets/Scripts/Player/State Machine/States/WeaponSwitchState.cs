@@ -51,6 +51,11 @@ public class WeaponSwitchState : BasePlayerState
         player.rb.AddForce(-player.rb.velocity * player.slowDownRate);
     }
 
+    public override void LateUpdate()
+    {
+        //nothing, just void override for now
+    }
+
     public override void ExitState()
     {
         base.ExitState();

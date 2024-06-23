@@ -7,7 +7,7 @@ using Steamworks;
 
 public class NetworkButtons : MonoBehaviour
 {
-    public UnityNetworkManager unityNetworkManager;
+    [HideInInspector] public UnityNetworkManager unityNetworkManager;
     private void Start()
     {
         unityNetworkManager = GetComponent<UnityNetworkManager>();

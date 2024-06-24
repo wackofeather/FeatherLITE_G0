@@ -11,11 +11,26 @@ public class Game_UI_Manager : UI_Manager
 
     new public static Game_UI_Manager instance { get; set; }
 
+
+
+
+
+
+
+    //GRAPPLE_INDICATOR
     public void UpdateGrappleIndicator(bool canGrapple)
     {
         if (canGrapple) GrappleIndicator.color = GrappleColor;
         else GrappleIndicator.color = NoGrappleColor;
     }
+
+
+
+
+
+
+
+
 
     public override void ConstructSingleton()
     {

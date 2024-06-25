@@ -66,6 +66,7 @@ public class BasePlayerState
 
     public virtual void LateUpdate()
     {
+        if (!player.IsOwner) return;
         Game_UI_Manager.instance.UpdateGrappleIndicator(player.CanGrapple());
     }
 

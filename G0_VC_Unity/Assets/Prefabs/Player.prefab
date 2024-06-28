@@ -863,6 +863,7 @@ GameObject:
   - component: {fileID: 1564597625595317825}
   - component: {fileID: 7369457806054413757}
   - component: {fileID: 2542861758873681554}
+  - component: {fileID: 1220896089835918760}
   m_Layer: 7
   m_Name: Player
   m_TagString: Untagged
@@ -1267,6 +1268,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerStateMachine: {fileID: 0}
+--- !u!114 &1220896089835918760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2920028746863420624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09b1e1babef9f0947a3638ea02655703, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overlayCamera: {fileID: 0}
+  playerCamera: {fileID: 0}
+  cameraData: {fileID: 0}
+  windEffect: {fileID: 0}
+  rb: {fileID: 0}
+  speedThreshold: 20
 --- !u!1 &3511650414507195146
 GameObject:
   m_ObjectHideFlags: 0

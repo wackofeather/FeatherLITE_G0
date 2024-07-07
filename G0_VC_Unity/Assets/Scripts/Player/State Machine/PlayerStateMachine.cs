@@ -400,13 +400,19 @@ public class PlayerStateMachine : NetworkBehaviour
     public void InteractCheck()
     {
         if (((InteractCoolDownTimer > 0) && hasPickedUpInteractButton == false) || isInteracting) return;
-        if (interact.action.IsPressed())
+        if (Physics.Raycast(PlayerCamera.position, PlayerCamera.forward, out RaycastHit hitInfo, 10000, interactableMask))     
         {
-            if (Physics.Raycast(PlayerCamera.position, PlayerCamera.forward, out RaycastHit hitInfo, 10000, interactableMask))
+            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj) && (hitInfo.distance < interactDistance))   
             {
-                if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj) && (hitInfo.distance < interactDistance))
+                
+                if (interact.action.IsPressed())
                 {
                     interactObj.Interact(this);
+                }
+                else
+                {
+                    //Game_UI_Manager.instance.UpdateWeaponPickUI(interactObj.);
+                    interactObj.LookInteract();
                 }
             }
         }

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using TMPro;
+using UnityEngine.UI;
 [CreateAssetMenu]
 public class WeaponData : ScriptableObject
 {
@@ -24,6 +25,9 @@ public class WeaponData : ScriptableObject
     [Space]
     public float BPS;
     public Transform gunTip;
+    [Space]
+    [Header("UI")]
+    public Sprite gunPickUpImage;
     /*    public class WeaponLogic : IWeaponable
         {
             protected bool isShooting;

@@ -21,3 +21,7 @@ MonoBehaviour:
   EXT_GUN_animatorOverrideController: {fileID: 22100000, guid: 5824359103043c24e8858bc5c9ad3cd5, type: 2}
   enterStateTime: 0.65
   pickUpTime: 3
+  maxAmmo_Inventory: 0
+  BPS: 0
+  gunTip: {fileID: 0}
+  gunPickUpImage: {fileID: 21300000, guid: ada789ec8db3319468a731197e6d4c74, type: 3}

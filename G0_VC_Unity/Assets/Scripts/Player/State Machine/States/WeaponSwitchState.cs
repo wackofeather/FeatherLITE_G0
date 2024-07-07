@@ -32,6 +32,13 @@ public class WeaponSwitchState : BasePlayerState
     {
         base.Update();
 
+
+
+        timer -= Time.deltaTime;
+        Game_UI_Manager.instance.SetCountdownText(timer);
+
+
+
         if (!player.IsLookingAtInteractable(player.lookAtObject)) player.ChangeState(player.RegularState);
         if (!player.interact.action.IsPressed())
         {
@@ -39,7 +46,7 @@ public class WeaponSwitchState : BasePlayerState
         } 
         if (!player.isInteracting) player.ChangeState(player.RegularState);
 
-        timer -= Time.deltaTime;
+   
         
 
         if (timer <= 0)
@@ -48,7 +55,7 @@ public class WeaponSwitchState : BasePlayerState
             player.ChangeState(player.RegularState);
             return;
         }
-        Game_UI_Manager.instance.SetCountdownText(timer);
+        
     }
 
 

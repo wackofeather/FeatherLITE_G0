@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
+
 public class MeleeState : BasePlayerState
 {
     private Vector3 meleeVector;
@@ -22,6 +23,8 @@ public class MeleeState : BasePlayerState
     private float camFOV;
 
     private float viewportCamFOV;
+
+    
 
 
 
@@ -60,7 +63,7 @@ public class MeleeState : BasePlayerState
 
 
 
-        
+        player.windEffect.SetFloat("Spawn Rate", player.windSpawnRate);
         
 
 
@@ -106,7 +109,7 @@ public class MeleeState : BasePlayerState
            // player.ViewportRenderers[i].SetDirty();
         }
 
-
+        player.windEffect.SetFloat("Spawn Rate", 0);
 
         player.isMelee = false;
 

@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.VFX;
+
 
 public class MeleeState : BasePlayerState
 {
@@ -24,7 +24,7 @@ public class MeleeState : BasePlayerState
 
     private float viewportCamFOV;
 
-    private VisualEffect windEffect;
+    
 
 
 
@@ -36,8 +36,6 @@ public class MeleeState : BasePlayerState
         timerVal = player.meleeAnim.length; //0.75f * player.meleeAnim.length;
 
         viewportCamFOV = player.ViewportFOV;
-
-        windEffect = player.PlayerCamera.GetComponentInChildren<VisualEffect>();
     }
 
 
@@ -65,7 +63,7 @@ public class MeleeState : BasePlayerState
 
 
 
-        windEffect.SetFloat("Spawn Rate", 100);
+        player.windEffect.SetFloat("Spawn Rate", player.windSpawnRate);
         
 
 
@@ -111,7 +109,7 @@ public class MeleeState : BasePlayerState
            // player.ViewportRenderers[i].SetDirty();
         }
 
-        windEffect.SetFloat("Spawn Rate", 0);
+        player.windEffect.SetFloat("Spawn Rate", 0);
 
         player.isMelee = false;
 

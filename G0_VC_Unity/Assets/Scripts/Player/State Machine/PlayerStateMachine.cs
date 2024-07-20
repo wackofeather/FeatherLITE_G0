@@ -8,7 +8,7 @@ using Unity.Netcode;
 
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Experimental.Rendering.Universal;
-
+using UnityEngine.VFX;
 public class PlayerStateMachine : NetworkBehaviour
 {
     [System.NonSerialized] public PlayerStateMachine StateMachine;
@@ -183,8 +183,10 @@ public class PlayerStateMachine : NetworkBehaviour
     [System.NonSerialized] public WeaponClass weapon_pickingUp;
 
 
+    [Header("SPECIAL UI")]
+    public VisualEffect windEffect;
+    public float windSpawnRate;
 
-    
 
     public RaycastHit GrappleCheck()
     {

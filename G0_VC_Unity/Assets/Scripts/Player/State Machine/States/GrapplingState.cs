@@ -189,8 +189,9 @@ public class GrapplingState : BasePlayerState
 
             ///NOTE: to optimize try using localPos and caching the converted gun tip so no need for calculation every frame. You have to use local pos so it works properly when reused over time tho
 
+            Vector3 convertedGunTip = player.FOVtranslate(player.viewport_gunTip, player.ViewportFOV, player.PlayerCamera.GetComponent<Camera>().fieldOfView);
 
-            Camera cam = player.PlayerCamera.GetComponent<Camera>();
+    /*        Camera cam = player.PlayerCamera.GetComponent<Camera>();
 
             float oldFOV = cam.fieldOfView;
 
@@ -200,14 +201,15 @@ public class GrapplingState : BasePlayerState
             Vector3 viewportPoint = cam.WorldToViewportPoint(player.viewport_gunTip.position);
 
             // Calculate the distance from the camera to the world point
-            float distance = Vector3.Distance(cam.transform.position, player.viewport_gunTip.position);
+            ///////////////////////////////////////////////////////////float distance = Vector3.Distance(cam.transform.position, player.viewport_gunTip.position);
+            float distance = Vector3.Project(player.viewport_gunTip.position - cam.transform.position, cam.transform.forward).magnitude;
 
             // Change the FOV of the camera to a hypothetical value
 
             cam.fieldOfView = oldFOV;
 
             // Convert the viewport point back to the world with the new FOV
-            Vector3 convertedGunTip = cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
+            Vector3 convertedGunTip = cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));*/
 
             /*            // Print the results
                         Debug.Log("Old world point: " + currentGrapplePosition);

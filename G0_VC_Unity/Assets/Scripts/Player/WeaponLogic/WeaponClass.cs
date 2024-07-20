@@ -2,10 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using UnityEngine.UIElements;
 
 public class WeaponClass : ScriptableObject , IWeaponable
 {
+
+/*    public T weaponTYPEData<T>(T param)
+    {
+        return param;
+    }*/
     public WeaponData weaponData;
     public float key;
 

@@ -419,4 +419,27 @@ public class PlayerStateMachine : NetworkBehaviour
         if (raycasthit.collider == null) return false;
         return (raycasthit.collider.gameObject == obj);
     }
+
+    public Vector3 FOVtranslate(Transform obj, float medianFOV, float endFOV)
+    {
+        Camera cam = PlayerCamera.GetComponent<Camera>();
+
+        
+
+        cam.fieldOfView = medianFOV;
+
+        // Project the world point to the viewport
+        Vector3 viewportPoint = cam.WorldToViewportPoint(obj.position);
+
+        // Calculate the distance from the camera to the world point
+        ///////////////////////////////////////////////////////////float distance = Vector3.Distance(cam.transform.position, player.viewport_gunTip.position);
+        float distance = Vector3.Project(obj.position - cam.transform.position, cam.transform.forward).magnitude;
+
+        // Change the FOV of the camera to a hypothetical value
+
+        cam.fieldOfView = endFOV;
+
+        // Convert the viewport point back to the world with the new FOV
+        return cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
+    }
 }

@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 [CreateAssetMenu]
 public class GunClass : WeaponClass
 {
+    public GunData gunData;
     [HideInInspector] float maxAmmo_Mag;
     [SerializeField] GameObject bullet;
 
@@ -58,18 +59,16 @@ public class GunClass : WeaponClass
     public void StartScope() { inventory.isScoping = true; }
     public void StopScope() { inventory.isScoping = false; }
 
-    public IEnumerator shootCoroutine()
+    public virtual IEnumerator shootCoroutine()
     {
         inventory.isShooting = true;
         while (true)
         {
             if (!weaponData.fireInput.action.IsPressed()) break;
             if (player.isMelee) break;
-            
             yield return new WaitForSeconds(1/weaponData.BPS);
         }
         inventory.isShooting = false;
         yield break;
     }
-
 }

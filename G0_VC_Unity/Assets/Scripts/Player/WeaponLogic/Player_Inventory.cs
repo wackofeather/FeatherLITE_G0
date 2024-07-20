@@ -231,11 +231,11 @@ public class Player_Inventory : NetworkBehaviour
         foreach (WeaponClass weaponclass in WeaponLookup.weaponLookup)
         {
             //Debug.Log(weaponclass.key);
-            GameObject gun = Instantiate(weaponclass.weaponData.weaponMesh, parent.transform);
+            GameObject gun = Instantiate(weaponclass.weaponData.Proxy_Prefab, parent.transform);
             gun.transform.parent = parent.transform;
             gun.transform.localPosition = Vector3.zero;
             SetLayerWITHChildren(gun.transform, viewport_Layer);
-            Animator weapon_animator = gun.AddComponent<Animator>();
+            Animator weapon_animator = gun.GetComponent<WeaponProxy>().animator_Object.AddComponent<Animator>();
             //weapon_animator = player.player_VP_GUN_anim_template;
             weapon_animator.runtimeAnimatorController = weaponclass.weaponData.VM_GUN_animatorOverrideController;
             gun.SetActive(false);
@@ -248,11 +248,11 @@ public class Player_Inventory : NetworkBehaviour
         foreach (WeaponClass weaponclass in WeaponLookup.weaponLookup)
         {
             //Debug.Log(weaponclass.key);
-            GameObject gun = Instantiate(weaponclass.weaponData.weaponMesh);
+            GameObject gun = Instantiate(weaponclass.weaponData.Proxy_Prefab);
             gun.transform.parent = parent.transform;
             gun.transform.localPosition = Vector3.zero;
             SetLayerWITHChildren(gun.transform, exterior_layer);
-            Animator weapon_animator = gun.AddComponent<Animator>();
+            Animator weapon_animator = gun.GetComponent<WeaponProxy>().animator_Object.AddComponent<Animator>();
             //weapon_animator = player.player_VP_GUN_anim_template;
             weapon_animator.runtimeAnimatorController = weaponclass.weaponData.EXT_GUN_animatorOverrideController;
             gun.SetActive(false);
@@ -285,6 +285,16 @@ public class Player_Inventory : NetworkBehaviour
     public Animator EXT_GetCurrentWeaponAnimator()
     {
         return EXT_currentAnimator;
+    }
+
+    public GameObject VP_GetProxy()
+    {
+        return VP_weapon_Dict[currentWeapon.key];
+    }
+
+    public GameObject EXT_GetProxy()
+    {
+        return EXT_weapon_Dict[currentWeapon.key];
     }
 
     void SetLayerWITHChildren(Transform root, string layer)

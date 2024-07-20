@@ -16,5 +16,5 @@ MonoBehaviour:
   key: 9182
   player: {fileID: 0}
   inventory: {fileID: 0}
-  maxAmmo_Inventory: 0
-  BPS: 0
+  gunData: {fileID: 0}
+  bullet: {fileID: 0}

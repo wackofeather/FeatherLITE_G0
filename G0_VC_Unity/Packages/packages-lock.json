@@ -7,7 +7,7 @@
       "dependencies": {
         "com.unity.netcode.gameobjects": "1.0.0-pre.4"
       },
-      "hash": "b2265b5a650ccc1c4ea4526351839b1c6e3263e0"
+      "hash": "0eda04fc2146a4f907a61de6403315bce705279e"
     },
     "com.unity.burst": {
       "version": "1.7.3",

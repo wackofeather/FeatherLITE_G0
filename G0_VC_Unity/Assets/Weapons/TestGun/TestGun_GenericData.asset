@@ -15,9 +15,13 @@ MonoBehaviour:
   fireInput: {fileID: 1203331415346767575, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   scope: {fileID: -2653568425862354484, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   weaponMesh: {fileID: 919132149155446097, guid: dd7dfaf65911fe749be709dabffd4ce7, type: 3}
+  Proxy_Prefab: {fileID: 3129589629331164895, guid: c657a429bd7922643b0c9ef20fbd19e1, type: 3}
   VM_ARM_animatorOverrideController: {fileID: 22100000, guid: bcfcc0742162c4f4b81d9352cba1b261, type: 2}
   VM_GUN_animatorOverrideController: {fileID: 22100000, guid: ced0d1b20fe13f74e97205ee517ba46d, type: 2}
   EXT_ARM_animatorOverrideController: {fileID: 22100000, guid: 39af5b84ac58f7e48806e02b78095196, type: 2}
   EXT_GUN_animatorOverrideController: {fileID: 22100000, guid: 5824359103043c24e8858bc5c9ad3cd5, type: 2}
   enterStateTime: 0.65
   pickUpTime: 3
+  maxAmmo_Inventory: 0
+  BPS: 0
+  gunTip: {fileID: 0}

@@ -9,8 +9,13 @@ using Unity.Netcode;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.VFX;
+using Unity.Networking.Transport;
+using Unity.Netcode.Transports.UTP;
+
 public class PlayerStateMachine : NetworkBehaviour
 {
+
+
     [System.NonSerialized] public PlayerStateMachine StateMachine;
     [System.NonSerialized] public RegularState RegularState;
     [System.NonSerialized] public GrapplingState GrapplingState;
@@ -262,6 +267,8 @@ public class PlayerStateMachine : NetworkBehaviour
 
             gameObject.layer = LayerMask.NameToLayer(EnemyLayer);
 
+
+
         }
         else
         {
@@ -269,9 +276,6 @@ public class PlayerStateMachine : NetworkBehaviour
             //foreach (Transform child in Exterior) child.gameObject.SetActive(false);
            // Debug.Log("host joined");
             Exterior.GetComponent<ExteriorShadowSwitch>().ShadowsOnly(true);
-
-
-
 
 
         }

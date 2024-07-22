@@ -107,6 +107,26 @@ public class PlayerNetwork : NetworkBehaviour
 
     #endregion
 
+    #region Transmit ID
+
+/*    [ServerRpc]
+    public void AddPlayer(float clientID)
+    {
+
+    }
+
+
+    [ClientRpc]
+    public void AddPlayerLocally(float clientID)
+    {
+
+    }*/
+
+
+    #endregion
+
+
+
     private struct PlayerNetworkState : INetworkSerializable
     {
         private float _posX, _posY, _posZ;

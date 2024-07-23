@@ -265,7 +265,7 @@ public class GrapplingState : BasePlayerState
 
             if (Angle > player.PlayerCamera.GetComponent<Camera>().fieldOfView * (1 + player.lookAwayLeniency)) break;
 
-            if (((player.grapplePoint - hit.point).magnitude >= 0.7f) && hit.collider != null) { Debug.Log(player.grapplePoint - hit.point); break; }
+            //if (((player.grapplePoint - hit.point).magnitude >= 0.7f) && hit.collider != null) { Debug.Log(player.grapplePoint - hit.point); break; }
 
 
             if (player.Grapple.action.WasReleasedThisFrame()) break;

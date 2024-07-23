@@ -57,7 +57,7 @@ public class Player_Inventory : NetworkBehaviour
             for (int i = 0; i < WeaponLookup.weaponLookup.Count; i++)
             {
                 GiveWeapon(WeaponLookup.weaponLookup[i]);
-               // Debug.Log("ahhhhh");
+                Debug.Log("ahhhhh");
             }
 
             foreach (WeaponClass weaponclass in WeaponLookup.weaponLookup)

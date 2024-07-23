@@ -12,8 +12,6 @@ using UnityEngine.VFX;
 using Unity.Networking.Transport;
 using Unity.Netcode.Transports.UTP;
 
-using Steamworks;
-
 public class PlayerStateMachine : NetworkBehaviour
 {
 
@@ -250,7 +248,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
     private void Start()
     {
-        if (IsOwner) Game_GeneralManager.instance.AddPlayerServerRPC(NetworkObjectId, NetworkObject);
+
     }
 
     public override void OnNetworkSpawn()
@@ -274,14 +272,10 @@ public class PlayerStateMachine : NetworkBehaviour
         }
         else
         {
-
             foreach (GameObject t in DummyOnlyObjects) t.SetActive(false);
             //foreach (Transform child in Exterior) child.gameObject.SetActive(false);
            // Debug.Log("host joined");
             Exterior.GetComponent<ExteriorShadowSwitch>().ShadowsOnly(true);
-            Debug.Log("yayayaya");
-            //Game_GeneralManager.instance.AddPlayerServerRPC(NetworkObjectId, NetworkObject);
-
 
 
         }
@@ -326,7 +320,7 @@ public class PlayerStateMachine : NetworkBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    
+
 
     private void Update()
     {
@@ -368,15 +362,7 @@ public class PlayerStateMachine : NetworkBehaviour
         CurrentPlayerState.LateUpdate();
     }
 
-    public override void OnNetworkDespawn()
-    {
-        base.OnNetworkDespawn();
 
-        if (IsOwner)
-        {
-            Game_GeneralManager.instance.RemovePlayerServerRPC(NetworkObjectId, NetworkObject);
-        }
-    }
 
 
 

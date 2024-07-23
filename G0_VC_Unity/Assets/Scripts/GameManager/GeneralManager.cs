@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
-public class GeneralManager : NetworkBehaviour
+public class GeneralManager : MonoBehaviour
 {
     public static GeneralManager instance { get; set; }
 
@@ -12,7 +11,6 @@ public class GeneralManager : NetworkBehaviour
         ConstructSingleton();
 
     }
-    
 
     public virtual void ConstructSingleton()
     {

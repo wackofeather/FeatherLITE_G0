@@ -248,7 +248,16 @@ public class PlayerStateMachine : NetworkBehaviour
 
     private void Start()
     {
+        if (IsOwner) StartCoroutine(Testcoroutine());
+    }
 
+    IEnumerator Testcoroutine()
+    {
+        //yield return new WaitForSeconds(1);
+
+        //Game_GeneralManager.instance.AddPlayerServerRPC(NetworkObject.NetworkObjectId, NetworkObject);
+
+        yield break;
     }
 
     public override void OnNetworkSpawn()
@@ -276,7 +285,7 @@ public class PlayerStateMachine : NetworkBehaviour
             //foreach (Transform child in Exterior) child.gameObject.SetActive(false);
            // Debug.Log("host joined");
             Exterior.GetComponent<ExteriorShadowSwitch>().ShadowsOnly(true);
-
+            //StartCoroutine(Testcoroutine());
 
         }
 
@@ -447,5 +456,22 @@ public class PlayerStateMachine : NetworkBehaviour
 
         // Convert the viewport point back to the world with the new FOV
         return cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
+    }
+
+    public void OnClientDisconnect()
+    {
+        Debug.Log("client disconnected");
+    }
+
+    public override void OnNetworkDespawn()
+    {
+
+       // if (IsOwner) Game_GeneralManager.instance.RemovePlayerServerRPC(NetworkObject.NetworkObjectId, NetworkObject);
+        Debug.Log("closingnetwork");
+
+
+        base.OnNetworkDespawn();
+
+       
     }
 }

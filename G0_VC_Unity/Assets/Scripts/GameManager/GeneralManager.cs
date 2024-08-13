@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class GeneralManager : MonoBehaviour
+public class GeneralManager : NetworkBehaviour
 {
     public static GeneralManager instance { get; set; }
 

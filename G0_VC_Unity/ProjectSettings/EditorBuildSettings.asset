@@ -5,8 +5,14 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 0
+    path: Assets/Scenes/Steam_Network_BaseScene.unity
+    guid: 0686b2104efe9bb46b7321a5da72c5c9
+  - enabled: 0
+    path: Assets/Scenes/MenuScene.unity
+    guid: 6ded0d759ac0f334fb9f4a4570faf8f4
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/DevScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 2aa3a13b79f60234fa01670a96895322, type: 2}

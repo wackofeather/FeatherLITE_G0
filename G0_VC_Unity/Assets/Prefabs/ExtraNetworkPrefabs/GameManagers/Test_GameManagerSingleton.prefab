@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3274449816
+  GlobalObjectIdHash: 133970927
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 0
@@ -71,6 +71,10 @@ MonoBehaviour:
   - {fileID: 7704726645358749622}
   - {fileID: 8187984260092742769}
   - {fileID: 3685736318734646022}
+  escape: {fileID: 3721098537386122375, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  paused: 0
+  testFloat: 0
+  player: {fileID: 2920028746863420624, guid: 43ad05ca72a9d364e84520262e6f65e0, type: 3}
 --- !u!1 &4059171949314698495
 GameObject:
   m_ObjectHideFlags: 0

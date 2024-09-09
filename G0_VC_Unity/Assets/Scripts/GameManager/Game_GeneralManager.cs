@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Netcode;
 using UnityEngine;
+using Steamworks;
+using Netcode.Transports.Facepunch;
+using Steamworks.Data;
+using UnityEngine.InputSystem;
 
 public class Game_GeneralManager : GeneralManager
 {
@@ -15,9 +19,51 @@ public class Game_GeneralManager : GeneralManager
     //ServerOnly
     private int internalSpawnTicker = 0;
 
+    public InputActionReference escape;
+    public bool paused;
+
 
     //test
     public float testFloat;
+
+    public GameObject player;
+
+
+
+    public void Update()
+    {
+        if (escape.action.triggered)
+        {
+            if (paused)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                paused = false;
+            }
+            if (!paused)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                paused = true;
+            }
+        }
+    }
+
+
+/*    [Rpc(SendTo.Server, RequireOwnership = false)]
+    public void SpawnPlayerRPC(ulong ClientID)
+    {
+        //if (IsServer) { Debug.Log("goofy"); }
+
+        Debug.LogAssertion("balsahsadaksdsdkshdsdshdjsds");
+
+        GameObject obj = Instantiate(player);
+        obj.GetComponent<NetworkObject>().SpawnAsPlayerObject(ClientID);
+    }*/
+
+
+
+
+/*
+
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
     public void TestSpawnServerRPC(NetworkObjectReference playerReference)
@@ -70,7 +116,7 @@ public class Game_GeneralManager : GeneralManager
         internalSpawnTicker++;
     }
 
-
+*/
 
 
 

@@ -469,9 +469,12 @@ public class PlayerStateMachine : NetworkBehaviour
        // if (IsOwner) Game_GeneralManager.instance.RemovePlayerServerRPC(NetworkObject.NetworkObjectId, NetworkObject);
         Debug.Log("closingnetwork");
 
+        
 
         base.OnNetworkDespawn();
 
-       
+        SteamLobbyManager.instance.LeaveLobby();
+
+
     }
 }

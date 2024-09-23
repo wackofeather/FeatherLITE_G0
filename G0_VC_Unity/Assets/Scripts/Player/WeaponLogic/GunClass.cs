@@ -66,6 +66,9 @@ public class GunClass : WeaponClass
         {
             if (!weaponData.fireInput.action.IsPressed()) break;
             if (player.isMelee) break;
+
+            //if (Physics.Raycast(weaponData.gunTip))
+
             yield return new WaitForSeconds(1/weaponData.BPS);
         }
         inventory.isShooting = false;

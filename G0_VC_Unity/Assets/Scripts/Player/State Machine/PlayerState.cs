@@ -33,7 +33,7 @@ public class BasePlayerState
 
         if (!player.IsOwner)
         {
-
+            //player.playerNetwork.ConsumeState();
             
             if (player.internal_CurrentState != key) player.ChangeState(player.stateDictionary[player.internal_CurrentState]);
             return;
@@ -58,6 +58,8 @@ public class BasePlayerState
         player.updown_Blendconstant = (player.xRotation + 90) / 180;
 
         if (player.melee.action.triggered && player.CurrentPlayerState != player.MeleeState) player.ChangeState(player.MeleeState);
+
+        //player.playerNetwork.TransmitState();
     }
     public virtual void FixedUpdate()
     {

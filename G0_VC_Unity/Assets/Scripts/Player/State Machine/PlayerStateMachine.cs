@@ -193,6 +193,14 @@ public class PlayerStateMachine : NetworkBehaviour
     public float windSpawnRate;
 
 
+    [Space(10)]
+    public PlayerNetwork playerNetwork;
+
+
+    [Header("Health")]
+    public int health;
+    
+
     public RaycastHit GrappleCheck()
     {
         RaycastHit hitinfo;
@@ -476,5 +484,15 @@ public class PlayerStateMachine : NetworkBehaviour
         SteamLobbyManager.instance.LeaveLobby();
 
 
+    }
+
+    public void SetHealth(int _health)
+    {
+        health = _health;
+    }
+
+    public void Damage(int damage)
+    {
+        health -= damage;
     }
 }

@@ -12,9 +12,9 @@ public class Game_GeneralManager : GeneralManager
 {
     new public static Game_GeneralManager instance { get; set; }
 
-    public Dictionary<float, NetworkObject> Player_LookUp { get; private set; }
+    public Dictionary<ulong, PlayerData> Player_LookUp = new Dictionary<ulong, PlayerData>(); //{ get; private set; }
 
-    public List<Transform> SpawnPlaces;
+    public List<Transform> SpawnPlaces = new List<Transform>();
 
     //ServerOnly
     private int internalSpawnTicker = 0;
@@ -32,6 +32,7 @@ public class Game_GeneralManager : GeneralManager
 
     public void Update()
     {
+        //Debug.Log(Player_LookUp.Count);
         if (escape.action.triggered)
         {
             if (paused)
@@ -48,75 +49,88 @@ public class Game_GeneralManager : GeneralManager
     }
 
 
-/*    [Rpc(SendTo.Server, RequireOwnership = false)]
-    public void SpawnPlayerRPC(ulong ClientID)
+    [Rpc(SendTo.Server, RequireOwnership = false)]
+    public void SpawnPlayerRPC(ulong Steam_ClientID, ulong NetworkID)
     {
-        //if (IsServer) { Debug.Log("goofy"); }
+        if (IsServer) { Debug.Log("goofy"); }
 
-        Debug.LogAssertion("balsahsadaksdsdkshdsdshdjsds");
+        //Debug.LogAssertion("balsahsadaksdsdkshdsdshdjsds");
 
         GameObject obj = Instantiate(player);
-        obj.GetComponent<NetworkObject>().SpawnAsPlayerObject(ClientID);
-    }*/
 
+        //Debug.Log(NetworkManager.Singleton.IsConnectedClient);
+        obj.GetComponent<NetworkObject>().SpawnAsPlayerObject(NetworkID);
+        obj.GetComponent<PlayerStateMachine>().SetHealth(100);
 
-
-
-/*
-
-
-    [Rpc(SendTo.Server, RequireOwnership = false)]
-    public void TestSpawnServerRPC(NetworkObjectReference playerReference)
-    {
-        SpawnAtPlace(playerReference);
+        AddPlayerServerRPC(Steam_ClientID, new PlayerData(obj.transform.position, 100, Steam_ClientID, NetworkID));
     }
+    /*
+        [Rpc(SendTo.Server, RequireOwnership = false)]
+        public void DespawnPlayer()
+        {
+
+        }
+    */
+
+
+
+
+    /*    [Rpc(SendTo.Server, RequireOwnership = false)]
+        public void TestSpawnServerRPC(NetworkObjectReference playerReference)
+        {
+            SpawnAtPlace(playerReference);
+        }*/
     [Rpc(SendTo.Server, RequireOwnership = false)]
-    public void AddPlayerServerRPC(float key, NetworkObjectReference player)
+    public void AddPlayerServerRPC(ulong key, PlayerData player)
     {
-        //Player_LookUp.Add(key, player);
+        Player_LookUp.Add(key, player);
 
         SpawnAtPlace(player);
 
-        //AddClientPlayerLookUpClientRPC(key, player);
+        AddClientPlayerLookUpClientRPC(key, player);
 
         Debug.Log("yipeee");
+
     }
 
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
-    public void RemovePlayerServerRPC(float key, NetworkObjectReference player)
+    public void RemovePlayerServerRPC(ulong key, PlayerData player)
     {
         //Player_LookUp.Add(key, player);
 
-        //Player_LookUp.Remove(key);
+        NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.Despawn();
 
-        //RemoveClientPlayerLookUpClientRPC(key);
+        Player_LookUp.Remove(key);
+
+        RemoveClientPlayerLookUpClientRPC(key);
         Debug.Log("bye");
     }
 
 
     [Rpc(SendTo.NotServer)]
-    public void AddClientPlayerLookUpClientRPC(float key, NetworkObjectReference player)
+    public void AddClientPlayerLookUpClientRPC(ulong key, PlayerData player)
     {
         if (IsHost) return;//NetworkSpawnManager.SpawnedObjects[objectId]
-        Player_LookUp.Add(key, NetworkManager.SpawnManager.SpawnedObjects[player.NetworkObjectId]);
+        Player_LookUp.Add(key, player);
     }
     [Rpc(SendTo.NotServer)]
-    public void RemoveClientPlayerLookUpClientRPC(float key)
+    public void RemoveClientPlayerLookUpClientRPC(ulong key)
     {
         if (IsHost) return;
 
         Player_LookUp.Remove(key);
     }
 
-    void SpawnAtPlace(NetworkObjectReference player)
+    void SpawnAtPlace(PlayerData player)
     {
-        NetworkManager.Singleton.SpawnManager.SpawnedObjects[player.NetworkObjectId].gameObject.GetComponent<Rigidbody>().position = SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position;
+        NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<Rigidbody>().position = SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position;
 
         internalSpawnTicker++;
     }
 
-*/
+
+
 
 
 

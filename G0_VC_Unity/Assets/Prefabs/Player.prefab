@@ -707,7 +707,7 @@ VisualEffect:
       - m_Value: 1.65
         m_Name: Radius/Deadzone
         m_Overridden: 1
-      - m_Value: 32
+      - m_Value: 0
         m_Name: Spawn Rate
         m_Overridden: 1
       - m_Value: 5
@@ -1382,6 +1382,7 @@ MonoBehaviour:
   pickupCooldownTime: 0.59
   windEffect: {fileID: 2237375671541017613}
   windSpawnRate: 32
+  playerNetwork: {fileID: 1564597625595317825}
 --- !u!114 &1564597625595317825
 MonoBehaviour:
   m_ObjectHideFlags: 0

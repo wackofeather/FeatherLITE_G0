@@ -82,7 +82,7 @@ public class SteamLobbyManager : MonoBehaviour
         //SteamFriends.OnGameLobbyJoinRequested += OnGameLobbyJoinRequest;
         //SteamMatchmaking.OnLobbyInvite += OnLobbyInvite;
 
-        ///SceneManager.LoadScene(MenuScene);
+        SceneManager.LoadScene(MenuScene);
 
 
 
@@ -209,7 +209,7 @@ public class SteamLobbyManager : MonoBehaviour
 
             StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(currentLobby.Owner.Id, true));
 
-            Debug.LogAssertion(currentLobby.Id);
+            //Debug.LogAssertion(currentLobby.Id);
 
             return true;
         }
@@ -256,16 +256,21 @@ public class SteamLobbyManager : MonoBehaviour
 
             while (true)
             {
-                if (loadScene == SceneEventProgressStatus.Started) { break; }
+                if (loadScene == SceneEventProgressStatus.Started && SceneManager.GetActiveScene().name == instance.GameScene) { break; }
                 Debug.Log("beep");
                 yield return null;
             }
             GUIUtility.systemCopyBuffer = targetID.Value.ToString();
 
+            //Debug.Log(Game_GeneralManager.instance != null);
+            //Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId);
+
         }
         else 
         { 
             NetworkManager.Singleton.gameObject.GetComponent<UnityNetworkManager>().StartClient();
+
+            //Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId);
             Debug.Log("nabsjagansjshsnauisusjskajsksjaksushenehshssnsnsnsnsnsnsnsns");
         }
 
@@ -279,6 +284,7 @@ public class SteamLobbyManager : MonoBehaviour
             yield return null;
         }
 
+        Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId, NetworkManager.Singleton.LocalClientId);
 
         //Game_GeneralManager.instance.SpawnPlayerRPC(NetworkManager.Singleton.LocalClientId);
 

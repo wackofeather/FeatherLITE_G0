@@ -37,7 +37,7 @@ public class PlayerNetwork : NetworkBehaviour
 
     #region Transmit State
 
-    private void TransmitState()
+    public void TransmitState()
     {
         var state = new PlayerNetworkState
         {
@@ -71,7 +71,7 @@ public class PlayerNetwork : NetworkBehaviour
     private Vector3 _posVel;
     //private float Exterior_rotVel;
 
-    private void ConsumeState()
+    public void ConsumeState()
     {
         // Here you'll find the cheapest, dirtiest interpolation you'll ever come across. Please do better in your game
         _rb.MovePosition(Vector3.SmoothDamp(_rb.position, _playerState.Value.Position, ref _posVel, _cheapInterpolationTime));
@@ -95,6 +95,8 @@ public class PlayerNetwork : NetworkBehaviour
         inventory.isShooting = _playerState.Value.isShooting_internal;
         playerStateMachine.grapplePoint = _playerState.Value.GrapplePosition;
         playerStateMachine.updown_Blendconstant = Mathf.Lerp(playerStateMachine.updown_Blendconstant, (_playerState.Value.Rotation.x + 90) / 180, 0.3f);
+
+        playerStateMachine.health = 0;
         //ebug.Log(_playerState.Value.Rotation.x);
 /*        float blendconstant = (playerStateMachine.xRotation + 90) / 180;
         playerStateMachine.player_EXT_ARM_anim_controller.SetFloat("Y_Look", blendconstant);
@@ -144,6 +146,8 @@ public class PlayerNetwork : NetworkBehaviour
         private float currentPlayerState_fl;
 
         private float currentWeapon_fl;
+
+        private int _health;
 
         internal Vector3 Position
         {
@@ -223,6 +227,15 @@ public class PlayerNetwork : NetworkBehaviour
             }
         }
 
+        internal int Health
+        {
+            get => _health;
+            set
+            {
+                _health = value;
+            }
+        }
+
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
         {
             serializer.SerializeValue(ref _posX);
@@ -238,6 +251,7 @@ public class PlayerNetwork : NetworkBehaviour
             serializer.SerializeValue(ref G_posZ);
             serializer.SerializeValue(ref currentPlayerState_fl);
             serializer.SerializeValue(ref currentWeapon_fl);
+            serializer.SerializeValue(ref _health);
         }
     }
 }

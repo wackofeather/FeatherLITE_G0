@@ -21,6 +21,7 @@ public class PlayerStateMachine : NetworkBehaviour
     [System.NonSerialized] public GrapplingState GrapplingState;
     [System.NonSerialized] public MeleeState MeleeState;
     [System.NonSerialized] public WeaponSwitchState WeaponSwitchState;
+    [System.NonSerialized] public DeathState DeathState;
 
     public Dictionary<float, BasePlayerState> stateDictionary = new Dictionary<float, BasePlayerState>();
 
@@ -198,7 +199,8 @@ public class PlayerStateMachine : NetworkBehaviour
 
 
     [Header("Health")]
-    public int health;
+    public int health = -10;
+    public GameObject DamageCollider;
     
 
     public RaycastHit GrappleCheck()
@@ -282,7 +284,7 @@ public class PlayerStateMachine : NetworkBehaviour
             //Debug.Log("bruhsushsh");
 
 
-            gameObject.layer = LayerMask.NameToLayer(EnemyLayer);
+            //gameObject.layer = LayerMask.NameToLayer(EnemyLayer);
 
 
 
@@ -303,10 +305,12 @@ public class PlayerStateMachine : NetworkBehaviour
         GrapplingState = new GrapplingState(this);
         MeleeState = new MeleeState(this);
         WeaponSwitchState = new WeaponSwitchState(this);
+        DeathState = new DeathState(this);
         stateDictionary.Add(RegularState.key, RegularState);
         stateDictionary.Add(GrapplingState.key, GrapplingState);
         stateDictionary.Add(MeleeState.key, MeleeState);
         stateDictionary.Add(WeaponSwitchState.key, WeaponSwitchState);
+        stateDictionary.Add(DeathState.key, DeathState);
         
         //RegularState.Start_Init();
         //GrapplingState.Start_Init();
@@ -491,8 +495,55 @@ public class PlayerStateMachine : NetworkBehaviour
         health = _health;
     }
 
+    [Rpc(SendTo.SpecifiedInParams)]
+    public void SetHealthRPC(int _health, RpcParams _params)
+    {
+        health = _health;
+    }
+
     public void Damage(int damage)
     {
+/*        if (health < 0)
+        {
+            SendDamageOwnerRPC(damage, OwnerClientId, true);
+            
+            return;
+        }*/
         health -= damage;
+        if (health < 0)
+        {
+            KillPlayerRPC();
+        }
+        SendDamageOwnerRPC(damage, OwnerClientId);
+    }
+
+    /*    [Rpc(SendTo.NotMe)]
+        void SendDamageRPC(int damage)
+        {
+            health -= damage;
+        }*/
+
+    [Rpc(SendTo.Owner)]
+    void SendDamageOwnerRPC(int damage, ulong damagerID)
+    {
+
+        health -= damage;
+        SetHealthRPC(health, RpcTarget.Single(damagerID, RpcTargetUse.Temp));
+        ulong[] IDS = new ulong[2];
+        IDS[0] = damagerID;
+        IDS[1] = OwnerClientId;
+        RelayDamageRPC(damage, RpcTarget.Not(IDS, RpcTargetUse.Temp));
+    }
+
+    [Rpc(SendTo.SpecifiedInParams)]
+    void RelayDamageRPC(int damage, RpcParams _params)
+    {
+        health -= damage;
+    }
+
+    [Rpc(SendTo.Owner)]
+    void KillPlayerRPC()
+    {
+        Game_GeneralManager.instance.Kill(this);
     }
 }

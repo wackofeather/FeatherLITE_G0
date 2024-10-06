@@ -31,8 +31,8 @@ public class PlayerNetwork : NetworkBehaviour
 
     private void Update()
     {
-        if (IsOwner) TransmitState();
-        else ConsumeState();
+/*        if (IsOwner) TransmitState();
+        else ConsumeState();*/
     }
 
     #region Transmit State
@@ -96,7 +96,7 @@ public class PlayerNetwork : NetworkBehaviour
         playerStateMachine.grapplePoint = _playerState.Value.GrapplePosition;
         playerStateMachine.updown_Blendconstant = Mathf.Lerp(playerStateMachine.updown_Blendconstant, (_playerState.Value.Rotation.x + 90) / 180, 0.3f);
 
-        playerStateMachine.health = 0;
+        //playerStateMachine.health = 0;
         //ebug.Log(_playerState.Value.Rotation.x);
 /*        float blendconstant = (playerStateMachine.xRotation + 90) / 180;
         playerStateMachine.player_EXT_ARM_anim_controller.SetFloat("Y_Look", blendconstant);

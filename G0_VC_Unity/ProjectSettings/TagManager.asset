@@ -16,7 +16,7 @@ TagManager:
   - ENEMY
   - FRIEND
   - INTERACTABLE
-  - 
+  - CAMERA
   - PHYSICAL_UI
   - test
   - 

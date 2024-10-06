@@ -28,7 +28,14 @@ public class GunClass : WeaponClass
 
         inventory.EXT_GetCurrentWeaponAnimator().SetBool("Firing", inventory.isShooting);
 
-        if (!player.IsOwner) return;
+        if (!player.IsOwner)
+        {
+            if (inventory.isShooting)
+            {
+                //do ext shooting here?
+            }
+            return;
+        }
 
 
         base.Weapon_Update();
@@ -47,12 +54,11 @@ public class GunClass : WeaponClass
 
 
 
-        if (weaponData.fireInput.action.IsPressed() && !player.isMelee) inventory.StartCoroutine(shootCoroutine());
-        else inventory.isShooting = false;
+        if (weaponData.fireInput.action.IsPressed() && !player.isMelee && !inventory.isShooting) inventory.StartCoroutine(shootCoroutine());
+
 
         if (weaponData.scope.action.IsPressed() && !player.isMelee) StartScope();
         else StopScope();
-        //Debug.Log(isShooting);
     }
 
 
@@ -61,17 +67,45 @@ public class GunClass : WeaponClass
 
     public virtual IEnumerator shootCoroutine()
     {
-        inventory.isShooting = true;
-        while (true)
+/*        if (player.IsOwner) 
+        {*/
+            inventory.isShooting = true;
+            while (true)
+            {
+                if (!weaponData.fireInput.action.IsPressed()) break;
+                if (player.isMelee) break;
+            RaycastHit hit = new RaycastHit();
+                //if (Physics.Raycast(inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position, ))
+                if (Physics.Raycast(player.PlayerCamera.transform.position, player.PlayerCamera.TransformDirection(Vector3.forward), out hit, 500f, (1 << LayerMask.NameToLayer("ENEMY")))) 
+                { 
+                    Debug.LogAssertion("hit!");
+                    hit.collider.gameObject.GetComponentInParent<PlayerStateMachine>().Damage(10);
+                }
+
+                yield return new WaitForSeconds(1 / weaponData.BPS);
+            }
+            inventory.isShooting = false;
+            yield break;
+/*        }*/
+/*        else
         {
-            if (!weaponData.fireInput.action.IsPressed()) break;
-            if (player.isMelee) break;
+            while (inventory.isShooting == true)
+            {
+                yield return new WaitForSeconds(1 / weaponData.BPS);
+            }
+            yield break;
+*//*            while (true)
+            {
+                if (!weaponData.fireInput.action.IsPressed()) break;
+                if (player.isMelee) break;
 
-            //if (Physics.Raycast(weaponData.gunTip))
+                //if (Physics.Raycast(inventory.VP_GetProxy().transform.position, ))
 
-            yield return new WaitForSeconds(1/weaponData.BPS);
-        }
-        inventory.isShooting = false;
-        yield break;
+                yield return new WaitForSeconds(1 / weaponData.BPS);
+            }
+            inventory.isShooting = false;
+            yield break;*//*
+        }*/
+        
     }
 }

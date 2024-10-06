@@ -60,6 +60,8 @@ public class BasePlayerState
         if (player.melee.action.triggered && player.CurrentPlayerState != player.MeleeState) player.ChangeState(player.MeleeState);
 
         //player.playerNetwork.TransmitState();
+
+        if (player.inventory.GetCurrentWeapon() != null) player.inventory.GetCurrentWeapon().Weapon_Update();
     }
     public virtual void FixedUpdate()
     {
@@ -68,7 +70,12 @@ public class BasePlayerState
 
     public virtual void LateUpdate()
     {
-        if (!player.IsOwner) return;
+        if (!player.IsOwner) 
+        {
+            player.playerNetwork.ConsumeState();
+            return;
+        }
+        player.playerNetwork.TransmitState();
         Game_UI_Manager.instance.UpdateGrappleIndicator(player.CanGrapple());
     }
 

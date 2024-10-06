@@ -1047,6 +1047,7 @@ Transform:
   - {fileID: 9170000013213899450}
   - {fileID: 9204850531463137951}
   - {fileID: 631153326889804983}
+  - {fileID: 6331771816369868027}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1212,10 +1213,10 @@ MonoBehaviour:
   grappleLenience_Time: 0.1
   whatIsGrappleable:
     serializedVersion: 2
-    m_Bits: 769
+    m_Bits: 129
   movingGrapplableLayers:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 128
   maxDistance: 100
   Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   grappleSpeed: 53.2
@@ -1383,6 +1384,8 @@ MonoBehaviour:
   windEffect: {fileID: 2237375671541017613}
   windSpawnRate: 32
   playerNetwork: {fileID: 1564597625595317825}
+  health: 0
+  DamageCollider: {fileID: 8231590536858020204}
 --- !u!114 &1564597625595317825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2195,6 +2198,52 @@ Transform:
   m_Father: {fileID: 7549162662110132104}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8231590536858020204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6331771816369868027}
+  - component: {fileID: 4491117924251952288}
+  m_Layer: 7
+  m_Name: DamageCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &6331771816369868027
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8231590536858020204}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2920028746863420629}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &4491117924251952288
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8231590536858020204}
+  m_Material: {fileID: 13400000, guid: 06a8275deb1a47f45ac99ad480bd6f2a, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1.8
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8815168177392360592
 GameObject:
   m_ObjectHideFlags: 0
@@ -2403,7 +2452,7 @@ GameObject:
   - component: {fileID: 2931182567401504268}
   - component: {fileID: 5336950757673161056}
   - component: {fileID: 8912980852272371814}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Camera
   m_TagString: Untagged
   m_Icon: {fileID: 0}

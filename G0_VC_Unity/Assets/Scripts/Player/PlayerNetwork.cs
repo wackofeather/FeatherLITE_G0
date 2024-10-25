@@ -19,6 +19,7 @@ public class PlayerNetwork : NetworkBehaviour
     [SerializeField] PlayerStateMachine playerStateMachine;
     [SerializeField] Player_Inventory inventory;
     private NetworkVariable<PlayerNetworkState> _playerState;
+    private PlayerNetworkState last_playerState;
     private Rigidbody _rb;
 
     private void Awake()
@@ -39,15 +40,18 @@ public class PlayerNetwork : NetworkBehaviour
 
     public void TransmitState()
     {
+        if (!NetworkManager.IsConnectedClient) return;
         var state = new PlayerNetworkState
         {
             Position = _rb.position,
+            Velocity = _rb.velocity,
             Rotation = new Vector2(playerStateMachine.xRotation, playerStateMachine.yRotation),
             isScoping_internal = inventory.isScoping,
             isShooting_internal = inventory.isShooting,
             GrapplePosition = playerStateMachine.grapplePoint,
             currentPlayerState_fl_internal = playerStateMachine.CurrentPlayerState.key,
-            currentWeapon_fl_internal = inventory.currentWeapon.key
+            currentWeapon_fl_internal = inventory.currentWeapon.key,
+            Health = playerStateMachine.health,
         };
 
         if (IsServer || !_serverAuth)
@@ -73,8 +77,10 @@ public class PlayerNetwork : NetworkBehaviour
 
     public void ConsumeState()
     {
+        if (!NetworkManager.IsConnectedClient) return;
+        //if (last_playerState == _playerState) return;
         // Here you'll find the cheapest, dirtiest interpolation you'll ever come across. Please do better in your game
-        _rb.MovePosition(Vector3.SmoothDamp(_rb.position, _playerState.Value.Position, ref _posVel, _cheapInterpolationTime));
+        ///_rb.MovePosition(Vector3.SmoothDamp(_rb.position, _playerState.Value.Position, ref _posVel, _cheapInterpolationTime));
 
         //Exterior.transform.rotation = Quaternion.Euler(0, Mathf.SmoothDampAngle(Exterior.transform.rotation.eulerAngles.y, _playerState.Value.Rotation.y, ref Exterior_rotVel, _cheapInterpolationTime), 0);
 
@@ -95,7 +101,7 @@ public class PlayerNetwork : NetworkBehaviour
         inventory.isShooting = _playerState.Value.isShooting_internal;
         playerStateMachine.grapplePoint = _playerState.Value.GrapplePosition;
         playerStateMachine.updown_Blendconstant = Mathf.Lerp(playerStateMachine.updown_Blendconstant, (_playerState.Value.Rotation.x + 90) / 180, 0.3f);
-
+        playerStateMachine.health = _playerState.Value.Health;
         //playerStateMachine.health = 0;
         //ebug.Log(_playerState.Value.Rotation.x);
 /*        float blendconstant = (playerStateMachine.xRotation + 90) / 180;
@@ -105,6 +111,14 @@ public class PlayerNetwork : NetworkBehaviour
         //playerStateMachine.isGrappling = _playerState.Value.isGrappling_internal;
 
         //Debug.Log(rotatables.transform.rotation.eulerAngles.y);
+    }
+
+    public void FixedConsumeState()
+    {
+        if (last_playerState.Equals(_playerState.Value)) return;
+        _rb.MovePosition(_playerState.Value.Position);
+        _rb.velocity = _playerState.Value.Velocity;
+        last_playerState = _playerState.Value;
     }
 
     #endregion
@@ -133,6 +147,8 @@ public class PlayerNetwork : NetworkBehaviour
     {
         private float _posX, _posY, _posZ;
 
+        private float _velX, _velY, _velZ;
+
         private float G_posX, G_posY, G_posZ;
 
         private float _rotX, _rotY;
@@ -157,6 +173,17 @@ public class PlayerNetwork : NetworkBehaviour
                 _posX = value.x;
                 _posY = value.y;
                 _posZ = value.z;
+            }
+        }
+
+        internal Vector3 Velocity
+        {
+            get => new(_velX, _velY, _velZ);
+            set
+            {
+                _velX = value.x;
+                _velY = value.y;
+                _velZ = value.z;
             }
         }
 

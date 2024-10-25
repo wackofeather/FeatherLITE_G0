@@ -220,7 +220,7 @@ public class SteamLobbyManager : MonoBehaviour
         }
     }
 
-    IEnumerator JoiningGameCoroutine(SteamId targetID, bool hosting)
+    public IEnumerator JoiningGameCoroutine(ulong targetID, bool hosting)
     {
 
         if (JoiningLobby) yield break;
@@ -260,7 +260,7 @@ public class SteamLobbyManager : MonoBehaviour
                 Debug.Log("beep");
                 yield return null;
             }
-            GUIUtility.systemCopyBuffer = targetID.Value.ToString();
+            GUIUtility.systemCopyBuffer = targetID.ToString();
 
             //Debug.Log(Game_GeneralManager.instance != null);
             //Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId);

@@ -136,8 +136,11 @@ public class GrapplingState : BasePlayerState
 
     public override void FixedUpdate()
     {
-        if (!player.IsOwner) return;
+
         base.FixedUpdate();
+
+        if (!player.IsOwner) return;
+
         if (Vector3.Distance(player.rb.position, player.grapplePoint) > 0.25f)
         {
             //if (Vector3.Distance(player.position, grapplePoint) < joint.maxDistance - grappleSpeed * Time.deltaTime) joint.maxDistance = Vector3.Distance(player.position, grapplePoint);
@@ -263,12 +266,16 @@ public class GrapplingState : BasePlayerState
             Physics.Raycast(player.PlayerCamera.position, (player.grapplePoint - player.PlayerCamera.position), out hit, player.maxDistance, player.whatIsGrappleable);
 
 
-            if (Angle > player.PlayerCamera.GetComponent<Camera>().fieldOfView * (1 + player.lookAwayLeniency)) break;
+            if (Angle > player.PlayerCamera.GetComponent<Camera>().fieldOfView * (1 + player.lookAwayLeniency)) { Debug.Log("Too far look away break"); break; }
 
-            if (((player.grapplePoint - hit.point).magnitude >= 0.7f) && hit.collider != null) { Debug.Log(player.grapplePoint - hit.point); break; }
+            if (((player.grapplePoint - hit.point).magnitude >= 0.7f) && hit.collider != null) { Debug.Log(hit.collider.gameObject.name); break; }
 
 
-            if (player.Grapple.action.WasReleasedThisFrame()) break;
+            if (player.Grapple.action.WasReleasedThisFrame()) 
+            {
+                Debug.Log("released Input break");
+                break;
+            }
 
             yield return null;
         }

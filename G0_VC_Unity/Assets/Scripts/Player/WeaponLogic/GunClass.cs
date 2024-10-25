@@ -78,8 +78,8 @@ public class GunClass : WeaponClass
                 //if (Physics.Raycast(inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position, ))
                 if (Physics.Raycast(player.PlayerCamera.transform.position, player.PlayerCamera.TransformDirection(Vector3.forward), out hit, 500f, (1 << LayerMask.NameToLayer("ENEMY")))) 
                 { 
-                    Debug.LogAssertion("hit!");
-                    hit.collider.gameObject.GetComponentInParent<PlayerStateMachine>().Damage(10);
+                    //Debug.LogAssertion("hit!");
+                    hit.collider.gameObject.GetComponent<PlayerStateMachine>().DamageRPC(1);
                 }
 
                 yield return new WaitForSeconds(1 / weaponData.BPS);

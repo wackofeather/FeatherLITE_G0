@@ -11,10 +11,13 @@ public class DeathState : BasePlayerState
     public override void EnterState()
     {
 
-        player.health = 0;
+        //player.health = 0;
+        if (player.IsOwner)
+        {
+            player.inventory.isScoping = false;
+            player.inventory.isShooting = false;
+        }
 
-        player.inventory.isScoping = false;
-        player.inventory.isShooting = false;
 
         base.EnterState();
         
@@ -26,14 +29,14 @@ public class DeathState : BasePlayerState
         return;
     }
 
-    public override void LateUpdate()
+/*    public override void LateUpdate()
     {
         return;
-    }
+    }*/
 
     public override void FixedUpdate()
     {
-        return;
+        base.FixedUpdate();
     }
 
     public override void AnimationTriggerEvent()

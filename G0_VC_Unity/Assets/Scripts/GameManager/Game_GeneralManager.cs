@@ -9,12 +9,15 @@ using Steamworks.Data;
 using UnityEngine.InputSystem;
 using System.Threading;
 using System.Linq;
+using System.Collections.Specialized;
+using System;
 
 public class Game_GeneralManager : GeneralManager
 {
     new public static Game_GeneralManager instance { get; set; }
 
-    public Dictionary<ulong, PlayerData> Player_LookUp = new Dictionary<ulong, PlayerData>(); //{ get; private set; }
+    //public Dictionary<ulong, PlayerData> Player_LookUp = new Dictionary<ulong, PlayerData>(); //{ get; private set; }
+    public OrderedDictionary Player_LookUp = new OrderedDictionary();
 
     public List<Transform> SpawnPlaces = new List<Transform>();
 
@@ -30,7 +33,30 @@ public class Game_GeneralManager : GeneralManager
 
     public GameObject player;
 
+    NetworkVariable<ulong> CurrentHost = new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
+    NetworkVariable<ulong> BackupHost = new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        //NetworkManager.OnClientDisconnectCallback += HandleHostMigration;
+    }
+
+    private void HandleHostMigration(ulong clientId)
+    {
+        if (Player_LookUp[clientId] == CurrentHost)
+        {
+            NetworkManager.DisconnectClient(clientId);
+            NetworkManager.Shutdown();
+            if (BackupHost.Value == SteamClient.SteamId.Value)
+            {
+                //NetworkManager.en
+                NetworkManager.StartHost();
+            }
+            else StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(BackupHost.Value, false));
+        }
+    }
 
 
 
@@ -41,14 +67,21 @@ public class Game_GeneralManager : GeneralManager
         {
             if (paused)
             {
+
                 Cursor.lockState = CursorLockMode.Locked;
-                paused = false;
+                //paused = false;
             }
             if (!paused)
             {
                 Cursor.lockState = CursorLockMode.None;
-                paused = true;
+                //paused = true;
             }
+            paused = !paused;
+        }
+        if (IsServer)
+        {
+            CurrentHost.Value = SteamClient.SteamId;
+            if (Player_LookUp.Count > 2) BackupHost.Value = (ulong)Player_LookUp[1];
         }
     }
 
@@ -79,9 +112,10 @@ public class Game_GeneralManager : GeneralManager
 
         //Debug.Log(NetworkManager.Singleton.IsConnectedClient);
         obj.GetComponent<NetworkObject>().SpawnAsPlayerObject(NetworkID);
+        obj.GetComponent<Rigidbody>().position = new Vector3(-1000,-1000,-1000);
        // obj.GetComponent<PlayerStateMachine>().SetHealth(100);
 
-        AddPlayerServerRPC(Steam_ClientID, new PlayerData(obj.transform.position, 100, Steam_ClientID, NetworkID));
+        AddPlayerServerRPC(Steam_ClientID, new PlayerData(obj.transform.position, 100, Steam_ClientID, NetworkID, obj.GetComponent<NetworkObject>()));
     }
 
 
@@ -106,14 +140,53 @@ public class Game_GeneralManager : GeneralManager
     {
         Player_LookUp.Add(key, player);
 
+        
+
+        AddClientPlayerLookUpClientRPC(key, player, NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject, RpcTarget.NotServer);
+        NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().SetHealthRPC(100, RpcTarget.Owner); //RpcTarget.Single(player.NetworkID, RpcTargetUse.Temp));
+        foreach (PlayerData playerData in Player_LookUp.Values)
+        {
+            if (playerData.SteamID != player.SteamID)
+            {
+                AddClientPlayerLookUpClientRPC(playerData.SteamID, playerData, NetworkManager.Singleton.ConnectedClients[playerData.NetworkID].PlayerObject, RpcTarget.Single(player.NetworkID, RpcTargetUse.Temp));
+            }
+            
+            //NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().SetHealth(-1000);
+        }
+
+        if (!NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().IsOwner)
+        {
+            /*            NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().DamageCollider.SetActive(true);
+                        NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().DamageCollider.layer = LayerMask.NameToLayer("ENEMY");*/
+            NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.gameObject.layer = LayerMask.NameToLayer("ENEMY");
+
+        }
+       
+
+        Debug.Log("yipeee   " + NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().IsOwner);
+
+        
+        SpawnAtPlaceRPC(player, SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position, RpcTarget.Single(player.NetworkID, RpcTargetUse.Temp));
+        internalSpawnTicker++;
+
+    }
+
+   /* public IEnumerator AddPlayerServerRPC_Coroutine(ulong key, PlayerData player)
+    {
+        Player_LookUp.Add(key, player);
+
         SpawnAtPlace(player);
 
         AddClientPlayerLookUpClientRPC(key, player, NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject, RpcTarget.NotServer);
         NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().SetHealthRPC(100, RpcTarget.Single(player.NetworkID, RpcTargetUse.Temp));
         foreach (PlayerData playerData in Player_LookUp.Values.ToList())
         {
-            if (playerData.SteamID == player.SteamID) return;
-            AddClientPlayerLookUpClientRPC(playerData.SteamID, playerData, NetworkManager.Singleton.ConnectedClients[playerData.NetworkID].PlayerObject, RpcTarget.Single(player.NetworkID, RpcTargetUse.Temp));
+            if (playerData.SteamID != player.SteamID)
+            {
+                AddClientPlayerLookUpClientRPC(playerData.SteamID, playerData, NetworkManager.Singleton.ConnectedClients[playerData.NetworkID].PlayerObject, RpcTarget.Single(player.NetworkID, RpcTargetUse.Temp));
+                //NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().SetHealth(-1000);
+            }
+           
         }
 
         if (!NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().IsOwner)
@@ -121,11 +194,9 @@ public class Game_GeneralManager : GeneralManager
             NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().DamageCollider.SetActive(true);
             NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().DamageCollider.layer = LayerMask.NameToLayer("ENEMY");
         }
-       
 
-        Debug.Log("yipeee");
-
-    }
+        yield break;
+    }*/
 
 
     [Rpc(SendTo.Server, RequireOwnership = false)]
@@ -151,8 +222,9 @@ public class Game_GeneralManager : GeneralManager
         //obj.gameObject.GetComponent<PlayerStateMachine>().GetComponent<PlayerStateMachine>().SetHealth(100);
         if (!obj.gameObject.GetComponent<PlayerStateMachine>().IsOwner)
         {
-            obj.gameObject.GetComponent<PlayerStateMachine>().DamageCollider.SetActive(true);
-            obj.gameObject.GetComponent<PlayerStateMachine>().DamageCollider.layer = LayerMask.NameToLayer("ENEMY");
+            /*obj.gameObject.GetComponent<PlayerStateMachine>().DamageCollider.SetActive(true);
+            obj.gameObject.GetComponent<PlayerStateMachine>().DamageCollider.layer = LayerMask.NameToLayer("ENEMY");*/
+            obj.gameObject.layer = LayerMask.NameToLayer("ENEMY");
         }
 /*        if (obj.gameObject.GetComponent<PlayerStateMachine>().IsOwner)
         {
@@ -169,11 +241,14 @@ public class Game_GeneralManager : GeneralManager
         Player_LookUp.Remove(key);
     }
 
-    void SpawnAtPlace(PlayerData player)
+    [Rpc(SendTo.SpecifiedInParams)]
+    void SpawnAtPlaceRPC(PlayerData player, Vector3 _position, RpcParams _params)
     {
-        NetworkManager.SpawnManager.GetPlayerNetworkObject(player.NetworkID).gameObject.GetComponent<Rigidbody>().position = SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position;
+        //NetworkManager.SpawnManager.GetPlayerNetworkObject(player.NetworkID).gameObject.GetComponent<Rigidbody>().position = _position;
 
-        internalSpawnTicker++;
+        NetworkManager.SpawnManager.GetLocalPlayerObject().gameObject.GetComponent<Rigidbody>().MovePosition(_position);
+        Debug.Log("hahskjahshssjdhsjdshdhjshdsjdhsdhshdshd");
+        //internalSpawnTicker++;
     }
 
 
@@ -188,7 +263,7 @@ public class Game_GeneralManager : GeneralManager
     {
         player.ChangeState(player.DeathState);
         player.gameObject.transform.position = new Vector3(0, 0, -10000);
-        float timer = 10;
+        float timer = 3;
         while (timer > 0) 
         { 
             timer -= Time.deltaTime;
@@ -196,7 +271,7 @@ public class Game_GeneralManager : GeneralManager
         }
         player.gameObject.transform.position = new Vector3(0, 0, 0);
         player.ChangeState(player.RegularState);
-        player.SetHealthRPC(100, RpcTarget.Everyone);
+        player.SetHealthRPC(100, RpcTarget.Owner);
         yield break;
         //
     }

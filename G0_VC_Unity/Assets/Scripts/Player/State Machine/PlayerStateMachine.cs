@@ -199,8 +199,10 @@ public class PlayerStateMachine : NetworkBehaviour
 
 
     [Header("Health")]
-    public int health = -10;
+    public int health;
     public GameObject DamageCollider;
+    public Transform ExtHealthBarLocation;
+    [HideInInspector] public GameObject extHealthBar;
     
 
     public RaycastHit GrappleCheck()
@@ -327,6 +329,7 @@ public class PlayerStateMachine : NetworkBehaviour
         if (!IsOwner)
         {
             VIEWPORT_lr.gameObject.SetActive(false);
+            Game_UI_Manager.instance.AddHealthBarToPlayer(this);
             return;
         }
 
@@ -490,9 +493,17 @@ public class PlayerStateMachine : NetworkBehaviour
 
     }
 
-    public void SetHealth(int _health)
+
+
+    [Rpc(SendTo.Owner)]
+    public void DamageRPC(int _damage)
     {
-        health = _health;
+        health -= _damage;
+        if (health <= 0)
+        {
+            KillPlayerRPC();
+        }
+
     }
 
     [Rpc(SendTo.SpecifiedInParams)]
@@ -501,49 +512,60 @@ public class PlayerStateMachine : NetworkBehaviour
         health = _health;
     }
 
-    public void Damage(int damage)
-    {
-/*        if (health < 0)
-        {
-            SendDamageOwnerRPC(damage, OwnerClientId, true);
-            
-            return;
-        }*/
-        health -= damage;
-        if (health < 0)
-        {
-            KillPlayerRPC();
-        }
-        SendDamageOwnerRPC(damage, OwnerClientId);
-    }
+    /* public void SetHealth(int _health)
+     {
+         health = _health;
+     }
 
-    /*    [Rpc(SendTo.NotMe)]
-        void SendDamageRPC(int damage)
-        {
-            health -= damage;
-        }*/
+     [Rpc(SendTo.SpecifiedInParams)]
+     public void SetHealthRPC(int _health, RpcParams _params)
+     {
+         health = _health;
+     }
 
-    [Rpc(SendTo.Owner)]
-    void SendDamageOwnerRPC(int damage, ulong damagerID)
-    {
+     public void Damage(int damage)
+     {
+ *//*        if (health < 0)
+         {
+             SendDamageOwnerRPC(damage, OwnerClientId, true);
 
-        health -= damage;
-        SetHealthRPC(health, RpcTarget.Single(damagerID, RpcTargetUse.Temp));
-        ulong[] IDS = new ulong[2];
-        IDS[0] = damagerID;
-        IDS[1] = OwnerClientId;
-        RelayDamageRPC(damage, RpcTarget.Not(IDS, RpcTargetUse.Temp));
-    }
+             return;
+         }*//*
+         health -= damage;
+         if (health < 0)
+         {
+             KillPlayerRPC();
+         }
+         SendDamageOwnerRPC(damage, OwnerClientId);
+     }
 
-    [Rpc(SendTo.SpecifiedInParams)]
-    void RelayDamageRPC(int damage, RpcParams _params)
-    {
-        health -= damage;
-    }
+     *//*    [Rpc(SendTo.NotMe)]
+         void SendDamageRPC(int damage)
+         {
+             health -= damage;
+         }*//*
 
-    [Rpc(SendTo.Owner)]
+     [Rpc(SendTo.Owner)]
+     void SendDamageOwnerRPC(int damage, ulong damagerID)
+     {
+
+         health -= damage;
+         SetHealthRPC(health, RpcTarget.Single(damagerID, RpcTargetUse.Temp));
+         ulong[] IDS = new ulong[2];
+         IDS[0] = damagerID;
+         IDS[1] = OwnerClientId;
+         RelayDamageRPC(damage, RpcTarget.Not(IDS, RpcTargetUse.Temp));
+     }
+
+     [Rpc(SendTo.SpecifiedInParams)]
+     void RelayDamageRPC(int damage, RpcParams _params)
+     {
+         health -= damage;
+     }*/
+
+    //[Rpc(SendTo.Owner)]
     void KillPlayerRPC()
     {
-        Game_GeneralManager.instance.Kill(this);
+        if (CurrentPlayerState != DeathState) Game_GeneralManager.instance.Kill(this);
     }
 }

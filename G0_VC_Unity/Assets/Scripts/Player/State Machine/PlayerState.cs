@@ -65,7 +65,10 @@ public class BasePlayerState
     }
     public virtual void FixedUpdate()
     {
-
+        if (!player.IsOwner)
+        {
+            player.playerNetwork.FixedConsumeState();
+        }
     }
 
     public virtual void LateUpdate()
@@ -73,10 +76,12 @@ public class BasePlayerState
         if (!player.IsOwner) 
         {
             player.playerNetwork.ConsumeState();
+            Game_UI_Manager.instance.UpdateDummyHealth(player);
             return;
         }
         player.playerNetwork.TransmitState();
         Game_UI_Manager.instance.UpdateGrappleIndicator(player.CanGrapple());
+        Game_UI_Manager.instance.UpdateHealth(player.health);
     }
 
     public virtual void AnimationTriggerEvent()

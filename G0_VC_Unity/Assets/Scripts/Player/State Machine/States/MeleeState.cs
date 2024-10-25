@@ -85,6 +85,12 @@ public class MeleeState : BasePlayerState
         startingVelocity = player.rb.velocity;
         endVelocity = meleeVector.normalized * player.meleeSpeed;
 
+
+        if (startingVelocity.magnitude > player.BreakNeckSpeed) { player.StartCoroutine(MeleeCoroutine(true)); }
+        else player.StartCoroutine(MeleeCoroutine(false));
+
+        //Debug.Log(startingVelocity.magnitude > player.BreakNeckSpeed);
+
         base.EnterState();
 
         //player.rb.velocity = meleeRotation.normalized * Vector3.forward * player.meleeSpeed;
@@ -120,23 +126,51 @@ public class MeleeState : BasePlayerState
 
     public override void FixedUpdate()
     {
-        if (!player.IsOwner) return;
 
         base.FixedUpdate();
 
-        float meleeProgress = player.meleeCurve.Evaluate(1 - timer);
+        //if (!player.IsOwner) return;
+
+/*        float meleeProgress = player.meleeCurve.Evaluate(1 - timer);
         Vector3 velocityVector;
 
 
         if (meleeProgress <= 1) velocityVector = startingVelocity + (endVelocity - startingVelocity) * player.meleeCurve.Evaluate(1 - timer);
         else velocityVector = endVelocity * meleeProgress;
 
-        player.rb.velocity = velocityVector;
+        player.rb.velocity = velocityVector;*/
 
         //player.rb.AddForce(velocityVector, ForceMode.VelocityChange);
 
         //if (Physics.Raycast(player.rb.position, new Vector3(meleeRotation.x, meleeRotation.y, meleeRotation.z), player.rb.velocity.magnitude))
         //if ((player.meleeSpeed > player.speed) && (player.PlayerCamera.transform.InverseTransformVector(player.rb.velocity).z < player.BreakNeckSpeed)) player.rb.velocity = ((meleeRotation.normalized * Vector3.forward * (((player.meleeSpeed - player.speed) * (timer / timerVal)) + player.speed - 1f)) - player.rb.velocity) * 40 * Time.fixedDeltaTime;
+    }
+
+    IEnumerator MeleeCoroutine(bool AboveBreakNeckSpeed)
+    {
+        if (AboveBreakNeckSpeed)
+        {
+            yield return new WaitForFixedUpdate();
+            player.rb.velocity = player.PlayerCamera.transform.forward * player.rb.velocity.magnitude;
+        }
+        else
+        {
+            while (true)
+            {
+                if (!player.isMelee) break;
+                float meleeProgress = player.meleeCurve.Evaluate(1 - timer);
+                Vector3 velocityVector;
+
+
+                if (meleeProgress <= 1) velocityVector = startingVelocity + (endVelocity - startingVelocity) * player.meleeCurve.Evaluate(1 - timer);
+                else velocityVector = endVelocity * meleeProgress;
+
+                player.rb.velocity = velocityVector;
+                yield return new WaitForFixedUpdate();
+            }
+
+        }
+        yield break;
     }
 
     public override void Update()
@@ -171,6 +205,14 @@ public class MeleeState : BasePlayerState
 
         if (!player.IsOwner) return;
 
+        Debug.LogAssertion(col.collider.gameObject.name);
+
+        if (col.collider.gameObject.layer == LayerMask.NameToLayer(player.EnemyLayer))
+        {
+            col.gameObject.GetComponent<PlayerStateMachine>().DamageRPC(100);
+            //player.ChangeState(player.RegularState);
+            return;
+        }
         if (col.contacts.Length > 1)
         {
             player.ChangeState(player.RegularState);
@@ -192,6 +234,7 @@ public class MeleeState : BasePlayerState
         }
         return val;
     }
+
 
 }
 

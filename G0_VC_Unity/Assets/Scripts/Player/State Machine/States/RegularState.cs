@@ -30,10 +30,12 @@ public class RegularState : BasePlayerState
     public override void FixedUpdate()
     {
 
+        base.FixedUpdate();
+
         if (!player.IsOwner) return;
 
 
-        base.FixedUpdate();
+        
 
 
 

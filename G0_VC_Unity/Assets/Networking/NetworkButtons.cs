@@ -46,7 +46,8 @@ public class NetworkButtons : MonoBehaviour
             if (GUILayout.Button("Client"))
             {
 
-                SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(LobbyID_Input));
+                //SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(LobbyID_Input));
+                SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(0));
                 /*                SteamId lobbyId = Convert.ToUInt64(LobbyID_Input);
                                 SteamLobbyManager.instance.JoinLobbyAsync(lobbyId);
                                 unityNetworkManager.StartClient();*/

@@ -23,5 +23,5 @@ MonoBehaviour:
   enterStateTime: 0.65
   pickUpTime: 3
   maxAmmo_Inventory: 0
-  BPS: 1
+  BPS: 100
   gunTip: {fileID: 0}

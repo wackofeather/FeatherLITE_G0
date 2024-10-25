@@ -37,6 +37,7 @@ Transform:
   - {fileID: 8538534044644966269}
   - {fileID: 1671833825163991969}
   - {fileID: 3161041677781400660}
+  - {fileID: 1479086602378071219}
   m_Father: {fileID: 2920028746863420629}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1213,10 +1214,10 @@ MonoBehaviour:
   grappleLenience_Time: 0.1
   whatIsGrappleable:
     serializedVersion: 2
-    m_Bits: 129
+    m_Bits: 769
   movingGrapplableLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 768
   maxDistance: 100
   Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   grappleSpeed: 53.2
@@ -1386,6 +1387,8 @@ MonoBehaviour:
   playerNetwork: {fileID: 1564597625595317825}
   health: 0
   DamageCollider: {fileID: 8231590536858020204}
+  ExtHealthBarLocation: {fileID: 1479086602378071219}
+  extHealthBar: {fileID: 0}
 --- !u!114 &1564597625595317825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1801,6 +1804,37 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &5291858504778683274
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1479086602378071219}
+  m_Layer: 3
+  m_Name: HealthBarLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1479086602378071219
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5291858504778683274}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.03, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7549162662110132104}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5797151198118576430
 GameObject:
   m_ObjectHideFlags: 0

@@ -48,6 +48,8 @@ public class WeaponSwitchState : BasePlayerState
 
     public override void FixedUpdate()
     {
+        base.FixedUpdate();
+
         player.rb.AddForce(-player.rb.velocity * player.slowDownRate);
     }
 

@@ -47,7 +47,7 @@ public class NetworkButtons : MonoBehaviour
             {
 
                 //SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(LobbyID_Input));
-                SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(0));
+                SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(LobbyID_Input));
                 /*                SteamId lobbyId = Convert.ToUInt64(LobbyID_Input);
                                 SteamLobbyManager.instance.JoinLobbyAsync(lobbyId);
                                 unityNetworkManager.StartClient();*/

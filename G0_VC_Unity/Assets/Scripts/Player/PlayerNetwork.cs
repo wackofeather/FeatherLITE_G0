@@ -22,6 +22,11 @@ public class PlayerNetwork : NetworkBehaviour
     private PlayerNetworkState last_playerState;
     private Rigidbody _rb;
 
+    public PlayerNetworkState GetState()
+    {
+        return _playerState.Value;
+    }
+
     private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
@@ -56,16 +61,22 @@ public class PlayerNetwork : NetworkBehaviour
 
         if (IsServer || !_serverAuth)
             _playerState.Value = state;
-        else
-            TransmitStateServerRpc(state);
+        //else
+            //TransmitStateServerRpc(state);
+
+        Game_GeneralManager.instance.myPlayerState = state;
 
         
     }
 
-    [ServerRpc]
-    private void TransmitStateServerRpc(PlayerNetworkState state)
+    //[Rpc(SendTo.Owner)]
+    public void TransmitState(PlayerNetworkState state)
     {
         _playerState.Value = state;
+        Game_GeneralManager.instance.myPlayerState = state;
+        Debug.LogAssertion("abajalsjsaaaaaaaaaaa" + _playerState.Value.Position);
+        ConsumeState();
+        FixedConsumeState();
     }
 
     #endregion
@@ -143,7 +154,7 @@ public class PlayerNetwork : NetworkBehaviour
 
 
 
-    private struct PlayerNetworkState : INetworkSerializable
+    public struct PlayerNetworkState : INetworkSerializable
     {
         private float _posX, _posY, _posZ;
 

@@ -1,6 +1,7 @@
 using Netcode.Transports.Facepunch;
 using Steamworks;
 using Steamworks.Data;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
@@ -8,7 +9,57 @@ using UnityEngine;
 
 public class SteamNetworkManager : MonoBehaviour
 {
-    public static SteamNetworkManager Instance { get; private set; } = null;
+
+/*    public struct SteamNetworkObject
+    {
+        public ulong NetworkID;
+        public GameObject _object;
+    }
+    public static SteamNetworkManager instance { get; private set; } = null;
+
+    public Dictionary<ulong, SteamNetworkObject> NetworkObjectLookup = new Dictionary<ulong, SteamNetworkObject>();
+
+    private void Awake()
+    {
+        if (instance == null)
+            instance = this;
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        DontDestroyOnLoad(gameObject);
+    }
+
+    void InitializeNetworkObjects()
+    {
+        if (!SteamLobbyManager.currentLobby.IsOwnedBy(SteamClient.SteamId)) 
+        {
+            NetworkObjectLookup.Clear();
+
+        }
+        
+    }
+
+
+    IEnumerator GetNetworkObjectList()
+    {
+        SteamNetworking.SendP2PPacket(SteamLobbyManager.currentLobby.Owner.Id, )
+    }
+
+    IEnumerator GiveNetworkObjectList()
+    {
+
+    }*/
+
+
+
+
+
+
+
+    /*public static SteamNetworkManager Instance { get; private set; } = null;
 
     private FacepunchTransport transport;
     public Lobby? CurrentLobby { get; private set; } = null;
@@ -200,5 +251,5 @@ public class SteamNetworkManager : MonoBehaviour
 
     private void OnClientDisconnectCallback(ulong clientId) => Debug.Log($"Client disconnected, clientId={clientId}", this);
 
-    #endregion
+    #endregion*/
 }

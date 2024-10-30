@@ -17,7 +17,7 @@ public class GeneralManager : NetworkBehaviour
     {
         if (instance != null && instance != this)
         {
-            Destroy(this);
+            Destroy(this.gameObject);
         }
         else
         {

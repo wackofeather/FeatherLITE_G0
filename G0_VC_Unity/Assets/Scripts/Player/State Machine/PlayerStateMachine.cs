@@ -488,7 +488,8 @@ public class PlayerStateMachine : NetworkBehaviour
 
         base.OnNetworkDespawn();
 
-        SteamLobbyManager.instance.LeaveLobby();
+        //SteamLobbyManager.instance.LeaveLobby();
+
 
 
     }

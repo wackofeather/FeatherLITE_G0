@@ -14,7 +14,7 @@ using UnityEngine.UI;
 
 public class SteamLobbyManager : MonoBehaviour
 {
-
+    bool gameSceneLoaded;
     public static SteamLobbyManager instance { get; set; }
 
     public GameObject networkManager;
@@ -66,7 +66,7 @@ public class SteamLobbyManager : MonoBehaviour
     //public Dictionary<SteamId, GameObject> inLobby = new Dictionary<SteamId, GameObject>();
 
 
-    bool JoiningLobby;
+    public bool JoiningLobby;
 
     private void Start()
     {
@@ -82,11 +82,21 @@ public class SteamLobbyManager : MonoBehaviour
         //SteamFriends.OnGameLobbyJoinRequested += OnGameLobbyJoinRequest;
         //SteamMatchmaking.OnLobbyInvite += OnLobbyInvite;
 
+
+
+
+       // NetworkManager.Singleton.SceneManager.OnLoadComplete += OnGameSceneLoaded;
+
         SceneManager.LoadScene(MenuScene);
 
 
 
         JoiningLobby = false;
+    }
+
+    private void OnGameSceneLoaded(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
+    {
+        if (sceneName == GameScene) gameSceneLoaded = true;
     }
 
     /*    void OnLobbyInvite(Friend friend, Lobby lobby)
@@ -207,7 +217,7 @@ public class SteamLobbyManager : MonoBehaviour
             //currentLobby.SetPrivate();
             currentLobby.SetJoinable(true);
 
-            StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(currentLobby.Owner.Id, true));
+            StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(currentLobby.Owner.Id, true, false));
 
             //Debug.LogAssertion(currentLobby.Id);
 
@@ -220,11 +230,12 @@ public class SteamLobbyManager : MonoBehaviour
         }
     }
 
-    public IEnumerator JoiningGameCoroutine(ulong targetID, bool hosting)
+    public IEnumerator JoiningGameCoroutine(ulong targetID, bool hosting, bool _reconnecting)
     {
 
         if (JoiningLobby) yield break;
 
+        
 
         JoiningLobby = true;
 
@@ -251,17 +262,23 @@ public class SteamLobbyManager : MonoBehaviour
             NetworkManager.Singleton.gameObject.GetComponent<UnityNetworkManager>().StartHost();
 
 
-            SceneEventProgressStatus loadScene = NetworkManager.Singleton.SceneManager.LoadScene(SteamLobbyManager.instance.GameScene, LoadSceneMode.Single);
+            gameSceneLoaded = false;
 
+            NetworkManager.Singleton.SceneManager.OnLoadComplete += OnGameSceneLoaded;
+
+            NetworkManager.Singleton.SceneManager.LoadScene(SteamLobbyManager.instance.GameScene, LoadSceneMode.Single);
+
+            
 
             while (true)
             {
-                if (loadScene == SceneEventProgressStatus.Started && SceneManager.GetActiveScene().name == instance.GameScene) { break; }
+                if (gameSceneLoaded == true) { break; }
                 Debug.Log("beep");
                 yield return null;
             }
             GUIUtility.systemCopyBuffer = targetID.ToString();
 
+            NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnGameSceneLoaded;
             //Debug.Log(Game_GeneralManager.instance != null);
             //Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId);
 
@@ -284,7 +301,7 @@ public class SteamLobbyManager : MonoBehaviour
             yield return null;
         }
 
-        Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId, NetworkManager.Singleton.LocalClientId);
+        Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId, NetworkManager.Singleton.LocalClientId, _reconnecting);
 
         //Game_GeneralManager.instance.SpawnPlayerRPC(NetworkManager.Singleton.LocalClientId);
 
@@ -309,7 +326,7 @@ public class SteamLobbyManager : MonoBehaviour
                 return false;
             }
             currentLobby = createLobbyOutput.Value;
-            StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(lobbyId, false));
+            StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(lobbyId, false, false));
             return true;
         }
         catch(System.Exception exception)

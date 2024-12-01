@@ -958,6 +958,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34ca699b5b924584ab045faa1c8a1383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameScene: 
+  PreLoadScene: 
+  wantConnection: 1
+  reconnecting: 0
   SpawnPlaces:
   - {fileID: 394112780}
   - {fileID: 76256125}
@@ -965,7 +969,13 @@ MonoBehaviour:
   escape: {fileID: 0}
   paused: 0
   testFloat: 0
-  player: {fileID: 0}
+  networkPlayer: {fileID: 0}
+  CurrentHost:
+    m_InternalValue: 0
+  BackupHost:
+    m_InternalValue: 0
+  currentLobbyOwner: 0
+  runtime_playerObj: {fileID: 0}
 --- !u!1 &1075876620
 GameObject:
   m_ObjectHideFlags: 0
@@ -1104,6 +1114,7 @@ MonoBehaviour:
   networkManager: {fileID: 0}
   playerPrefab: {fileID: 0}
   GameScene: 
+  PreLoadScene: 
   MenuScene: 
   JoiningLobby: 0
 --- !u!4 &1325708672 stripped
@@ -1466,6 +1477,10 @@ PrefabInstance:
     - target: {fileID: 245004102692830664, guid: eeb2fb847a093a54b85a70f19217796e, type: 3}
       propertyPath: m_Name
       value: Test_GameManagerSingleton (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 245004102692830664, guid: eeb2fb847a093a54b85a70f19217796e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6103117848782853763, guid: eeb2fb847a093a54b85a70f19217796e, type: 3}
       propertyPath: m_RootOrder
@@ -2204,11 +2219,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _serverAuth: 0
   _cheapInterpolationTime: 0.1
-  Exterior: {fileID: 5188508672481329624}
-  Viewport: {fileID: 23794730855196592}
-  rotatables: {fileID: 3205671145147270072}
   playerStateMachine: {fileID: 0}
   inventory: {fileID: 0}
+  playerObj: {fileID: 0}
 --- !u!4 &1671833826484777357
 Transform:
   m_ObjectHideFlags: 0

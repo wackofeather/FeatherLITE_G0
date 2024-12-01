@@ -50,8 +50,8 @@ MonoBehaviour:
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 0
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
+  ActiveSceneSynchronization: 1
+  SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
@@ -67,6 +67,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34ca699b5b924584ab045faa1c8a1383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GameScene: DevScene
+  PreLoadScene: Game_PreLoadScene
+  wantConnection: 0
+  reconnecting: 0
+  blah: 0
   SpawnPlaces:
   - {fileID: 7704726645358749622}
   - {fileID: 8187984260092742769}
@@ -74,7 +79,13 @@ MonoBehaviour:
   escape: {fileID: 3721098537386122375, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   paused: 0
   testFloat: 0
-  player: {fileID: 2920028746863420624, guid: 43ad05ca72a9d364e84520262e6f65e0, type: 3}
+  networkPlayer: {fileID: 9148826740613714648, guid: f1a731358e9cf3b49add5c1821e9b846, type: 3}
+  CurrentHost:
+    m_InternalValue: 0
+  BackupHost:
+    m_InternalValue: 0
+  currentLobbyOwner: 0
+  runtime_playerObj: {fileID: 0}
 --- !u!1 &4059171949314698495
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,8 +11,10 @@ using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.VFX;
 using Unity.Networking.Transport;
 using Unity.Netcode.Transports.UTP;
+using System.Net.NetworkInformation;
+using static PlayerNetwork;
 
-public class PlayerStateMachine : NetworkBehaviour
+public class PlayerStateMachine : MonoBehaviour
 {
 
 
@@ -153,6 +155,7 @@ public class PlayerStateMachine : NetworkBehaviour
     public AnimationCurve meleeFOV_curve;
     [Range(0,1)] public float meleeWeight_Input;
     [Range(0, 1)] public float meleeWeight_Velocity;
+    public Collider BumpCollider;
 
 
     [Header("Animation")]
@@ -194,8 +197,8 @@ public class PlayerStateMachine : NetworkBehaviour
     public float windSpawnRate;
 
 
-    [Space(10)]
-    public PlayerNetwork playerNetwork;
+    
+    [HideInInspector] public PlayerNetwork playerNetwork;
 
 
     [Header("Health")]
@@ -203,6 +206,8 @@ public class PlayerStateMachine : NetworkBehaviour
     public GameObject DamageCollider;
     public Transform ExtHealthBarLocation;
     [HideInInspector] public GameObject extHealthBar;
+
+    public NetworkInfo networkInfo;
     
 
     public RaycastHit GrappleCheck()
@@ -260,7 +265,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
     private void Start()
     {
-        if (IsOwner) StartCoroutine(Testcoroutine());
+        if (networkInfo._isOwner) StartCoroutine(Testcoroutine());
     }
 
     IEnumerator Testcoroutine()
@@ -272,13 +277,32 @@ public class PlayerStateMachine : NetworkBehaviour
         yield break;
     }
 
-    public override void OnNetworkSpawn()
+    public void Player_OnNetworkSpawn(bool reconnecting)
     {
-        base.OnNetworkSpawn();
+        if (reconnecting)
+        {
+            if (!networkInfo._isOwner)
+            {
+                Debug.LogWarning("yababadoo");
+                //Game_UI_Manager.instance.AddHealthBarToPlayer(this);
+            }
+            else
+            {
+                foreach (InputActionMap map in move.asset.actionMaps)
+                {
+                    map.Enable();
+                }
 
+                /*GetComponent<PlayerInput>().enabled = false;
+                GetComponent<PlayerInput>().enabled = true;*/
+            }
+            return;
+        }
+        //base.OnNetworkSpawn();
 
+        //Debug.LogWarning("ahsgajsgdsbdjdfififofofoofofofofofof" + networkInfo._isOwner);
 
-        if (!IsOwner)
+        if (!networkInfo._isOwner)
         {
             foreach (GameObject t in OwnerOnlyObjects) t.SetActive(false);
             foreach (Transform child in Viewport) child.gameObject.SetActive(false);
@@ -324,9 +348,9 @@ public class PlayerStateMachine : NetworkBehaviour
         Initialize(RegularState);
 
 
-        if (!IsOwner) Debug.Log("initialized states");
+        if (!networkInfo._isOwner) Debug.Log("initialized states");
 
-        if (!IsOwner)
+        if (!networkInfo._isOwner)
         {
             VIEWPORT_lr.gameObject.SetActive(false);
             Game_UI_Manager.instance.AddHealthBarToPlayer(this);
@@ -348,6 +372,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
     private void Update()
     {
+        //Debug.Log(move.action.ReadValue<Vector3>());
         //if (internal_CurrentState == 0) Debug.Log("wahahahahahahahah");
         // if (!IsOwner) Debug.Log(CurrentPlayerState == null);
         CurrentPlayerState.Update();
@@ -473,20 +498,20 @@ public class PlayerStateMachine : NetworkBehaviour
         return cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
     }
 
-    public void OnClientDisconnect()
+/*    public void OnClientDisconnect()
     {
         Debug.Log("client disconnected");
-    }
+    }*/
 
-    public override void OnNetworkDespawn()
+    public void Player_OnNetworkDespawn()
     {
 
        // if (IsOwner) Game_GeneralManager.instance.RemovePlayerServerRPC(NetworkObject.NetworkObjectId, NetworkObject);
         Debug.Log("closingnetwork");
 
-        
+        //Destroy(extHealthBar);
 
-        base.OnNetworkDespawn();
+        //base.OnNetworkDespawn();
 
         //SteamLobbyManager.instance.LeaveLobby();
 
@@ -494,24 +519,14 @@ public class PlayerStateMachine : NetworkBehaviour
 
     }
 
-
-
-    [Rpc(SendTo.Owner)]
-    public void DamageRPC(int _damage)
+    public void Player_OnDisconnect()
     {
-        health -= _damage;
-        if (health <= 0)
-        {
-            KillPlayerRPC();
-        }
-
+        Destroy(extHealthBar);
     }
 
-    [Rpc(SendTo.SpecifiedInParams)]
-    public void SetHealthRPC(int _health, RpcParams _params)
-    {
-        health = _health;
-    }
+
+
+
 
     /* public void SetHealth(int _health)
      {
@@ -564,8 +579,8 @@ public class PlayerStateMachine : NetworkBehaviour
          health -= damage;
      }*/
 
-    //[Rpc(SendTo.Owner)]
-    void KillPlayerRPC()
+    [Rpc(SendTo.Owner)]
+    public void KillPlayerRPC()
     {
         if (CurrentPlayerState != DeathState) Game_GeneralManager.instance.Kill(this);
     }

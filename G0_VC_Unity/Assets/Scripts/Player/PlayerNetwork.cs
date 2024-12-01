@@ -1,6 +1,9 @@
+using Steamworks;
+using System.Collections;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Networking.Types;
 
 /// <summary>
 /// An example network serializer with both server and owner authority.
@@ -13,30 +16,103 @@ public class PlayerNetwork : NetworkBehaviour
     /// </summary>
     [SerializeField] private bool _serverAuth;
     [SerializeField] private float _cheapInterpolationTime = 0.1f;
-    [SerializeField] private GameObject Exterior;
-    [SerializeField] private GameObject Viewport;
-    [SerializeField] Transform rotatables;
-    [SerializeField] PlayerStateMachine playerStateMachine;
-    [SerializeField] Player_Inventory inventory;
+    private GameObject Exterior;
+    private GameObject Viewport;
+    private Transform rotatables;
+    [HideInInspector] public PlayerStateMachine playerStateMachine;
+    public Player_Inventory inventory;
     private NetworkVariable<PlayerNetworkState> _playerState;
     private PlayerNetworkState last_playerState;
     private Rigidbody _rb;
-
+    public GameObject playerObj;
+    private NetworkVariable<ulong> _SteamID;
     public PlayerNetworkState GetState()
     {
         return _playerState.Value;
     }
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+
+        if (IsOwner) _SteamID.Value = SteamClient.SteamId;
+
+        StartCoroutine(NetworkSpawnCoroutine());
+
+
+    }
+
+    IEnumerator NetworkSpawnCoroutine()
+    {
+        while (_SteamID.Value == 0)
+        {
+            yield return null;
+        }
+
+        GameObject _playerObj;
+        if (!Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.ContainsKey(_SteamID.Value)) _playerObj = Instantiate(playerObj);
+        else _playerObj = Game_GeneralManager.instance.PlayerGameObject_LocalLookUp[_SteamID.Value].gameObject;
+
+        if (!Game_GeneralManager.instance.reconnecting) _playerObj.transform.position = new Vector3(-1000, -1000, -1000);
+        playerStateMachine = _playerObj.GetComponent<PlayerStateMachine>();
+        _rb = playerStateMachine.GetComponent<Rigidbody>();
+        playerStateMachine.playerNetwork = this;
+        /*            PlayerData data = Game_GeneralManager.instance.Player_LookUp[_SteamID.Value];
+                    data.playerObject = _playerObj;
+                    Game_GeneralManager.instance.Player_LookUp[_SteamID.Value] = data;*/
+        SendNetworkInfo();
+
+        if (IsOwner) Game_GeneralManager.instance.runtime_playerObj = _playerObj;
+        inventory = playerStateMachine.gameObject.GetComponentInChildren<Player_Inventory>();
+        Exterior = playerStateMachine.Exterior.gameObject;
+        Viewport = playerStateMachine.Viewport.gameObject;
+        rotatables = playerStateMachine.Rotatables;
+
+        AddSelfToLookups();
+
+
+        playerStateMachine.Player_OnNetworkSpawn(Game_GeneralManager.instance.reconnecting);
+
+
+
+
+        if (!Game_GeneralManager.instance.reconnecting)
+        {
+            
+            if (IsOwner)
+            {
+                Game_GeneralManager.instance.Server_SpawnPlayerForGameRPC(GetComponent<NetworkObject>(), OwnerClientId);
+            }
+            Game_GeneralManager.instance.InitPlayer(IsOwner, this);
+        }
+        yield break;
+    }
+
+    public override void OnNetworkDespawn()
+    {
+        base.OnNetworkDespawn();
+
+        playerStateMachine.Player_OnNetworkDespawn();
+        //if (IsOwner && !Game_GeneralManager.instance.wantConnection) Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.Remove(_SteamID.Value);
+
+
+    }
+
     private void Awake()
     {
-        _rb = GetComponent<Rigidbody>();
+        
 
         var permission = _serverAuth ? NetworkVariableWritePermission.Server : NetworkVariableWritePermission.Owner;
         _playerState = new NetworkVariable<PlayerNetworkState>(writePerm: permission);
+        _SteamID = new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Owner);
     }
 
     private void Update()
     {
+        SendNetworkInfo();
+        if (IsOwner) _SteamID.Value = SteamClient.SteamId;
+        
 /*        if (IsOwner) TransmitState();
         else ConsumeState();*/
     }
@@ -88,10 +164,10 @@ public class PlayerNetwork : NetworkBehaviour
 
     public void ConsumeState()
     {
-        if (!NetworkManager.IsConnectedClient) return;
+        if (!NetworkManager.IsConnectedClient) { Debug.LogWarning("balsshshshs"); return; }
         //if (last_playerState == _playerState) return;
         // Here you'll find the cheapest, dirtiest interpolation you'll ever come across. Please do better in your game
-        ///_rb.MovePosition(Vector3.SmoothDamp(_rb.position, _playerState.Value.Position, ref _posVel, _cheapInterpolationTime));
+        _rb.MovePosition(Vector3.SmoothDamp(_rb.position, _playerState.Value.Position, ref _posVel, _cheapInterpolationTime));
 
         //Exterior.transform.rotation = Quaternion.Euler(0, Mathf.SmoothDampAngle(Exterior.transform.rotation.eulerAngles.y, _playerState.Value.Rotation.y, ref Exterior_rotVel, _cheapInterpolationTime), 0);
 
@@ -105,7 +181,7 @@ public class PlayerNetwork : NetworkBehaviour
         playerStateMachine.xRotation = _playerState.Value.Rotation.x;
         playerStateMachine.yRotation = _playerState.Value.Rotation.y;
 
-        //  Debug.Log(_playerState.Value.currentPlayerState_fl_internal);
+        //Debug.LogWarning(_playerState.Value.currentPlayerState_fl_internal);
         if (_playerState.Value.currentPlayerState_fl_internal != 0) playerStateMachine.internal_CurrentState = _playerState.Value.currentPlayerState_fl_internal;
         if (_playerState.Value.currentWeapon_fl_internal != 0) inventory.internal_CurrentWeapon = _playerState.Value.currentWeapon_fl_internal;
         inventory.isScoping = _playerState.Value.isScoping_internal;
@@ -113,6 +189,8 @@ public class PlayerNetwork : NetworkBehaviour
         playerStateMachine.grapplePoint = _playerState.Value.GrapplePosition;
         playerStateMachine.updown_Blendconstant = Mathf.Lerp(playerStateMachine.updown_Blendconstant, (_playerState.Value.Rotation.x + 90) / 180, 0.3f);
         playerStateMachine.health = _playerState.Value.Health;
+
+        
         //playerStateMachine.health = 0;
         //ebug.Log(_playerState.Value.Rotation.x);
 /*        float blendconstant = (playerStateMachine.xRotation + 90) / 180;
@@ -126,10 +204,10 @@ public class PlayerNetwork : NetworkBehaviour
 
     public void FixedConsumeState()
     {
-        if (last_playerState.Equals(_playerState.Value)) return;
+/*        if (last_playerState.Equals(_playerState.Value)) return;
         _rb.MovePosition(_playerState.Value.Position);
         _rb.velocity = _playerState.Value.Velocity;
-        last_playerState = _playerState.Value;
+        last_playerState = _playerState.Value;*/
     }
 
     #endregion
@@ -291,5 +369,63 @@ public class PlayerNetwork : NetworkBehaviour
             serializer.SerializeValue(ref currentWeapon_fl);
             serializer.SerializeValue(ref _health);
         }
+    }
+
+
+
+
+    public struct NetworkInfo
+    {
+        public bool _isOwner;
+    }
+
+    void SendNetworkInfo()
+    {
+        //Debug.LogWarning(IsOwner);
+        NetworkInfo info = new NetworkInfo();
+        info._isOwner = IsOwner;
+        playerStateMachine.networkInfo = info;
+    }
+
+    void AddSelfToLookups()
+    {
+        //Debug.LogWarning("kookoo " + _SteamID.Value);
+        if (Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.ContainsKey(_SteamID.Value))
+        {
+            Game_GeneralManager.instance.PlayerGameObject_LocalLookUp[_SteamID.Value] = playerStateMachine;
+        }
+        else
+        {
+            Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.Add(_SteamID.Value, playerStateMachine);
+        }
+
+        if (Game_GeneralManager.instance.Player_LookUp.ContainsKey(_SteamID.Value))
+        {
+            Game_GeneralManager.instance.Player_LookUp[_SteamID.Value] = new PlayerData(playerStateMachine.transform.position, 100, _SteamID.Value, OwnerClientId);
+        }
+        else
+        {
+            Game_GeneralManager.instance.Player_LookUp.Add(_SteamID.Value, new PlayerData(playerStateMachine.transform.position, 100, _SteamID.Value, OwnerClientId));
+        }
+    }
+
+    
+
+
+    [Rpc(SendTo.Owner)]
+    public void DamageRPC(int _damage)
+    {
+        playerStateMachine.health -= _damage;
+        if (playerStateMachine.health <= 0)
+        {
+            playerStateMachine.KillPlayerRPC();
+        }
+
+    }
+
+    [Rpc(SendTo.SpecifiedInParams)]
+    public void SetHealthRPC(int _health, RpcParams _params)
+    {
+        playerStateMachine.health = _health;
     }
 }

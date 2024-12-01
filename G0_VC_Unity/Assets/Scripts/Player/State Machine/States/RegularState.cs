@@ -32,7 +32,7 @@ public class RegularState : BasePlayerState
 
         base.FixedUpdate();
 
-        if (!player.IsOwner) return;
+        if (!player.networkInfo._isOwner) { return; }
 
 
         
@@ -77,7 +77,7 @@ public class RegularState : BasePlayerState
         base.Update();
 
 
-        if (!player.IsOwner) return;
+        if (!player.networkInfo._isOwner) return;
 
         //Debug.Log(player.quality);
 

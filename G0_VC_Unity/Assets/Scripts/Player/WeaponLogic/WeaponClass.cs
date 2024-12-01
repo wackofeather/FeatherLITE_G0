@@ -24,7 +24,7 @@ public class WeaponClass : ScriptableObject , IWeaponable
     {
 
 
-        if (!player.IsOwner) return;
+        if (!player.networkInfo._isOwner) return;
 
         if (shootingTimer > 0) shootingTimer -= Time.deltaTime;
 
@@ -39,7 +39,7 @@ public class WeaponClass : ScriptableObject , IWeaponable
         player.player_EXT_ARM_anim_controller.SetTrigger("SwitchWeapon");
         inventory.EXT_GetCurrentWeaponAnimator().SetTrigger("SwitchWeapon");
 
-        if (!player.IsOwner) return;
+        if (!player.networkInfo._isOwner) return;
 
 
         inventory.isShooting = false;
@@ -67,7 +67,7 @@ public class WeaponClass : ScriptableObject , IWeaponable
         player.player_EXT_ARM_anim_controller.ResetTrigger("SwitchWeapon");
         inventory.EXT_GetCurrentWeaponAnimator().ResetTrigger("SwitchWeapon");
 
-        if (!player.IsOwner) return;
+        if (!player.networkInfo._isOwner) return;
 
         player.player_VP_ARM_anim_controller.ResetTrigger("SwitchWeapon");
         inventory.VP_GetCurrentWeaponAnimator().ResetTrigger("SwitchWeapon");

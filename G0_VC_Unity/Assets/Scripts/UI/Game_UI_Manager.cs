@@ -48,7 +48,7 @@ public class Game_UI_Manager : UI_Manager
     {
         player.extHealthBar.GetComponentInChildren<TextMeshProUGUI>().text = player.health.ToString();
         player.extHealthBar.transform.position = player.ExtHealthBarLocation.position;
-        player.GetComponent<PlayerStateMachine>().extHealthBar.transform.LookAt(new Vector3(NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.x, player.GetComponent<PlayerStateMachine>().extHealthBar.transform.position.y, NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.z));
+        player.GetComponent<PlayerStateMachine>().extHealthBar.transform.LookAt(new Vector3(Game_GeneralManager.instance.runtime_playerObj.GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.x, player.extHealthBar.transform.position.y, Game_GeneralManager.instance.runtime_playerObj.GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.z));
     }
 
 

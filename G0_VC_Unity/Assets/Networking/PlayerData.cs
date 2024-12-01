@@ -10,15 +10,15 @@ public struct PlayerData : INetworkSerializable
     public float health;
     public ulong SteamID;
     public ulong NetworkID;
-    public NetworkObjectReference PlayerObjectReference;
+    //public GameObject playerObject;
 
-    public PlayerData(Vector3 _position, float _health, ulong _SteamID, ulong _NetworkID, NetworkObjectReference _PlayerObjectReference)
+    public PlayerData(Vector3 _position, float _health, ulong _SteamID, ulong _NetworkID)
     {
         position = _position;
         health = _health;
         SteamID = _SteamID;
         NetworkID = _NetworkID;
-        PlayerObjectReference = _PlayerObjectReference;
+        //playerObject = _playerObject;
     }
 
 
@@ -28,6 +28,6 @@ public struct PlayerData : INetworkSerializable
         serializer.SerializeValue(ref health);
         serializer.SerializeValue(ref SteamID);
         serializer.SerializeValue(ref NetworkID);
-        serializer.SerializeValue(ref PlayerObjectReference);
+        //serializer.SerializeValue(ref playerObject);
     }
 }

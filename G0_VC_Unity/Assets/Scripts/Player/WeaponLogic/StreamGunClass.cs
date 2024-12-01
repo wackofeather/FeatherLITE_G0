@@ -20,7 +20,7 @@ public class StreamGunClass : GunClass
 
         if (!player.inventory.isShooting) return;
 
-        if (player.IsOwner)
+        if (player.networkInfo._isOwner)
         {
 
         }

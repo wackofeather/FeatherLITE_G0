@@ -54,7 +54,7 @@ public class MeleeState : BasePlayerState
         player.isMelee = true;
 
 
-        if (!player.IsOwner)
+        if (!player.networkInfo._isOwner)
         {
             base.EnterState();
             return;
@@ -89,6 +89,14 @@ public class MeleeState : BasePlayerState
         if (startingVelocity.magnitude > player.BreakNeckSpeed) { player.StartCoroutine(MeleeCoroutine(true)); }
         else player.StartCoroutine(MeleeCoroutine(false));
 
+
+        foreach (Collider playerCol in player.BumpCollider.GetComponent<BumpColliderChecker>().player_hits)
+        {
+            playerCol.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(100);
+        }
+
+        
+
         //Debug.Log(startingVelocity.magnitude > player.BreakNeckSpeed);
 
         base.EnterState();
@@ -102,7 +110,7 @@ public class MeleeState : BasePlayerState
     {
         
         
-        if (!player.IsOwner)
+        if (!player.networkInfo._isOwner)
         {
             player.isMelee = false;
             return;
@@ -180,7 +188,7 @@ public class MeleeState : BasePlayerState
         base.Update();
 
 
-        if (!player.IsOwner) return;
+        if (!player.networkInfo._isOwner) return;
 
         float fov_calc = viewportCamFOV * (1 + player.meleeFOV_curve.Evaluate(1 - timer));
 
@@ -199,20 +207,31 @@ public class MeleeState : BasePlayerState
         if (timer < 0) player.ChangeState(player.RegularState);
     }
 
+    public override void OnBumpPlayer(Collider col)
+    {
+        base.OnBumpPlayer(col);
+
+        
+
+        Debug.LogWarning(col.gameObject.name);
+
+
+        col.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(100);
+        //player.ChangeState(player.RegularState);
+
+        
+    }
+
     public override void OnCollisionEnter(Collision col)
     {
         base.OnCollisionEnter(col);
 
-        if (!player.IsOwner) return;
+        if (!player.networkInfo._isOwner) return;
 
-        Debug.LogAssertion(col.collider.gameObject.name);
 
-        if (col.collider.gameObject.layer == LayerMask.NameToLayer(player.EnemyLayer))
-        {
-            col.gameObject.GetComponent<PlayerStateMachine>().DamageRPC(100);
-            //player.ChangeState(player.RegularState);
-            return;
-        }
+        if (col.gameObject.layer == LayerMask.NameToLayer(player.EnemyLayer)) return;
+
+
         if (col.contacts.Length > 1)
         {
             player.ChangeState(player.RegularState);
@@ -221,8 +240,6 @@ public class MeleeState : BasePlayerState
 
         if (Vector3.Angle((col.contacts[0].point - player.rb.position), meleeVector) < 90) player.ChangeState(player.RegularState);
     }
-
-
 
 
     public static float IntegrateCurve(AnimationCurve curve, float startTime, float endTime, int steps)
@@ -234,7 +251,5 @@ public class MeleeState : BasePlayerState
         }
         return val;
     }
-
-
 }
 

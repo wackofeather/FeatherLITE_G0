@@ -6,7 +6,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player_Inventory : NetworkBehaviour
+public class Player_Inventory : MonoBehaviour
 {
     [SerializeField] WeaponLookup WeaponLookup;
     [SerializeField] int MaxWeapons;
@@ -44,13 +44,13 @@ public class Player_Inventory : NetworkBehaviour
 
     Vector3 OwnerGunTip;
 
-    public override void OnNetworkSpawn()
+    public void Start()
     {
-        base.OnNetworkSpawn();
+
 
         EXT_IntitializeWeapons(EXT_GunParent);
 
-        if (IsOwner)
+        if (player.networkInfo._isOwner)
         {
             VP_IntitializeWeapons(VP_GunParent);
             
@@ -95,10 +95,7 @@ public class Player_Inventory : NetworkBehaviour
         //  currentWeapon = Weapon_Inventory[0];
         //ChangeCurrentWeapon_INDEX(0);
     }
-    private void Start()
-    {
 
-    }
     // Start is called before the first frame update
     void Awake()
     {
@@ -109,7 +106,7 @@ public class Player_Inventory : NetworkBehaviour
     private void Update()
     {
        // Debug.Log(IsOwner);
-        if (!IsOwner)
+        if (!player.networkInfo._isOwner)
         {
             if (internal_CurrentWeapon == 0) return;
             if (GetCurrentWeapon() == null)
@@ -210,7 +207,7 @@ public class Player_Inventory : NetworkBehaviour
         }
 
         currentWeapon = weapon;
-        if (IsOwner)
+        if (player.networkInfo._isOwner)
         {
             VP_currentAnimator = VP_weapon_Dict[currentWeapon.key].GetComponentInChildren<Animator>();
             VP_weapon_Dict[currentWeapon.key].SetActive(true);
@@ -310,7 +307,7 @@ public class Player_Inventory : NetworkBehaviour
 
     public Vector3 GunTip()
     {
-        if (IsOwner)
+        if (player.networkInfo._isOwner)
         {
             return OwnerGunTip;
         }

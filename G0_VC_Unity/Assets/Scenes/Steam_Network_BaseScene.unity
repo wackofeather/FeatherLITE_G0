@@ -169,7 +169,9 @@ MonoBehaviour:
   networkManager: {fileID: 825287896}
   playerPrefab: {fileID: 2920028746863420624, guid: 43ad05ca72a9d364e84520262e6f65e0, type: 3}
   GameScene: DevScene
+  PreLoadScene: Game_PreLoadScene
   MenuScene: MenuScene
+  JoiningLobby: 0
 --- !u!1 &825287896
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +291,7 @@ MonoBehaviour:
     TimeResyncInterval: 30
     EnsureNetworkVariableLengthSafety: 0
     EnableSceneManagement: 1
-    ForceSamePrefabs: 1
+    ForceSamePrefabs: 0
     RecycleNetworkIds: 1
     NetworkIdRecycleDelay: 120
     RpcHashSize: 0

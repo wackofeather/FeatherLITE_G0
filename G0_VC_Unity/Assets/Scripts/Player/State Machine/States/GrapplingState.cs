@@ -18,7 +18,7 @@ public class GrapplingState : BasePlayerState
     {
         base.InitializeState();
 
-        if (player.IsOwner)
+        if (player.networkInfo._isOwner)
         {
             player.EXTERIOR_grappleHand.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
         }
@@ -45,7 +45,7 @@ public class GrapplingState : BasePlayerState
         player.EXTERIOR_lr.positionCount = player.quality + 1;
         player.spring.SetVelocity(player.velocity);
 
-        if (!player.IsOwner)
+        if (!player.networkInfo._isOwner)
         {
             player.isGrappling = true;
             base.EnterState();
@@ -96,7 +96,7 @@ public class GrapplingState : BasePlayerState
     {
         
 
-        if (!player.IsOwner)
+        if (!player.networkInfo._isOwner)
         {
             player.EXTERIOR_grappleHand.transform.position = player.exterior_gunTip.position;
             player.EXTERIOR_grappleHand.SetActive(false);
@@ -139,7 +139,7 @@ public class GrapplingState : BasePlayerState
 
         base.FixedUpdate();
 
-        if (!player.IsOwner) return;
+        if (!player.networkInfo._isOwner) return;
 
         if (Vector3.Distance(player.rb.position, player.grapplePoint) > 0.25f)
         {
@@ -157,7 +157,7 @@ public class GrapplingState : BasePlayerState
     {
         base.Update();
 
-        if (!player.IsOwner) return;
+        if (!player.networkInfo._isOwner) return;
 
         if (player.movingGrapplableLayers == (player.movingGrapplableLayers | (1 << hit.transform.gameObject.layer))) 
         {
@@ -181,7 +181,7 @@ public class GrapplingState : BasePlayerState
         player.spring.SetStrength(player.strength);
         player.spring.Update(Time.deltaTime);
 
-        if (player.IsOwner)
+        if (player.networkInfo._isOwner)
         {
 
 

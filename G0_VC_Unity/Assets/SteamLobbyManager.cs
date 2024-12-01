@@ -21,6 +21,8 @@ public class SteamLobbyManager : MonoBehaviour
 
     public GameObject playerPrefab;
 
+    
+
     private void Awake()
     {
         ConstructSingleton();
@@ -59,6 +61,8 @@ public class SteamLobbyManager : MonoBehaviour
 
     public String GameScene;
 
+    public string PreLoadScene;
+
     public string MenuScene;
 /*    public GameObject InLobbyFriend;
     public Transform content;*/
@@ -96,7 +100,13 @@ public class SteamLobbyManager : MonoBehaviour
 
     private void OnGameSceneLoaded(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
     {
+        Debug.LogWarning(sceneName);
         if (sceneName == GameScene) gameSceneLoaded = true;
+    }
+
+    private void OnRegularSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+    {
+        if (scene.name == GameScene) gameSceneLoaded = true;
     }
 
     /*    void OnLobbyInvite(Friend friend, Lobby lobby)
@@ -232,14 +242,46 @@ public class SteamLobbyManager : MonoBehaviour
 
     public IEnumerator JoiningGameCoroutine(ulong targetID, bool hosting, bool _reconnecting)
     {
-
+        Debug.LogWarning("blahhhhh");
         if (JoiningLobby) yield break;
 
         
 
         JoiningLobby = true;
 
-        NetworkManager.Singleton.gameObject.GetComponent<FacepunchTransport>().targetSteamId = targetID;
+        if (_reconnecting)
+        {
+            Debug.Log(currentLobby.IsOwnedBy(SteamClient.SteamId));
+
+            yield return new WaitUntil(() => !currentLobby.IsOwnedBy(Game_GeneralManager.instance.CurrentHost.Value));
+
+            Debug.Log(currentLobby.IsOwnedBy(SteamClient.SteamId) + "2");
+            
+            /*            while (true)
+                        {*/
+            if (currentLobby.IsOwnedBy(SteamClient.SteamId))
+            {
+                if (!hosting)
+                {
+                    Debug.Log("transferring ownership");
+                    currentLobby.Owner = new Friend(Game_GeneralManager.instance.BackupHost.Value);
+                }
+            }
+
+            yield return new WaitUntil(() => currentLobby.IsOwnedBy(Game_GeneralManager.instance.BackupHost.Value));
+
+            Debug.LogAssertion("ownership successfully transferred");
+            //Debug.LogWarning("waiting for ne owner" + currentLobby.Owner.Id);
+            /*                if (Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.ContainsKey(currentLobby.Owner.Id))
+                            {
+                            Debug.LogWarning(currentLobby.Owner.Id);*/
+            NetworkManager.Singleton.gameObject.GetComponent<FacepunchTransport>().targetSteamId = currentLobby.Owner.Id;
+/*                    break;
+            }*/
+            //yield return null;
+            //}
+        } 
+        else NetworkManager.Singleton.gameObject.GetComponent<FacepunchTransport>().targetSteamId = targetID;
 
         /*        SceneEventProgressStatus loadScene = NetworkManager.SceneManager.LoadScene(SteamLobbyManager.instance.GameScene, LoadSceneMode.Single);
 
@@ -259,36 +301,80 @@ public class SteamLobbyManager : MonoBehaviour
         if (hosting)
         {
 
-            NetworkManager.Singleton.gameObject.GetComponent<UnityNetworkManager>().StartHost();
-
-
-            gameSceneLoaded = false;
-
-            NetworkManager.Singleton.SceneManager.OnLoadComplete += OnGameSceneLoaded;
-
-            NetworkManager.Singleton.SceneManager.LoadScene(SteamLobbyManager.instance.GameScene, LoadSceneMode.Single);
-
             
 
-            while (true)
+            if (!_reconnecting)
             {
-                if (gameSceneLoaded == true) { break; }
-                Debug.Log("beep");
-                yield return null;
-            }
-            GUIUtility.systemCopyBuffer = targetID.ToString();
+                gameSceneLoaded = false;
 
-            NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnGameSceneLoaded;
+                SceneManager.sceneLoaded += OnRegularSceneLoaded;
+
+                SceneManager.LoadScene(SteamLobbyManager.instance.GameScene, LoadSceneMode.Single);
+
+
+
+                while (true)
+                {
+                    if (gameSceneLoaded == true) { break; }
+                    Debug.Log("beep");
+                    yield return null;
+                }
+
+                SceneManager.sceneLoaded -= OnRegularSceneLoaded;
+            }
+
+            GUIUtility.systemCopyBuffer = currentLobby.Id.ToString();
+
+            NetworkManager.Singleton.StartHost();
+
             //Debug.Log(Game_GeneralManager.instance != null);
             //Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId);
+            Debug.Log(NetworkManager.Singleton.IsConnectedClient);
 
         }
         else 
-        { 
-            NetworkManager.Singleton.gameObject.GetComponent<UnityNetworkManager>().StartClient();
+        {
+            /*            gameSceneLoaded = false;
+
+                        NetworkManager.Singleton.SceneManager.OnLoadComplete += OnGameSceneLoaded;
+
+                        NetworkManager.Singleton.SceneManager.LoadScene(SteamLobbyManager.instance.PreLoadScene, LoadSceneMode.Single);
+
+
+
+                        while (true)
+                        {
+                            if (gameSceneLoaded == true) { break; }
+                            Debug.Log("beep");
+                            yield return null;
+                        }*/
+
+            if (!_reconnecting)
+            {
+                gameSceneLoaded = false;
+
+                SceneManager.sceneLoaded += OnRegularSceneLoaded;
+
+                SceneManager.LoadScene(SteamLobbyManager.instance.GameScene, LoadSceneMode.Single);
+
+
+
+                while (true)
+                {
+                    if (gameSceneLoaded == true) { break; }
+                    Debug.Log("beep");
+                    yield return null;
+                }
+
+                SceneManager.sceneLoaded -= OnRegularSceneLoaded;
+            }
+
+
+
+            NetworkManager.Singleton.StartClient();
 
             //Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId);
-            Debug.Log("nabsjagansjshsnauisusjskajsksjaksushenehshssnsnsnsnsnsnsnsns");
+            Debug.LogWarning(NetworkManager.Singleton.IsConnectedClient);
         }
 
 
@@ -297,10 +383,10 @@ public class SteamLobbyManager : MonoBehaviour
 
         while (!NetworkManager.Singleton.IsConnectedClient)
         {
-            //Debug.Log("ggsgsgsg");
+            Debug.Log(NetworkManager.Singleton.IsConnectedClient);
             yield return null;
         }
-
+        Debug.LogWarning("spawning player");
         Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId, NetworkManager.Singleton.LocalClientId, _reconnecting);
 
         //Game_GeneralManager.instance.SpawnPlayerRPC(NetworkManager.Singleton.LocalClientId);
@@ -308,6 +394,8 @@ public class SteamLobbyManager : MonoBehaviour
         JoiningLobby = false;
         yield break;
     }
+
+
 
     public async Task<bool> JoinLobbyAsync(SteamId lobbyId)
     {
@@ -326,7 +414,9 @@ public class SteamLobbyManager : MonoBehaviour
                 return false;
             }
             currentLobby = createLobbyOutput.Value;
-            StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(lobbyId, false, false));
+
+            Debug.LogWarning((lobbyId == currentLobby.Owner.Id) + "  " + lobbyId + "   " + currentLobby.MemberCount);
+            StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(currentLobby.Owner.Id, false, false));
             return true;
         }
         catch(System.Exception exception)

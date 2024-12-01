@@ -20,6 +20,8 @@ public class GunClass : WeaponClass
 
     public override void Weapon_Update()
     {
+
+        //if (!player.networkInfo._isOwner) Debug.LogWarning("Blah");
         player.player_EXT_ARM_anim_controller.SetBool("Scoping", inventory.isScoping);
 
         player.player_EXT_ARM_anim_controller.SetBool("Firing", inventory.isShooting);
@@ -28,7 +30,7 @@ public class GunClass : WeaponClass
 
         inventory.EXT_GetCurrentWeaponAnimator().SetBool("Firing", inventory.isShooting);
 
-        if (!player.IsOwner)
+        if (!player.networkInfo._isOwner)
         {
             if (inventory.isShooting)
             {
@@ -74,14 +76,14 @@ public class GunClass : WeaponClass
             {
                 if (!weaponData.fireInput.action.IsPressed()) break;
                 if (player.isMelee) break;
-            RaycastHit hit = new RaycastHit();
+                RaycastHit hit = new RaycastHit();
                 //if (Physics.Raycast(inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position, ))
                 if (Physics.Raycast(player.PlayerCamera.transform.position, player.PlayerCamera.TransformDirection(Vector3.forward), out hit, 500f, (1 << LayerMask.NameToLayer("ENEMY")))) 
                 { 
-                    //Debug.LogAssertion("hit!");
-                    hit.collider.gameObject.GetComponent<PlayerStateMachine>().DamageRPC(1);
+                    Debug.LogAssertion("hit!");
+                    hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(1);
                 }
-
+                //Debug.LogWarning(player);
                 yield return new WaitForSeconds(1 / weaponData.BPS);
             }
             inventory.isShooting = false;

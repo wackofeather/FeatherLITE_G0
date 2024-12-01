@@ -236,6 +236,66 @@ Transform:
   m_Father: {fileID: 7549162662110132104}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &695868868292465392
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8429679026590292188}
+  - component: {fileID: 6629244836526764190}
+  - component: {fileID: 7453061298660062322}
+  m_Layer: 14
+  m_Name: BumpChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8429679026590292188
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695868868292465392}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2920028746863420629}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &6629244836526764190
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695868868292465392}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.12, y: 1.9, z: 0.851909}
+  m_Center: {x: 0, y: 0, z: 0.33095446}
+--- !u!114 &7453061298660062322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695868868292465392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 067a544850b2bff4b9ecf5a1982c7a19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 58085483968552630}
+  player_hits: []
 --- !u!1 &730938435161761512
 GameObject:
   m_ObjectHideFlags: 0
@@ -1016,11 +1076,7 @@ GameObject:
   - component: {fileID: 2920028746863420626}
   - component: {fileID: 2920028746863420625}
   - component: {fileID: 2920028746863420630}
-  - component: {fileID: -3036239568206950947}
-  - component: {fileID: 2920028746863420631}
   - component: {fileID: 58085483968552630}
-  - component: {fileID: 1564597625595317825}
-  - component: {fileID: 7369457806054413757}
   - component: {fileID: 2542861758873681554}
   m_Layer: 7
   m_Name: Player
@@ -1049,6 +1105,7 @@ Transform:
   - {fileID: 9204850531463137951}
   - {fileID: 631153326889804983}
   - {fileID: 6331771816369868027}
+  - {fileID: 8429679026590292188}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1112,67 +1169,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &-3036239568206950947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2920028746863420624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4004174479
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
---- !u!114 &2920028746863420631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2920028746863420624}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cb15766206401c41933677815ec6af9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  StateMachine: {fileID: 0}
-  rb: {fileID: 2920028746863420625}
-  move: {fileID: -2513984626473278120, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
-  fire: {fileID: 1203331415346767575, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
-  scope: {fileID: -2653568425862354484, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
-  pause: {fileID: -3210920384054898338, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
-  Unpause: {fileID: 522131853969190471, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
-  Rotatables: {fileID: 3205671146708248980}
-  PlayerCamera: {fileID: 5087725685347788842}
-  CameraHolder: {fileID: 2904342871602623982}
-  Exterior: {fileID: 7549162662110132104}
-  Viewport: {fileID: 4029365067287448490}
-  OwnerOnlyObjects:
-  - {fileID: 9005852761526138014}
-  - {fileID: 9176002160699643285}
-  DummyOnlyObjects: []
-  speed: 10
-  mouseSens: 1
-  accel: 3
-  tooFastaccel: 1
-  BreakNeckSpeed: 10
-  inputVector: {x: 0, y: 0, z: 0}
-  xRotation: 0
-  yRotation: 0
-  putTogetherVelocity: {x: 0, y: 0, z: 0}
-  grapplingGunScript: {fileID: 1199171846237049367}
-  lineRenderer: {fileID: 8217942930679748817}
-  CanMove: 0
 --- !u!114 &58085483968552630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1202,13 +1198,14 @@ MonoBehaviour:
   - {fileID: 9005852761526138014}
   - {fileID: 9176002160699643285}
   - {fileID: 2142893908388048426}
+  - {fileID: 695868868292465392}
   DummyOnlyObjects: []
   speed: 10
   mouseSens: 1
   accel: 3
   tooFastaccel: 1
   BreakNeckSpeed: 10
-  grapplingGunScript: {fileID: 1199171846237049367}
+  grapplingGunScript: {fileID: 0}
   lineRenderer: {fileID: 8217942930679748817}
   CanMove: 0
   grappleLenience_Time: 0.1
@@ -1362,6 +1359,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   meleeWeight_Input: 0.7
   meleeWeight_Velocity: 0.05
+  BumpCollider: {fileID: 6629244836526764190}
   player_VP_ARM_anim_controller: {fileID: 8585395096242110883}
   player_EXT_ARM_anim_controller: {fileID: 2523672247751498225}
   isGrappling: 0
@@ -1384,45 +1382,11 @@ MonoBehaviour:
   pickupCooldownTime: 0.59
   windEffect: {fileID: 2237375671541017613}
   windSpawnRate: 32
-  playerNetwork: {fileID: 1564597625595317825}
+  playerNetwork: {fileID: 0}
   health: 0
   DamageCollider: {fileID: 8231590536858020204}
   ExtHealthBarLocation: {fileID: 1479086602378071219}
   extHealthBar: {fileID: 0}
---- !u!114 &1564597625595317825
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2920028746863420624}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 795cbbca8f2cace4f90c225d5fe84212, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _serverAuth: 0
-  _cheapInterpolationTime: 0.1
-  Exterior: {fileID: 23794732989468060}
-  Viewport: {fileID: 5188508671892663284}
-  rotatables: {fileID: 3205671146708248980}
-  playerStateMachine: {fileID: 58085483968552630}
-  inventory: {fileID: 5251551333770687422}
---- !u!114 &7369457806054413757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2920028746863420624}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0002326aeee43749805f34115ff05d3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grappleScript: {fileID: 1199171846237049367}
-  playerScript: {fileID: 2920028746863420631}
-  MeleeAction: {fileID: -5764667613011676199, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
 --- !u!114 &2542861758873681554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2104,7 +2068,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5230236037117931691}
-  - component: {fileID: 1199171846237049367}
   - component: {fileID: 5184948639662322760}
   m_Layer: 0
   m_Name: Grappler
@@ -2130,33 +2093,6 @@ Transform:
   m_Father: {fileID: 3205671146708248980}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1199171846237049367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8052138231561209821}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f9b388e793956f4ea083828bd957179, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
-  grappleSpeed: 53.2
-  jointDamper: 7
-  jointSpring: 4.5
-  jointMassScale: 4.5
-  ropeSpeed: 10
-  retractSpeed: 130
-  lookAwayLeniency: 0.128
-  VIEWPORT_lr: {fileID: 8217942930679748817}
-  EXTERIOR_lr: {fileID: 930950947033205134}
-  exterior_gunTip: {fileID: 7461241620872723705}
-  viewport_gunTip: {fileID: 2803622966508885609}
-  VIEWPORT_grappleHand: {fileID: 5975438975082879522}
-  EXTERIOR_grappleHand: {fileID: 9119124232412013355}
-  ViewportFOV: 40
 --- !u!114 &5184948639662322760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2169,7 +2105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c63ffc6b3ca48cd4e88ebdfd11c0cb96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grapplingGun: {fileID: 1199171846237049367}
+  grapplingGun: {fileID: 0}
   quality: 500
   damper: 14
   strength: 800

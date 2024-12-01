@@ -12,7 +12,7 @@ public class DeathState : BasePlayerState
     {
 
         //player.health = 0;
-        if (player.IsOwner)
+        if (player.networkInfo._isOwner)
         {
             player.inventory.isScoping = false;
             player.inventory.isShooting = false;
@@ -26,7 +26,15 @@ public class DeathState : BasePlayerState
 
     public override void Update()
     {
-        return;
+        if (!player.networkInfo._isOwner)
+        {
+            //player.playerNetwork.ConsumeState();
+
+            if (player.internal_CurrentState != key) player.ChangeState(player.stateDictionary[player.internal_CurrentState]);
+
+            if (player.inventory.GetCurrentWeapon() != null) { player.inventory.GetCurrentWeapon().Weapon_Update(); }
+            return;
+        }
     }
 
 /*    public override void LateUpdate()
@@ -53,7 +61,7 @@ public class DeathState : BasePlayerState
 
         player.inventory.EXT_GetCurrentWeaponAnimator().SetBool("Firing", player.inventory.isShooting);
 
-        if (!player.IsOwner) return;
+        if (!player.networkInfo._isOwner) return;
 
         player.player_VP_ARM_anim_controller.SetBool("Scoping", player.inventory.isScoping);
 

@@ -42,6 +42,7 @@ public class PlayerStateMachine : MonoBehaviour
     public InputActionReference Unpause;
     public InputActionReference melee;
     public InputActionReference interact;
+    public InputActionReference copyCode;
 
     public Transform Rotatables;
     public Transform PlayerCamera;
@@ -397,7 +398,10 @@ public class PlayerStateMachine : MonoBehaviour
             if (!interact.action.IsPressed()) hasPickedUpInteractButton = true;
         }
 
-
+        if (copyCode.action.triggered)
+        {
+            GUIUtility.systemCopyBuffer = SteamLobbyManager.currentLobby.Id.ToString();
+        }
     }
 
     private void FixedUpdate()

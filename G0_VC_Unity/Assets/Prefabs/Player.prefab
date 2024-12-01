@@ -1189,6 +1189,7 @@ MonoBehaviour:
   Unpause: {fileID: 522131853969190471, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   melee: {fileID: -5764667613011676199, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   interact: {fileID: 484325941126055002, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  copyCode: {fileID: 8568523257207466500, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   Rotatables: {fileID: 3205671146708248980}
   PlayerCamera: {fileID: 5087725685347788842}
   CameraHolder: {fileID: 2904342871602623982}

@@ -19,6 +19,7 @@ using static UnityEngine.GraphicsBuffer;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Unity.Networking.Transport;
+using System.Threading.Tasks;
 
 public class Game_GeneralManager : GeneralManager
 {
@@ -59,6 +60,8 @@ public class Game_GeneralManager : GeneralManager
     public NetworkVariable<ulong> CurrentHost = new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
     public NetworkVariable<ulong> BackupHost = new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
 
+    //public NetworkList<ulong> HostBackups = new NetworkList<ulong>(new List<ulong>(), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+
     public ulong currentLobbyOwner;
 
     public PlayerNetworkState myPlayerState;
@@ -92,6 +95,8 @@ public class Game_GeneralManager : GeneralManager
             Debug.Log("hahahahajajajajaj" + NetworkManager.SceneManager.ClientSynchronizationMode);
             this.NetworkObject.DestroyWithScene = false;
             this.NetworkObject.DontDestroyWithOwner = true;
+
+            FindBackupHost();
         }
 
 
@@ -99,7 +104,7 @@ public class Game_GeneralManager : GeneralManager
         NetworkManager.SceneManager.VerifySceneBeforeLoading += VerifySceneLoading;
         NetworkManager.SceneManager.VerifySceneBeforeUnloading += VerifySceneUnLoading;
         NetworkManager.OnClientDisconnectCallback += Disconnect;
-        NetworkManager.OnClientDisconnectCallback += HandleHostMigration;
+        NetworkManager.OnClientDisconnectCallback += TryReconnection;
 
 
 
@@ -146,11 +151,11 @@ public class Game_GeneralManager : GeneralManager
         }
     }
 
-    private void HandleHostMigration(ulong myNetworkID)
+    private async void TryReconnection(ulong myNetworkID)
     {
         Debug.LogAssertion("migration");
-        if (!wantConnection) { return; }
-        if (IsHost) { Debug.LogAssertion("ishostshsysjsajajs"); return; }
+        if (!wantConnection) { SteamLobbyManager.instance.RevertToMenu(); return; }
+        if (IsHost) { SteamLobbyManager.instance.RevertToMenu(); return; }
 
         /*DontDestroyOnLoad(gameObject);
         DontDestroyOnLoad(NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GetComponent<PlayerNetwork>().playerStateMachine.gameObject);*/
@@ -158,6 +163,17 @@ public class Game_GeneralManager : GeneralManager
 
         //gameObject.GetComponent<NetworkObject>().Despawn();
         //Destroy(gameObject.GetComponent<NetworkObject>());
+
+        Task<bool> tryReconnectingtoCurrent = SteamLobbyManager.instance.TryConnect(false);
+
+        while (!tryReconnectingtoCurrent.IsCompleted)
+        {
+            await Task.Yield();
+        }
+        if (!tryReconnectingtoCurrent.IsCompletedSuccessfully) { SteamLobbyManager.instance.RevertToMenu(); return; }
+        if (tryReconnectingtoCurrent.Result == true) return;
+
+
         foreach (PlayerStateMachine _player in PlayerGameObject_LocalLookUp.Values)
         {
             DontDestroyOnLoad(_player.gameObject);
@@ -205,9 +221,15 @@ public class Game_GeneralManager : GeneralManager
 
         Debug.Log("balsjhskshdidididididididididdi" + (NetworkManager.SpawnManager != null));
 
+
+        while (NetworkManager.SpawnManager != null)
+        {
+            if (!reconnecting) yield break;
+            yield return null;
+        }
         
         //yield return null;
-        yield return new WaitUntil(() => NetworkManager.SpawnManager != null);
+        ///yield return new WaitUntil(() => NetworkManager.SpawnManager != null);
         //yield return new WaitUntil(() => NetworkManager.Singleton.IsConnectedClient);
 
         //yield return new WaitUntil(() => NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject() != null);
@@ -304,7 +326,7 @@ public class Game_GeneralManager : GeneralManager
         NetworkManager.SceneManager.VerifySceneBeforeLoading -= VerifySceneLoading;
         NetworkManager.SceneManager.VerifySceneBeforeUnloading -= VerifySceneUnLoading;
         NetworkManager.OnClientDisconnectCallback -= Disconnect;
-        NetworkManager.OnClientDisconnectCallback -= HandleHostMigration;
+        NetworkManager.OnClientDisconnectCallback -= TryReconnection;
 
         //destroy playerobj
         //remove from lookups
@@ -325,6 +347,7 @@ public class Game_GeneralManager : GeneralManager
 
     void Disconnect(ulong DisconnectingNetworkID)
     {
+        if (!IsServer) return;
         //if (wantConnection) return;
         //Debug.LogAssertion("blahashsksjs");
         DisconnectRPC(DisconnectingNetworkID);
@@ -354,25 +377,33 @@ public class Game_GeneralManager : GeneralManager
 
 
 
+
+
     void FindBackupHost()
     {
-        if (Player_LookUp.Count == 2) 
-        {
-            //Debug.Log(Player_LookUp.Values.ToList()[1].SteamID);
-            //Debug.LogAssertion(BackupHost.Value);
-            //BackupHost.Value = SteamLobbyManager.currentLobby.Members.ToList()[1].Id;
-            BackupHost.Value = Player_LookUp.Values.ToList()[1].SteamID;
 
-        }
-
-        if (!Player_LookUp.ContainsKey(BackupHost.Value) && BackupHost.Value != 0 && Player_LookUp.Count >= 2)
-        {
+        if (Player_LookUp.Count >= 2) 
+        { 
             BackupHost.Value = Player_LookUp.Values.ToList()[1].SteamID;
-            //BackupHost.Value = SteamLobbyManager.currentLobby.Members.ToList()[1].Id;
+            //HostBackups = Player_LookUp.Values.ToList().Select(person => person.SteamID).ToList();
         }
+        /*        if (Player_LookUp.Count == 2) 
+                {
+                    //Debug.Log(Player_LookUp.Values.ToList()[1].SteamID);
+                    //Debug.LogAssertion(BackupHost.Value);
+                    //BackupHost.Value = SteamLobbyManager.currentLobby.Members.ToList()[1].Id;
+                    BackupHost.Value = Player_LookUp.Values.ToList()[1].SteamID;
+
+                }
+
+                if (!Player_LookUp.ContainsKey(BackupHost.Value) && BackupHost.Value != 0 && Player_LookUp.Count >= 2)
+                {
+                    BackupHost.Value = Player_LookUp.Values.ToList()[1].SteamID;
+                    //BackupHost.Value = SteamLobbyManager.currentLobby.Members.ToList()[1].Id;
+                }*/
 
         //Debug.LogWarning(Player_LookUp.Count);
-        
+
     }
 
 /*    [Rpc(SendTo.Server)]

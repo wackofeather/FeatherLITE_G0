@@ -61,7 +61,7 @@ public class MeleeState : BasePlayerState
         }
 
 
-
+        player.BumpCollider.GetComponent<BumpColliderChecker>().player_hits.RemoveAll(item => item == null);
 
         player.windEffect.SetFloat("Spawn Rate", player.windSpawnRate);
         

@@ -82,6 +82,7 @@ public class SteamLobbyManager : MonoBehaviour
         //SteamMatchmaking.OnChatMessage += OnChatMessage;
         SteamMatchmaking.OnLobbyMemberDisconnected += OnLobbyMemberDisconnected;
         SteamMatchmaking.OnLobbyMemberLeave += OnLobbyMemberDisconnected;
+        //SteamMatchmaking.onlobbyle
         //SteamMatchmaking.OnLobbyGameCreated += OnLobbyGameCreated;
         //SteamFriends.OnGameLobbyJoinRequested += OnGameLobbyJoinRequest;
         //SteamMatchmaking.OnLobbyInvite += OnLobbyInvite;
@@ -133,6 +134,8 @@ public class SteamLobbyManager : MonoBehaviour
     {
         Debug.Log($"{friend.Name} left the lobby");
         Debug.Log($"New lobby owner is {currentLobby.Owner}");
+
+        if (friend.IsMe) Debug.LogWarning("uh oh");
 /*        if (inLobby.ContainsKey(friend.Id))
         {
             Destroy(inLobby[friend.Id]);
@@ -301,7 +304,7 @@ public class SteamLobbyManager : MonoBehaviour
         if (hosting)
         {
 
-            
+
 
             if (!_reconnecting)
             {
@@ -325,7 +328,22 @@ public class SteamLobbyManager : MonoBehaviour
 
             GUIUtility.systemCopyBuffer = currentLobby.Id.ToString();
 
-            NetworkManager.Singleton.StartHost();
+            ///NetworkManager.Singleton.StartHost();
+            ///
+            Task<bool> tryConnect = TryConnect(true);
+            yield return new WaitUntil(() => tryConnect.IsCompleted);
+            if (tryConnect.Result == false)
+            {
+                if (_reconnecting) 
+                { 
+                    Game_GeneralManager.instance.reconnecting = false; 
+                }
+
+                RevertToMenu();
+
+                yield break;
+            }
+
 
             //Debug.Log(Game_GeneralManager.instance != null);
             //Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId);
@@ -348,6 +366,19 @@ public class SteamLobbyManager : MonoBehaviour
                             Debug.Log("beep");
                             yield return null;
                         }*/
+            //
+            /*            if (NetworkManager.Singleton.StartClient())
+                        {
+
+                        }
+                        else
+                        {
+                            Debug.LogWarning("blahaj");
+                            Game_GeneralManager.instance.reconnecting = false;
+                            yield break;
+                        }*/
+            //
+
 
             if (!_reconnecting)
             {
@@ -370,8 +401,30 @@ public class SteamLobbyManager : MonoBehaviour
             }
 
 
+            Task<bool> tryConnect = TryConnect(false);
+            yield return new WaitUntil(() => tryConnect.IsCompleted);
+            if (tryConnect.Result == false)
+            {
+                if (_reconnecting)
+                {
+                    Game_GeneralManager.instance.reconnecting = false;
+                }
 
-            NetworkManager.Singleton.StartClient();
+                RevertToMenu();
+
+                yield break;
+            }
+
+
+            /*            if (NetworkManager.Singleton.StartClient())
+                        {
+
+                        }
+                        else
+                        {
+                            Game_GeneralManager.instance.reconnecting = false;
+                            yield break;
+                        }*/
 
             //Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId);
             Debug.LogWarning(NetworkManager.Singleton.IsConnectedClient);
@@ -395,6 +448,34 @@ public class SteamLobbyManager : MonoBehaviour
         yield break;
     }
 
+
+    public async Task<bool> TryConnect(bool Hosting)
+    {
+        if (Hosting)
+        {
+            if (NetworkManager.Singleton.StartHost())
+            {
+                return true;
+            }
+            else return false;
+        }
+        else
+        {
+            if (NetworkManager.Singleton.StartClient())
+            {
+                while (!NetworkManager.Singleton.GetComponent<FacepunchTransport>().connectionManager.Connected)
+                {
+                    if (!NetworkManager.Singleton.GetComponent<FacepunchTransport>().connectionManager.Connecting)
+                    {
+                        return false;
+                    }
+                    await Task.Yield();
+                }
+                return true;
+            }
+            else return false;
+        }
+    }
 
 
     public async Task<bool> JoinLobbyAsync(SteamId lobbyId)
@@ -455,22 +536,33 @@ public class SteamLobbyManager : MonoBehaviour
     {
         try
         {
-           // UserInLobby = false;
-            /*            currentLobby.Leave();
-                        //OnLobbyLeave.Invoke();
-            *//*            foreach (var user in inLobby.Values)
-                        {
-                            Destroy(user);
-                        }*//*
-                        inLobby.Clear();*/
+            UserInLobby = false;
+            currentLobby.Leave();
+            //OnLobbyLeave.Invoke();
 
-           // currentLobby.Leave();
+            // currentLobby.Leave();
         }
         catch
         {
 
         }
     }
+
+    public async void RevertToMenu()
+    {
+        LeaveLobby();
+
+        if (SceneManager.GetActiveScene().name != MenuScene)
+        {
+            SceneManager.LoadScene(MenuScene);
+            while (SceneManager.GetActiveScene().name != MenuScene) { await Task.Yield(); }
+        }
+
+        //display disconnect info
+
+    }
+
+
 
     public void OnApplicationQuit()
     {
@@ -479,7 +571,7 @@ public class SteamLobbyManager : MonoBehaviour
 
 
     }
-
+    
     public void OnDestroy()
     {
         Debug.Log("ahh im dying");

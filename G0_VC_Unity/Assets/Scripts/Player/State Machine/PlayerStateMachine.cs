@@ -13,6 +13,7 @@ using Unity.Networking.Transport;
 using Unity.Netcode.Transports.UTP;
 using System.Net.NetworkInformation;
 using static PlayerNetwork;
+using Steamworks;
 
 public class PlayerStateMachine : MonoBehaviour
 {
@@ -209,6 +210,8 @@ public class PlayerStateMachine : MonoBehaviour
     [HideInInspector] public GameObject extHealthBar;
 
     public NetworkInfo networkInfo;
+
+    float deleteTimer = 5;
     
 
     public RaycastHit GrappleCheck()
@@ -401,6 +404,21 @@ public class PlayerStateMachine : MonoBehaviour
         if (copyCode.action.triggered)
         {
             GUIUtility.systemCopyBuffer = SteamLobbyManager.currentLobby.Id.ToString();
+        }
+
+        if (playerNetwork != null)
+        {
+            deleteTimer = 5;
+        }
+        else
+        {
+            deleteTimer -= Time.deltaTime;
+        }
+        if (deleteTimer < 0)
+        {
+            Player_OnNetworkDespawn();
+            Player_OnDisconnect();
+            Destroy(this.gameObject);
         }
     }
 

@@ -85,6 +85,8 @@ public class Game_GeneralManager : GeneralManager
                 Debug.Log("hahahahajajajajaj" + NetworkManager.SceneManager.ClientSynchronizationMode);*/
         //SceneManager.LoadScene(GameScene, LoadSceneMode.Additive);
         SteamMatchmaking.OnLobbyDataChanged += OnLobbyDataChange;
+
+        currentLobbyOwner = SteamLobbyManager.currentLobby.Owner.Id;
     }
     public override void OnNetworkSpawn()
     {
@@ -125,7 +127,8 @@ public class Game_GeneralManager : GeneralManager
 
     void OnLobbyDataChange(Lobby newLobbyData)
     {
-        Debug.LogAssertion("jeez louise  " + newLobbyData.Owner.Id + "   " + SteamLobbyManager.currentLobby.Owner.Id);
+        Debug.LogAssertion("jeez louise  " + newLobbyData.Owner.Id + "   " + currentLobbyOwner);
+        //if (!wantConnection) return;
         if (currentLobbyOwner != newLobbyData.Owner.Id)
         {
             Debug.LogAssertion("loooooooooooooooooooooook");
@@ -372,6 +375,7 @@ public class Game_GeneralManager : GeneralManager
 
        // wantConnection = false;
         SteamLobbyManager.instance.LeaveLobby();
+        Debug.LogAssertion("hoooooha");
     }
 
     void Disconnect(ulong DisconnectingNetworkID)

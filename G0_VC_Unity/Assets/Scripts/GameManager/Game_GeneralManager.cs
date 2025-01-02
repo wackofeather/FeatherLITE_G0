@@ -68,18 +68,23 @@ public class Game_GeneralManager : GeneralManager
 
     [HideInInspector] public GameObject runtime_playerObj;
 
+    float NetworkID;
+
     NetworkVariable<HostInfo> hostInfo = new NetworkVariable<HostInfo>(writePerm: NetworkVariableWritePermission.Server);
+
+    private Coroutine HostMigrationCorT;
+    private Coroutine JoiningGameCorT;
 
 
     private void Start()
     {
         wantConnection = false;
-/*        NetworkManager.SceneManager.PostSynchronizationSceneUnloading = false;
+        /*        NetworkManager.SceneManager.PostSynchronizationSceneUnloading = false;
 
-        NetworkManager.SceneManager.SetClientSynchronizationMode(LoadSceneMode.Additive);
-        Debug.Log("hahahahajajajajaj" + NetworkManager.SceneManager.ClientSynchronizationMode);*/
+                NetworkManager.SceneManager.SetClientSynchronizationMode(LoadSceneMode.Additive);
+                Debug.Log("hahahahajajajajaj" + NetworkManager.SceneManager.ClientSynchronizationMode);*/
         //SceneManager.LoadScene(GameScene, LoadSceneMode.Additive);
-
+        SteamMatchmaking.OnLobbyDataChanged += OnLobbyDataChange;
     }
     public override void OnNetworkSpawn()
     {
@@ -104,11 +109,11 @@ public class Game_GeneralManager : GeneralManager
         NetworkManager.SceneManager.VerifySceneBeforeLoading += VerifySceneLoading;
         NetworkManager.SceneManager.VerifySceneBeforeUnloading += VerifySceneUnLoading;
         NetworkManager.OnClientDisconnectCallback += Disconnect;
-        NetworkManager.OnClientDisconnectCallback += TryReconnection;
-
-
-
+        ///NetworkManager.OnClientDisconnectCallback += TryReconnection;
         
+
+        currentLobbyOwner = SteamLobbyManager.currentLobby.Owner.Id;
+        NetworkID = NetworkManager.Singleton.LocalClientId;
 
         if (!wantConnection) testFloat = UnityEngine.Random.Range(0, 1000f);
 
@@ -116,6 +121,24 @@ public class Game_GeneralManager : GeneralManager
 
         //DontDestroyOnLoad(this.gameObject);
         
+    }
+
+    void OnLobbyDataChange(Lobby newLobbyData)
+    {
+        Debug.LogAssertion("jeez louise  " + newLobbyData.Owner.Id + "   " + SteamLobbyManager.currentLobby.Owner.Id);
+        if (currentLobbyOwner != newLobbyData.Owner.Id)
+        {
+            Debug.LogAssertion("loooooooooooooooooooooook");
+            if (HostMigrationCorT != null) StopCoroutine(HostMigrationCorT);
+            if (JoiningGameCorT != null) StopCoroutine(JoiningGameCorT);
+
+            foreach (PlayerStateMachine _player in PlayerGameObject_LocalLookUp.Values)
+            {
+                DontDestroyOnLoad(_player.gameObject);
+            }
+            
+            HostMigrationCorT = StartCoroutine(HostMigrationCoroutine(myPlayerState));
+        }
     }
 
     private bool VerifySceneUnLoading(Scene scene)
@@ -189,7 +212,15 @@ public class Game_GeneralManager : GeneralManager
     IEnumerator HostMigrationCoroutine(PlayerNetworkState player)
     {
         reconnecting = true;
+        Debug.LogAssertion("kookookaka " + currentLobbyOwner + "  " + Player_LookUp[currentLobbyOwner].NetworkID);
+        LocalDisconnect(Player_LookUp[currentLobbyOwner].NetworkID);
+
+        currentLobbyOwner = SteamLobbyManager.currentLobby.Owner.Id;
+
         NetworkManager.Shutdown();
+
+        
+
         while (NetworkManager.ShutdownInProgress)
         {
             Debug.Log("shutting down");
@@ -200,24 +231,21 @@ public class Game_GeneralManager : GeneralManager
         //Debug.LogWarning(clientId == Player_LookUp[CurrentHost.Value].NetworkID);
 
         //NetworkManager.gameObject.SetActive(true);
+        
 
-        if (wantConnection)
+        //Player_LookUp.Clear();
+
+
+        
+
+        Debug.LogWarning(SteamLobbyManager.currentLobby.Owner.Id);
+
+        if (SteamLobbyManager.currentLobby.Owner.Id == SteamClient.SteamId.Value)
         {
-            //Player_LookUp.Clear();
-            
-
-            LocalDisconnect(0);
-
-            Debug.LogWarning(SteamLobbyManager.currentLobby.Owner.Id);
-
-            if (BackupHost.Value == SteamClient.SteamId.Value)
-            {
-                //NetworkManager.en
-                StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(SteamLobbyManager.currentLobby.Owner.Id, true, true));
-            }
-            else StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(SteamLobbyManager.currentLobby.Owner.Id, false, true));
+            //NetworkManager.en
+            JoiningGameCorT = StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(SteamLobbyManager.currentLobby.Owner.Id, true, true));
         }
-        else yield break;
+        else JoiningGameCorT = StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(SteamLobbyManager.currentLobby.Owner.Id, false, true));
 
         Debug.Log("balsjhskshdidididididididididdi" + (NetworkManager.SpawnManager != null));
 
@@ -263,7 +291,7 @@ public class Game_GeneralManager : GeneralManager
 
         if (IsServer) internalSpawnTicker = hostInfo.Value.spawnTicker;
 
-        Debug.LogAssertion("ajhshsjkdhs" + player.Position);
+        Debug.LogAssertion("ajhshsjkdhs" + player.Position + "  " + (NetworkManager.SpawnManager.GetLocalPlayerObject() != null));
 
         if (IsOwner)
         {
@@ -289,6 +317,7 @@ public class Game_GeneralManager : GeneralManager
 
     public void Update()
     {
+        //Debug.LogAssertion(IsHost);
         //Debug.Log(Player_LookUp.Count);
         if (escape.action.triggered)
         {
@@ -326,7 +355,7 @@ public class Game_GeneralManager : GeneralManager
         NetworkManager.SceneManager.VerifySceneBeforeLoading -= VerifySceneLoading;
         NetworkManager.SceneManager.VerifySceneBeforeUnloading -= VerifySceneUnLoading;
         NetworkManager.OnClientDisconnectCallback -= Disconnect;
-        NetworkManager.OnClientDisconnectCallback -= TryReconnection;
+        ///NetworkManager.OnClientDisconnectCallback -= TryReconnection;
 
         //destroy playerobj
         //remove from lookups
@@ -348,6 +377,7 @@ public class Game_GeneralManager : GeneralManager
     void Disconnect(ulong DisconnectingNetworkID)
     {
         if (!IsServer) return;
+
         //if (wantConnection) return;
         //Debug.LogAssertion("blahashsksjs");
         DisconnectRPC(DisconnectingNetworkID);
@@ -356,17 +386,20 @@ public class Game_GeneralManager : GeneralManager
     [Rpc(SendTo.ClientsAndHost)]
     void DisconnectRPC(ulong DisconnectingNetworkID)
     {
-       // Debug.LogAssertion("bahsjssksksksksks  " + DisconnectingNetworkID);
+        Debug.LogAssertion("bahsjssksksksksks  " + DisconnectingNetworkID);
         LocalDisconnect(DisconnectingNetworkID);
     }
 
     void LocalDisconnect(ulong DisconnectingNetworkID)
     {
-        ulong myId = NetworkManager.LocalClientId;
-        Debug.Log((DisconnectingNetworkID != OwnerClientId) + "    " + DisconnectingNetworkID + "    " + myId);
-        if (DisconnectingNetworkID != myId | (DisconnectingNetworkID == 0 && !IsHost))
+        ulong myId = (ulong)NetworkID;
+        Debug.LogAssertion("my ID " + DisconnectingNetworkID);
+        Debug.LogWarning((DisconnectingNetworkID != OwnerClientId) + "    " + DisconnectingNetworkID + "    " + myId + "  " + Player_LookUp.Count + "  " + IsHost);
+        if (DisconnectingNetworkID != myId | (DisconnectingNetworkID == 0 && myId != 0))
         {
-            ulong steam_id = Player_LookUp.Where(d => d.Value.NetworkID == DisconnectingNetworkID).First().Value.SteamID;
+            ulong steam_id = 0;
+            try { steam_id = Player_LookUp.Where(d => d.Value.NetworkID == DisconnectingNetworkID).First().Value.SteamID; }
+            catch { return; }
             Player_LookUp.Remove(steam_id);
             PlayerGameObject_LocalLookUp[steam_id].Player_OnNetworkDespawn();
             PlayerGameObject_LocalLookUp[steam_id].Player_OnDisconnect();

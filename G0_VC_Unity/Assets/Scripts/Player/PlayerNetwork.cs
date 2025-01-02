@@ -45,14 +45,15 @@ public class PlayerNetwork : NetworkBehaviour
 
     IEnumerator NetworkSpawnCoroutine()
     {
+        bool reconnecting;
         while (_SteamID.Value == 0)
         {
             yield return null;
         }
 
         GameObject _playerObj;
-        if (!Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.ContainsKey(_SteamID.Value)) _playerObj = Instantiate(playerObj);
-        else _playerObj = Game_GeneralManager.instance.PlayerGameObject_LocalLookUp[_SteamID.Value].gameObject;
+        if (!Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.ContainsKey(_SteamID.Value)) { _playerObj = Instantiate(playerObj); reconnecting = false; }
+        else { _playerObj = Game_GeneralManager.instance.PlayerGameObject_LocalLookUp[_SteamID.Value].gameObject; reconnecting = true; }
 
         if (!Game_GeneralManager.instance.reconnecting) _playerObj.transform.position = new Vector3(-1000, -1000, -1000);
         playerStateMachine = _playerObj.GetComponent<PlayerStateMachine>();
@@ -72,7 +73,7 @@ public class PlayerNetwork : NetworkBehaviour
         AddSelfToLookups();
 
 
-        playerStateMachine.Player_OnNetworkSpawn(Game_GeneralManager.instance.reconnecting);
+        playerStateMachine.Player_OnNetworkSpawn(reconnecting);
 
 
 
@@ -389,7 +390,7 @@ public class PlayerNetwork : NetworkBehaviour
 
     void AddSelfToLookups()
     {
-        //Debug.LogWarning("kookoo " + _SteamID.Value);
+        Debug.LogWarning("socatoa " + OwnerClientId);
         if (Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.ContainsKey(_SteamID.Value))
         {
             Game_GeneralManager.instance.PlayerGameObject_LocalLookUp[_SteamID.Value] = playerStateMachine;

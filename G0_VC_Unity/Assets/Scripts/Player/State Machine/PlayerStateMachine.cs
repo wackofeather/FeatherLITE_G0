@@ -283,6 +283,8 @@ public class PlayerStateMachine : MonoBehaviour
 
     public void Player_OnNetworkSpawn(bool reconnecting)
     {
+
+        Debug.LogWarning("kumalala" + networkInfo._isOwner + "  " + reconnecting);
         if (reconnecting)
         {
             if (!networkInfo._isOwner)
@@ -416,9 +418,14 @@ public class PlayerStateMachine : MonoBehaviour
         }
         if (deleteTimer < 0)
         {
+            if (Game_GeneralManager.instance.reconnecting) return;
             Player_OnNetworkDespawn();
             Player_OnDisconnect();
+
+            if (networkInfo._isOwner) SteamLobbyManager.instance.RevertToMenu();
+
             Destroy(this.gameObject);
+            
         }
     }
 
@@ -529,7 +536,7 @@ public class PlayerStateMachine : MonoBehaviour
     {
 
        // if (IsOwner) Game_GeneralManager.instance.RemovePlayerServerRPC(NetworkObject.NetworkObjectId, NetworkObject);
-        Debug.Log("closingnetwork");
+        Debug.LogAssertion("closingnetwork");
 
         //Destroy(extHealthBar);
 

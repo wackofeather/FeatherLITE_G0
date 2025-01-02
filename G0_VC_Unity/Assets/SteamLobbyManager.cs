@@ -245,8 +245,8 @@ public class SteamLobbyManager : MonoBehaviour
 
     public IEnumerator JoiningGameCoroutine(ulong targetID, bool hosting, bool _reconnecting)
     {
-        Debug.LogWarning("blahhhhh");
-        if (JoiningLobby) yield break;
+
+        //if (JoiningLobby) { Debug.LogWarning("blahhhhh"); yield break; }
 
         
 
@@ -254,14 +254,15 @@ public class SteamLobbyManager : MonoBehaviour
 
         if (_reconnecting)
         {
-            Debug.Log(currentLobby.IsOwnedBy(SteamClient.SteamId));
+            yield return new WaitUntil(() => currentLobby.IsOwnedBy(targetID));
+            /*Debug.Log(currentLobby.IsOwnedBy(SteamClient.SteamId));
 
             yield return new WaitUntil(() => !currentLobby.IsOwnedBy(Game_GeneralManager.instance.CurrentHost.Value));
 
             Debug.Log(currentLobby.IsOwnedBy(SteamClient.SteamId) + "2");
             
-            /*            while (true)
-                        {*/
+            *//*            while (true)
+                        {*//*
             if (currentLobby.IsOwnedBy(SteamClient.SteamId))
             {
                 if (!hosting)
@@ -275,7 +276,7 @@ public class SteamLobbyManager : MonoBehaviour
 
             Debug.LogAssertion("ownership successfully transferred");
             //Debug.LogWarning("waiting for ne owner" + currentLobby.Owner.Id);
-            /*                if (Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.ContainsKey(currentLobby.Owner.Id))
+            *//*                if (Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.ContainsKey(currentLobby.Owner.Id))
                             {
                             Debug.LogWarning(currentLobby.Owner.Id);*/
             NetworkManager.Singleton.gameObject.GetComponent<FacepunchTransport>().targetSteamId = currentLobby.Owner.Id;

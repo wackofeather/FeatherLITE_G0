@@ -82,7 +82,7 @@ public class MeleeState : BasePlayerState
 
 
 
-        startingVelocity = player.rb.velocity;
+        startingVelocity = player.rb.linearVelocity;
         endVelocity = meleeVector.normalized * player.meleeSpeed;
 
 
@@ -159,7 +159,7 @@ public class MeleeState : BasePlayerState
         if (AboveBreakNeckSpeed)
         {
             yield return new WaitForFixedUpdate();
-            player.rb.velocity = player.PlayerCamera.transform.forward * player.rb.velocity.magnitude;
+            player.rb.linearVelocity = player.PlayerCamera.transform.forward * player.rb.linearVelocity.magnitude;
         }
         else
         {
@@ -173,7 +173,7 @@ public class MeleeState : BasePlayerState
                 if (meleeProgress <= 1) velocityVector = startingVelocity + (endVelocity - startingVelocity) * player.meleeCurve.Evaluate(1 - timer);
                 else velocityVector = endVelocity * meleeProgress;
 
-                player.rb.velocity = velocityVector;
+                player.rb.linearVelocity = velocityVector;
                 yield return new WaitForFixedUpdate();
             }
 

@@ -60,9 +60,9 @@ public class GrapplingState : BasePlayerState
 
         if (player.movingGrapplableLayers == (player.movingGrapplableLayers | (1 << hit.transform.gameObject.layer))) local_grapplePoint = hit.transform.gameObject.transform.InverseTransformPoint(hit.point);
         player.grapplePoint = hit.point;
-        Vector3 relativeVelocity = player.PlayerCamera.InverseTransformVector(player.rb.velocity);
+        Vector3 relativeVelocity = player.PlayerCamera.InverseTransformVector(player.rb.linearVelocity);
         if (relativeVelocity.z < 0) relativeVelocity.z = 0f;
-        player.rb.velocity = player.PlayerCamera.rotation * relativeVelocity;
+        player.rb.linearVelocity = player.PlayerCamera.rotation * relativeVelocity;
         player.joint = player.gameObject.AddComponent<SpringJoint>();
         player.joint.autoConfigureConnectedAnchor = false;
         player.joint.connectedAnchor = player.grapplePoint;

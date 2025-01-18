@@ -490,7 +490,7 @@ public class Game_GeneralManager : GeneralManager
     public virtual void Server_SpawnPlayerForGameRPC(NetworkObjectReference playerNetworkObject, ulong NetworkID)
     {
         Owner_SpawnPlayerForGameRPC(playerNetworkObject, internalSpawnTicker, RpcTarget.Single(NetworkID, RpcTargetUse.Temp));
-
+        Debug.Log("spawnTicker is" + internalSpawnTicker);
         internalSpawnTicker++;
 /*        ((GameObject)playerNetworkObject).GetComponent<PlayerNetwork>().playerStateMachine.rb.MovePosition(new Vector3(-1000, -1000, -1000));
         ((GameObject)playerNetworkObject).GetComponent<PlayerNetwork>().SetHealthRPC(100, RpcTarget.Owner);*/
@@ -500,8 +500,8 @@ public class Game_GeneralManager : GeneralManager
     public virtual void Owner_SpawnPlayerForGameRPC(NetworkObjectReference playerNetworkObject,  int SpawnTicker, RpcParams _param)
     {
         playerNetworkObject.TryGet(out NetworkObject playerObj);
-
-        playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.gameObject.transform.position = SpawnPlaces[SpawnTicker % SpawnPlaces.Count].position;//.rb.MovePosition(SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position);
+        Debug.Log("networkobject is" + SpawnPlaces[SpawnTicker % SpawnPlaces.Count]);
+        playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.rb.MovePosition(SpawnPlaces[SpawnTicker % SpawnPlaces.Count].position);//.rb.MovePosition(SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position);
         playerObj.gameObject.GetComponent<PlayerNetwork>().SetHealthRPC(100, RpcTarget.Owner);
         //Debug.LogWarning(SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position);
 
@@ -571,11 +571,11 @@ public class Game_GeneralManager : GeneralManager
             NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.gameObject.layer = LayerMask.NameToLayer("ENEMY");
 
         }
-       
+
 
         //Debug.Log("yipeee   " + NetworkManager.Singleton.ConnectedClients[player.NetworkID].PlayerObject.GetComponent<PlayerStateMachine>().networkInfo._isOwner);
 
-        
+        if (!_reconnecting) Debug.LogAssertion("gagagagagag");
         if (!_reconnecting) SpawnAtPlaceRPC(player, SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position, RpcTarget.Single(player.NetworkID, RpcTargetUse.Temp));
         internalSpawnTicker++;
 
@@ -674,7 +674,7 @@ public class Game_GeneralManager : GeneralManager
     IEnumerator KillCoroutine(PlayerStateMachine player)
     {
         player.ChangeState(player.DeathState);
-        player.gameObject.transform.position = new Vector3(0, 0, -10000);
+        player.rb.MovePosition(new Vector3(0, 0, -10000));
         float timer = 3;
         while (timer > 0) 
         { 

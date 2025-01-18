@@ -28,7 +28,7 @@ public class DeathState : BasePlayerState
     {
         if (!player.networkInfo._isOwner)
         {
-            //player.playerNetwork.ConsumeState();
+            player.playerNetwork.ConsumeState();
 
             if (player.internal_CurrentState != key) player.ChangeState(player.stateDictionary[player.internal_CurrentState]);
 

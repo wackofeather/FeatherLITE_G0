@@ -46,11 +46,11 @@ public class RegularState : BasePlayerState
 
         if (player.inputVector == Vector3.zero) return;
 
-        if (player.rb.velocity.magnitude > player.BreakNeckSpeed)
+        if (player.rb.linearVelocity.magnitude > player.BreakNeckSpeed)
         {
             //Debug.Log("ahhhhhhhhhhhhhh");
             Vector3 inputVelocity = player.inputVector * player.speed;
-            Vector3 relativeVelocity = player.PlayerCamera.transform.InverseTransformVector(player.rb.velocity);
+            Vector3 relativeVelocity = player.PlayerCamera.transform.InverseTransformVector(player.rb.linearVelocity);
 
 
 
@@ -67,7 +67,7 @@ public class RegularState : BasePlayerState
 
             player.rb.AddForce(player.PlayerCamera.transform.rotation * player.putTogetherVelocity * player.tooFastaccel);
         }
-        else player.rb.AddForce((player.PlayerCamera.transform.rotation * player.inputVector * player.speed - player.rb.velocity) * player.accel);
+        else player.rb.AddForce((player.PlayerCamera.transform.rotation * player.inputVector * player.speed - player.rb.linearVelocity) * player.accel);
     }
 
     public override void Update()

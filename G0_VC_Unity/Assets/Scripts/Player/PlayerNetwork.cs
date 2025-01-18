@@ -3,7 +3,7 @@ using System.Collections;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Networking.Types;
+//using UnityEngine.Networking.Types;
 
 /// <summary>
 /// An example network serializer with both server and owner authority.
@@ -77,7 +77,7 @@ public class PlayerNetwork : NetworkBehaviour
 
 
 
-
+        Debug.LogWarning("reconnecting is" + reconnecting);
         if (!Game_GeneralManager.instance.reconnecting)
         {
             
@@ -126,7 +126,7 @@ public class PlayerNetwork : NetworkBehaviour
         var state = new PlayerNetworkState
         {
             Position = _rb.position,
-            Velocity = _rb.velocity,
+            Velocity = _rb.linearVelocity,
             Rotation = new Vector2(playerStateMachine.xRotation, playerStateMachine.yRotation),
             isScoping_internal = inventory.isScoping,
             isShooting_internal = inventory.isShooting,
@@ -416,9 +416,11 @@ public class PlayerNetwork : NetworkBehaviour
     [Rpc(SendTo.Owner)]
     public void DamageRPC(int _damage)
     {
+        Debug.Log("blahahahahahahahahaha");
         playerStateMachine.health -= _damage;
         if (playerStateMachine.health <= 0)
         {
+            //Debug.Log("death!!!!!");
             playerStateMachine.KillPlayerRPC();
         }
 

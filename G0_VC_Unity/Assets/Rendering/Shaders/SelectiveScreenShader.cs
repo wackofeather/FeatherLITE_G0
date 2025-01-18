@@ -443,6 +443,7 @@ public class SelectiveScreenShader : ScriptableRendererFeature
         {
             public Material screenMaterial;
             public TextureHandle cameraTexture;
+            public TextureHandle colorTexture;
         }
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
@@ -453,14 +454,64 @@ public class SelectiveScreenShader : ScriptableRendererFeature
             using (var builder = renderGraph.AddRasterRenderPass<PassData>(passName, out var passData))
             {
                 UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
+                //passData.cameraTexture = resourceData.cameraColor;
 
-                builder.AllowGlobalStateModification(true);
+                //builder.AllowGlobalStateModification(true);
 
                 passData.screenMaterial = m_screenMaterial;
                 //
-                passData.cameraTexture = resourceData.activeColorTexture;
+
+
+
+
+/*
+                var destinationDesc = renderGraph.GetTextureDesc(passData.cameraTexture);
+
+                destinationDesc.clearBuffer = false;
+
+
+
+                //TextureHandle test = renderGraph.CreateTexture(destinationDesc);
+                TextureHandle destination = renderGraph.CreateTexture(destinationDesc);*/
+
+                var customData = frameData.Get<SelectiveRenderPass.CustomData>();
+
+                //Debug.Log();
+
+                //TextureHandle color_Texture;
+                if (customData.textureHandles.ContainsKey(uniquepassTag)) passData.colorTexture = customData.textureHandles[uniquepassTag];//renderGraph.CreateTexture(customData.textureHandles[uniquepassTag].GetDescriptor(renderGraph));
+                else return;
+
+/*                if (uniquepassTag == 1) Debug.Log("blahashsjajaks");
+                if (uniquepassTag == 0)
+                {
+                    for (int i = 0; i < customData.textureHandles.Count; i++)
+                    {
+
+                        if (customData.textureHandles.ContainsKey(customData.textureHandles.Keys.ToList()[i])) customData.textureHandles.Remove(customData.textureHandles.Keys.ToList()[i]);
+                        //Debug.Log((Texture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]]);//(RenderTexture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]]);
+                        //if ((RenderTexture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]] == (RenderTexture)TextureHandle.nullHandle) customData.textureHandles.Remove(customData.textureHandles.Keys.ToList()[i]);
+                        //customData.textureHandles[] = TextureHandle.nullHandle;
+                    }
+                }*/
+
+
+                builder.UseTexture(passData.colorTexture);
+
+               // builder.UseTexture(passData.cameraTexture);
+
+                //////resourceData.cameraColor = passData.cameraTexture;
+
+                
+
+/*                RenderGraphUtils.BlitMaterialParameters para = new RenderGraphUtils.BlitMaterialParameters(passData.colorTexture, destination, m_screenMaterial, 0);
+
+                renderGraph.AddBlitPass(para, passName: m_PassName);*/
+
+                //resourceData.cameraColor = destination;
 
                 builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
+                // builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
 
 
             }
@@ -478,10 +529,7 @@ public class SelectiveScreenShader : ScriptableRendererFeature
 
 
 
-
-
-
-                return;
+              // return;
 
             
             /*            var resourceData = frameData.Get<UniversalResourceData>();
@@ -605,7 +653,13 @@ public class SelectiveScreenShader : ScriptableRendererFeature
         }
         static void ExecutePass(PassData data, RasterGraphContext context)
         {
-            data.screenMaterial.SetTexture("_Test", data.cameraTexture);
+
+            
+
+            //Debug.Log(data.colorTexture);
+            Blitter.BlitTexture(context.cmd, data.colorTexture, new Vector4(1, 1, 0, 0), data.screenMaterial, 0);
+
+            //data.screenMaterial.SetTexture("_Test", data.cameraTexture);
         }
     }
 

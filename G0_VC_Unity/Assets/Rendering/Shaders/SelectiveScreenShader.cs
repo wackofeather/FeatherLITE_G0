@@ -657,7 +657,7 @@ public class SelectiveScreenShader : ScriptableRendererFeature
         }
         static void ExecutePass(PassData data, RasterGraphContext context)
         {
-            //s
+            //
 
             data.screenMaterial.SetTexture("_Test", data.colorTexture);
             //Debug.Log(data.colorTexture);

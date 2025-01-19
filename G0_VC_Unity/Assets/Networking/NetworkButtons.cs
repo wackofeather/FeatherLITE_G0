@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using UnityEngine;
-using Steamworks;
+//using Steamworks;
 
 public class NetworkButtons : MonoBehaviour
 {

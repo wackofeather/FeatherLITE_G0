@@ -6,12 +6,18 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 
-public class WeaponManager : MonoBehaviour
+public class WeaponManager : NetworkBehaviour
 {
     [SerializeField] Player_Inventory inventory;
 
 
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
 
+        if (!IsOwner) return;
+
+    }
 
     // Update is called once per frame
     void Update()
@@ -19,7 +25,7 @@ public class WeaponManager : MonoBehaviour
 
 
         //Debug.Log(inventory.GetCurrentWeapon());
-        //if (inventory.GetCurrentWeapon() != null) inventory.GetCurrentWeapon().Weapon_Update();
+        if (inventory.GetCurrentWeapon() != null) inventory.GetCurrentWeapon().Weapon_Update();
         
     }
 }

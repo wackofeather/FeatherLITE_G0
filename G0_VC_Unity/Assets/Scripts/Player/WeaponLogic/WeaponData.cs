@@ -11,7 +11,6 @@ public class WeaponData : ScriptableObject
     public InputActionReference fireInput;
     public InputActionReference scope;
     public GameObject weaponMesh;
-    public GameObject Proxy_Prefab;
     [Header("ViewModel")]
     public AnimatorOverrideController VM_ARM_animatorOverrideController;
     public AnimatorOverrideController VM_GUN_animatorOverrideController;

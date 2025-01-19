@@ -7,7 +7,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-
 public class MeleeState : BasePlayerState
 {
     private Vector3 meleeVector;
@@ -23,8 +22,6 @@ public class MeleeState : BasePlayerState
     private float camFOV;
 
     private float viewportCamFOV;
-
-    
 
 
 
@@ -54,16 +51,16 @@ public class MeleeState : BasePlayerState
         player.isMelee = true;
 
 
-        if (!player.networkInfo._isOwner)
+        if (!player.IsOwner)
         {
             base.EnterState();
             return;
         }
 
 
-        player.BumpCollider.GetComponent<BumpColliderChecker>().player_hits.RemoveAll(item => item == null);
 
-        player.windEffect.SetFloat("Spawn Rate", player.windSpawnRate);
+
+        
         
 
 
@@ -82,22 +79,8 @@ public class MeleeState : BasePlayerState
 
 
 
-        startingVelocity = player.rb.linearVelocity;
+        startingVelocity = player.rb.velocity;
         endVelocity = meleeVector.normalized * player.meleeSpeed;
-
-
-        if (startingVelocity.magnitude > player.BreakNeckSpeed) { player.StartCoroutine(MeleeCoroutine(true)); }
-        else player.StartCoroutine(MeleeCoroutine(false));
-
-
-        foreach (Collider playerCol in player.BumpCollider.GetComponent<BumpColliderChecker>().player_hits)
-        {
-            playerCol.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(100);
-        }
-
-        
-
-        //Debug.Log(startingVelocity.magnitude > player.BreakNeckSpeed);
 
         base.EnterState();
 
@@ -110,7 +93,7 @@ public class MeleeState : BasePlayerState
     {
         
         
-        if (!player.networkInfo._isOwner)
+        if (!player.IsOwner)
         {
             player.isMelee = false;
             return;
@@ -123,7 +106,7 @@ public class MeleeState : BasePlayerState
            // player.ViewportRenderers[i].SetDirty();
         }
 
-        player.windEffect.SetFloat("Spawn Rate", 0);
+
 
         player.isMelee = false;
 
@@ -134,51 +117,23 @@ public class MeleeState : BasePlayerState
 
     public override void FixedUpdate()
     {
+        if (!player.IsOwner) return;
 
         base.FixedUpdate();
 
-        //if (!player.IsOwner) return;
-
-/*        float meleeProgress = player.meleeCurve.Evaluate(1 - timer);
+        float meleeProgress = player.meleeCurve.Evaluate(1 - timer);
         Vector3 velocityVector;
 
 
         if (meleeProgress <= 1) velocityVector = startingVelocity + (endVelocity - startingVelocity) * player.meleeCurve.Evaluate(1 - timer);
         else velocityVector = endVelocity * meleeProgress;
 
-        player.rb.velocity = velocityVector;*/
+        player.rb.velocity = velocityVector;
 
         //player.rb.AddForce(velocityVector, ForceMode.VelocityChange);
 
         //if (Physics.Raycast(player.rb.position, new Vector3(meleeRotation.x, meleeRotation.y, meleeRotation.z), player.rb.velocity.magnitude))
         //if ((player.meleeSpeed > player.speed) && (player.PlayerCamera.transform.InverseTransformVector(player.rb.velocity).z < player.BreakNeckSpeed)) player.rb.velocity = ((meleeRotation.normalized * Vector3.forward * (((player.meleeSpeed - player.speed) * (timer / timerVal)) + player.speed - 1f)) - player.rb.velocity) * 40 * Time.fixedDeltaTime;
-    }
-
-    IEnumerator MeleeCoroutine(bool AboveBreakNeckSpeed)
-    {
-        if (AboveBreakNeckSpeed)
-        {
-            yield return new WaitForFixedUpdate();
-            player.rb.linearVelocity = player.PlayerCamera.transform.forward * player.rb.linearVelocity.magnitude;
-        }
-        else
-        {
-            while (true)
-            {
-                if (!player.isMelee) break;
-                float meleeProgress = player.meleeCurve.Evaluate(1 - timer);
-                Vector3 velocityVector;
-
-
-                if (meleeProgress <= 1) velocityVector = startingVelocity + (endVelocity - startingVelocity) * player.meleeCurve.Evaluate(1 - timer);
-                else velocityVector = endVelocity * meleeProgress;
-
-                player.rb.linearVelocity = velocityVector;
-                yield return new WaitForFixedUpdate();
-            }
-
-        }
-        yield break;
     }
 
     public override void Update()
@@ -188,7 +143,7 @@ public class MeleeState : BasePlayerState
         base.Update();
 
 
-        if (!player.networkInfo._isOwner) return;
+        if (!player.IsOwner) return;
 
         float fov_calc = viewportCamFOV * (1 + player.meleeFOV_curve.Evaluate(1 - timer));
 
@@ -207,30 +162,11 @@ public class MeleeState : BasePlayerState
         if (timer < 0) player.ChangeState(player.RegularState);
     }
 
-    public override void OnBumpPlayer(Collider col)
-    {
-        base.OnBumpPlayer(col);
-
-        
-
-        Debug.LogWarning(col.gameObject.name);
-
-
-        col.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(100);
-        //player.ChangeState(player.RegularState);
-
-        
-    }
-
     public override void OnCollisionEnter(Collision col)
     {
         base.OnCollisionEnter(col);
 
-        if (!player.networkInfo._isOwner) return;
-
-
-        if (col.gameObject.layer == LayerMask.NameToLayer(player.EnemyLayer)) return;
-
+        if (!player.IsOwner) return;
 
         if (col.contacts.Length > 1)
         {
@@ -242,6 +178,8 @@ public class MeleeState : BasePlayerState
     }
 
 
+
+
     public static float IntegrateCurve(AnimationCurve curve, float startTime, float endTime, int steps)
     {
         float val = 0;
@@ -251,5 +189,6 @@ public class MeleeState : BasePlayerState
         }
         return val;
     }
+
 }
 

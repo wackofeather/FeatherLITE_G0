@@ -6,20 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Steam_Network_BaseScene.unity
-    guid: 0686b2104efe9bb46b7321a5da72c5c9
-  - enabled: 1
-    path: Assets/Scenes/MenuScene.unity
-    guid: 6ded0d759ac0f334fb9f4a4570faf8f4
-  - enabled: 1
-    path: Assets/Scenes/DevScene.unity
+    path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
-    path: Assets/Scenes/Game_PreLoadScene.unity
-    guid: 35c79f4e9247cc14d8673da7b2bf99b4
-  - enabled: 0
-    path: Assets/Scenes/Test.unity
-    guid: 3f7fae98c86bb8a4ebc34a76e1113593
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 2aa3a13b79f60234fa01670a96895322, type: 2}
-  m_UseUCBPForAssetBundles: 0

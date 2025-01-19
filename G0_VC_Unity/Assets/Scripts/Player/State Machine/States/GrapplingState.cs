@@ -18,7 +18,7 @@ public class GrapplingState : BasePlayerState
     {
         base.InitializeState();
 
-        if (player.networkInfo._isOwner)
+        if (player.IsOwner)
         {
             player.EXTERIOR_grappleHand.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
         }
@@ -45,7 +45,7 @@ public class GrapplingState : BasePlayerState
         player.EXTERIOR_lr.positionCount = player.quality + 1;
         player.spring.SetVelocity(player.velocity);
 
-        if (!player.networkInfo._isOwner)
+        if (!player.IsOwner)
         {
             player.isGrappling = true;
             base.EnterState();
@@ -60,9 +60,9 @@ public class GrapplingState : BasePlayerState
 
         if (player.movingGrapplableLayers == (player.movingGrapplableLayers | (1 << hit.transform.gameObject.layer))) local_grapplePoint = hit.transform.gameObject.transform.InverseTransformPoint(hit.point);
         player.grapplePoint = hit.point;
-        Vector3 relativeVelocity = player.PlayerCamera.InverseTransformVector(player.rb.linearVelocity);
+        Vector3 relativeVelocity = player.PlayerCamera.InverseTransformVector(player.rb.velocity);
         if (relativeVelocity.z < 0) relativeVelocity.z = 0f;
-        player.rb.linearVelocity = player.PlayerCamera.rotation * relativeVelocity;
+        player.rb.velocity = player.PlayerCamera.rotation * relativeVelocity;
         player.joint = player.gameObject.AddComponent<SpringJoint>();
         player.joint.autoConfigureConnectedAnchor = false;
         player.joint.connectedAnchor = player.grapplePoint;
@@ -96,7 +96,7 @@ public class GrapplingState : BasePlayerState
     {
         
 
-        if (!player.networkInfo._isOwner)
+        if (!player.IsOwner)
         {
             player.EXTERIOR_grappleHand.transform.position = player.exterior_gunTip.position;
             player.EXTERIOR_grappleHand.SetActive(false);
@@ -136,11 +136,8 @@ public class GrapplingState : BasePlayerState
 
     public override void FixedUpdate()
     {
-
+        if (!player.IsOwner) return;
         base.FixedUpdate();
-
-        if (!player.networkInfo._isOwner) return;
-
         if (Vector3.Distance(player.rb.position, player.grapplePoint) > 0.25f)
         {
             //if (Vector3.Distance(player.position, grapplePoint) < joint.maxDistance - grappleSpeed * Time.deltaTime) joint.maxDistance = Vector3.Distance(player.position, grapplePoint);
@@ -157,7 +154,7 @@ public class GrapplingState : BasePlayerState
     {
         base.Update();
 
-        if (!player.networkInfo._isOwner) return;
+        if (!player.IsOwner) return;
 
         if (player.movingGrapplableLayers == (player.movingGrapplableLayers | (1 << hit.transform.gameObject.layer))) 
         {
@@ -181,7 +178,7 @@ public class GrapplingState : BasePlayerState
         player.spring.SetStrength(player.strength);
         player.spring.Update(Time.deltaTime);
 
-        if (player.networkInfo._isOwner)
+        if (player.IsOwner)
         {
 
 
@@ -192,9 +189,8 @@ public class GrapplingState : BasePlayerState
 
             ///NOTE: to optimize try using localPos and caching the converted gun tip so no need for calculation every frame. You have to use local pos so it works properly when reused over time tho
 
-            Vector3 convertedGunTip = player.FOVtranslate(player.viewport_gunTip, player.ViewportFOV, player.PlayerCamera.GetComponent<Camera>().fieldOfView);
 
-    /*        Camera cam = player.PlayerCamera.GetComponent<Camera>();
+            Camera cam = player.PlayerCamera.GetComponent<Camera>();
 
             float oldFOV = cam.fieldOfView;
 
@@ -204,15 +200,14 @@ public class GrapplingState : BasePlayerState
             Vector3 viewportPoint = cam.WorldToViewportPoint(player.viewport_gunTip.position);
 
             // Calculate the distance from the camera to the world point
-            ///////////////////////////////////////////////////////////float distance = Vector3.Distance(cam.transform.position, player.viewport_gunTip.position);
-            float distance = Vector3.Project(player.viewport_gunTip.position - cam.transform.position, cam.transform.forward).magnitude;
+            float distance = Vector3.Distance(cam.transform.position, player.viewport_gunTip.position);
 
             // Change the FOV of the camera to a hypothetical value
 
             cam.fieldOfView = oldFOV;
 
             // Convert the viewport point back to the world with the new FOV
-            Vector3 convertedGunTip = cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));*/
+            Vector3 convertedGunTip = cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
 
             /*            // Print the results
                         Debug.Log("Old world point: " + currentGrapplePosition);
@@ -266,16 +261,12 @@ public class GrapplingState : BasePlayerState
             Physics.Raycast(player.PlayerCamera.position, (player.grapplePoint - player.PlayerCamera.position), out hit, player.maxDistance, player.whatIsGrappleable);
 
 
-            if (Angle > player.PlayerCamera.GetComponent<Camera>().fieldOfView * (1 + player.lookAwayLeniency)) { Debug.Log("Too far look away break"); break; }
+            if (Angle > player.PlayerCamera.GetComponent<Camera>().fieldOfView * (1 + player.lookAwayLeniency)) break;
 
-            if (((player.grapplePoint - hit.point).magnitude >= 0.7f) && hit.collider != null) { Debug.Log(hit.collider.gameObject.name); break; }
+            if (((player.grapplePoint - hit.point).magnitude >= 0.7f) && hit.collider != null) { Debug.Log(player.grapplePoint - hit.point); break; }
 
 
-            if (player.Grapple.action.WasReleasedThisFrame()) 
-            {
-                Debug.Log("released Input break");
-                break;
-            }
+            if (player.Grapple.action.WasReleasedThisFrame()) break;
 
             yield return null;
         }

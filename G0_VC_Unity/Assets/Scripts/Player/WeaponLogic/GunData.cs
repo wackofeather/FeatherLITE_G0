@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class GunData : ScriptableObject
+public class GunData : WeaponData
 {
 
     [SerializeField] float maxAmmo_Inventory;

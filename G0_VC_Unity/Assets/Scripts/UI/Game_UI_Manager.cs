@@ -51,7 +51,35 @@ public class Game_UI_Manager : UI_Manager
         player.GetComponent<PlayerStateMachine>().extHealthBar.transform.LookAt(new Vector3(Game_GeneralManager.instance.runtime_playerObj.GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.x, player.extHealthBar.transform.position.y, Game_GeneralManager.instance.runtime_playerObj.GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.z));
     }
 
+    //WEAPONPICKUP
+    [SerializeField] Image WeaponPickUpImageObject;
+    public void UpdateWeaponPickUI(Sprite sprite)
+    {
+        if (sprite == null) WeaponPickUpImageObject.color = new Color(0, 0, 0, 0);
+        else
+        {
+            WeaponPickUpImageObject.sprite = sprite;
+            WeaponPickUpImageObject.color = new Color(1, 1, 1, 1);
+        }
+    }
 
+
+
+
+    //PLACEHOLDER LOADINGBAR
+    [SerializeField] TextMeshProUGUI WeaponPickUpCountdown;
+    public void SetCountdownText(float countDownNumber)
+    {
+        WeaponPickUpCountdown.SetAllDirty();
+        if (countDownNumber == 0)
+        {
+            float Test = -1;
+            WeaponPickUpCountdown.text = Test.ToString();
+            Debug.Log("CountdownStopped");
+        }
+        else WeaponPickUpCountdown.text = countDownNumber.ToString();
+        //WeaponPickUpCountdown.ForceMeshUpdate(true);
+    }
 
 
 
@@ -69,5 +97,5 @@ public class Game_UI_Manager : UI_Manager
         }
     }
 
-    //s
+    //shid
 }

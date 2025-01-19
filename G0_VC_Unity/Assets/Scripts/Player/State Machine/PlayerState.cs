@@ -27,15 +27,17 @@ public class BasePlayerState
     }
     public virtual void Update()
     {
-
+        //if (!player.networkInfo._isOwner) Debug.Log(player.inventory.GetCurrentWeapon());
         player.player_EXT_ARM_anim_controller.SetFloat("Y_Look", player.updown_Blendconstant);
         player.inventory.EXT_GetCurrentWeaponAnimator().SetFloat("Y_Look", player.updown_Blendconstant);
 
-        if (!player.IsOwner)
+        if (!player.networkInfo._isOwner)
         {
-
+            //player.playerNetwork.ConsumeState();
             
             if (player.internal_CurrentState != key) player.ChangeState(player.stateDictionary[player.internal_CurrentState]);
+
+            if (player.inventory.GetCurrentWeapon() != null) { player.inventory.GetCurrentWeapon().Weapon_Update(); }
             return;
         }
 
@@ -58,16 +60,41 @@ public class BasePlayerState
         player.updown_Blendconstant = (player.xRotation + 90) / 180;
 
         if (player.melee.action.triggered && player.CurrentPlayerState != player.MeleeState) player.ChangeState(player.MeleeState);
+
+        //player.playerNetwork.TransmitState();
+
+        if (player.inventory.GetCurrentWeapon() != null) { player.inventory.GetCurrentWeapon().Weapon_Update(); }
     }
     public virtual void FixedUpdate()
     {
+        if (player.playerNetwork != null)
+        {
+            if (!player.networkInfo._isOwner)
+            {
+                player.playerNetwork.FixedConsumeState();
+            }
+        }
 
     }
 
     public virtual void LateUpdate()
     {
-        if (!player.IsOwner) return;
+        if (player.playerNetwork != null)
+        {
+            if (!player.networkInfo._isOwner)
+            {
+                player.playerNetwork.ConsumeState();
+            }
+            else player.playerNetwork.TransmitState();
+        }
+        if (!player.networkInfo._isOwner)
+        {
+            //Debug.LogAssertion("hoorah");
+            Game_UI_Manager.instance.UpdateDummyHealth(player);
+            return;
+        }
         Game_UI_Manager.instance.UpdateGrappleIndicator(player.CanGrapple());
+        Game_UI_Manager.instance.UpdateHealth(player.health);
     }
 
     public virtual void AnimationTriggerEvent()
@@ -83,7 +110,7 @@ public class BasePlayerState
             player.inventory.EXT_GetCurrentWeaponAnimator().SetBool("Melee", player.isMelee);
         }
         
-        if (!player.IsOwner) return;
+        if (!player.networkInfo._isOwner) return;
 
         player.player_VP_ARM_anim_controller.SetBool("Grappling", player.isGrappling);
         //player.player_anim_controller.SetBool("Scoping", player.isScoping);
@@ -115,6 +142,11 @@ public class BasePlayerState
     public virtual void OnCollisionExit(Collision col) 
     { 
     
+    }
+
+    public virtual void OnBumpPlayer(Collider col)
+    {
+
     }
 
 }

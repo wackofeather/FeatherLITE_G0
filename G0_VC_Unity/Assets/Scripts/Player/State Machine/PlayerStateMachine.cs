@@ -7,15 +7,24 @@ using Unity.VisualScripting;
 using Unity.Netcode;
 
 using UnityEngine.Rendering.Universal;
-using UnityEngine.Experimental.Rendering.Universal;
 
-public class PlayerStateMachine : NetworkBehaviour
+using UnityEngine.VFX;
+using Unity.Networking.Transport;
+using Unity.Netcode.Transports.UTP;
+using System.Net.NetworkInformation;
+using static PlayerNetwork;
+using Steamworks;
+
+public class PlayerStateMachine : MonoBehaviour
 {
+
+
     [System.NonSerialized] public PlayerStateMachine StateMachine;
     [System.NonSerialized] public RegularState RegularState;
     [System.NonSerialized] public GrapplingState GrapplingState;
     [System.NonSerialized] public MeleeState MeleeState;
     [System.NonSerialized] public WeaponSwitchState WeaponSwitchState;
+    [System.NonSerialized] public DeathState DeathState;
 
     public Dictionary<float, BasePlayerState> stateDictionary = new Dictionary<float, BasePlayerState>();
 
@@ -34,6 +43,7 @@ public class PlayerStateMachine : NetworkBehaviour
     public InputActionReference Unpause;
     public InputActionReference melee;
     public InputActionReference interact;
+    public InputActionReference copyCode;
 
     public Transform Rotatables;
     public Transform PlayerCamera;
@@ -147,6 +157,7 @@ public class PlayerStateMachine : NetworkBehaviour
     public AnimationCurve meleeFOV_curve;
     [Range(0,1)] public float meleeWeight_Input;
     [Range(0, 1)] public float meleeWeight_Velocity;
+    public Collider BumpCollider;
 
 
     [Header("Animation")]
@@ -183,7 +194,24 @@ public class PlayerStateMachine : NetworkBehaviour
     [System.NonSerialized] public WeaponClass weapon_pickingUp;
 
 
+    [Header("SPECIAL UI")]
+    public VisualEffect windEffect;
+    public float windSpawnRate;
 
+
+    
+    [HideInInspector] public PlayerNetwork playerNetwork;
+
+
+    [Header("Health")]
+    public int health;
+    public GameObject DamageCollider;
+    public Transform ExtHealthBarLocation;
+    [HideInInspector] public GameObject extHealthBar;
+
+    public NetworkInfo networkInfo;
+
+    float deleteTimer = 5;
     
 
     public RaycastHit GrappleCheck()
@@ -241,16 +269,46 @@ public class PlayerStateMachine : NetworkBehaviour
 
     private void Start()
     {
-
+        if (networkInfo._isOwner) StartCoroutine(Testcoroutine());
     }
 
-    public override void OnNetworkSpawn()
+    IEnumerator Testcoroutine()
     {
-        base.OnNetworkSpawn();
+        //yield return new WaitForSeconds(1);
 
+        //Game_GeneralManager.instance.AddPlayerServerRPC(NetworkObject.NetworkObjectId, NetworkObject);
 
+        yield break;
+    }
 
-        if (!IsOwner)
+    public void Player_OnNetworkSpawn(bool reconnecting)
+    {
+
+        Debug.LogWarning("kumalala" + networkInfo._isOwner + "  " + reconnecting);
+        if (reconnecting)
+        {
+            if (!networkInfo._isOwner)
+            {
+                Debug.LogWarning("yababadoo");
+                //Game_UI_Manager.instance.AddHealthBarToPlayer(this);
+            }
+            else
+            {
+                foreach (InputActionMap map in move.asset.actionMaps)
+                {
+                    map.Enable();
+                }
+
+                /*GetComponent<PlayerInput>().enabled = false;
+                GetComponent<PlayerInput>().enabled = true;*/
+            }
+            return;
+        }
+        //base.OnNetworkSpawn();
+
+        //Debug.LogWarning("ahsgajsgdsbdjdfififofofoofofofofofof" + networkInfo._isOwner);
+
+        if (!networkInfo._isOwner)
         {
             foreach (GameObject t in OwnerOnlyObjects) t.SetActive(false);
             foreach (Transform child in Viewport) child.gameObject.SetActive(false);
@@ -258,7 +316,9 @@ public class PlayerStateMachine : NetworkBehaviour
             //Debug.Log("bruhsushsh");
 
 
-            gameObject.layer = LayerMask.NameToLayer(EnemyLayer);
+            //gameObject.layer = LayerMask.NameToLayer(EnemyLayer);
+
+
 
         }
         else
@@ -267,10 +327,7 @@ public class PlayerStateMachine : NetworkBehaviour
             //foreach (Transform child in Exterior) child.gameObject.SetActive(false);
            // Debug.Log("host joined");
             Exterior.GetComponent<ExteriorShadowSwitch>().ShadowsOnly(true);
-
-
-
-
+            //StartCoroutine(Testcoroutine());
 
         }
 
@@ -280,10 +337,12 @@ public class PlayerStateMachine : NetworkBehaviour
         GrapplingState = new GrapplingState(this);
         MeleeState = new MeleeState(this);
         WeaponSwitchState = new WeaponSwitchState(this);
+        DeathState = new DeathState(this);
         stateDictionary.Add(RegularState.key, RegularState);
         stateDictionary.Add(GrapplingState.key, GrapplingState);
         stateDictionary.Add(MeleeState.key, MeleeState);
         stateDictionary.Add(WeaponSwitchState.key, WeaponSwitchState);
+        stateDictionary.Add(DeathState.key, DeathState);
         
         //RegularState.Start_Init();
         //GrapplingState.Start_Init();
@@ -295,11 +354,12 @@ public class PlayerStateMachine : NetworkBehaviour
         Initialize(RegularState);
 
 
-        if (!IsOwner) Debug.Log("initialized states");
+        if (!networkInfo._isOwner) Debug.Log("initialized states");
 
-        if (!IsOwner)
+        if (!networkInfo._isOwner)
         {
             VIEWPORT_lr.gameObject.SetActive(false);
+            Game_UI_Manager.instance.AddHealthBarToPlayer(this);
             return;
         }
 
@@ -318,6 +378,7 @@ public class PlayerStateMachine : NetworkBehaviour
 
     private void Update()
     {
+        //Debug.Log(move.action.ReadValue<Vector3>());
         //if (internal_CurrentState == 0) Debug.Log("wahahahahahahahah");
         // if (!IsOwner) Debug.Log(CurrentPlayerState == null);
         CurrentPlayerState.Update();
@@ -342,7 +403,30 @@ public class PlayerStateMachine : NetworkBehaviour
             if (!interact.action.IsPressed()) hasPickedUpInteractButton = true;
         }
 
+        if (copyCode.action.triggered)
+        {
+            GUIUtility.systemCopyBuffer = SteamLobbyManager.currentLobby.Id.ToString();
+        }
 
+        if (playerNetwork != null)
+        {
+            deleteTimer = 5;
+        }
+        else
+        {
+            deleteTimer -= Time.deltaTime;
+        }
+        if (deleteTimer < 0)
+        {
+            if (Game_GeneralManager.instance.reconnecting) return;
+            Player_OnNetworkDespawn();
+            Player_OnDisconnect();
+
+            if (networkInfo._isOwner) SteamLobbyManager.instance.RevertToMenu();
+
+            Destroy(this.gameObject);
+            
+        }
     }
 
     private void FixedUpdate()
@@ -424,5 +508,115 @@ public class PlayerStateMachine : NetworkBehaviour
         
         if (raycasthit.collider == null) return false;
         return (raycasthit.collider.gameObject == obj);
+    }
+
+    public Vector3 FOVtranslate(Transform obj, float medianFOV, float endFOV)
+    {
+        Camera cam = PlayerCamera.GetComponent<Camera>();
+
+        
+
+        cam.fieldOfView = medianFOV;
+
+        // Project the world point to the viewport
+        Vector3 viewportPoint = cam.WorldToViewportPoint(obj.position);
+
+        // Calculate the distance from the camera to the world point
+        ///////////////////////////////////////////////////////////float distance = Vector3.Distance(cam.transform.position, player.viewport_gunTip.position);
+        float distance = Vector3.Project(obj.position - cam.transform.position, cam.transform.forward).magnitude;
+
+        // Change the FOV of the camera to a hypothetical value
+
+        cam.fieldOfView = endFOV;
+
+        // Convert the viewport point back to the world with the new FOV
+        return cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
+    }
+
+/*    public void OnClientDisconnect()
+    {
+        Debug.Log("client disconnected");
+    }*/
+
+    public void Player_OnNetworkDespawn()
+    {
+
+       // if (IsOwner) Game_GeneralManager.instance.RemovePlayerServerRPC(NetworkObject.NetworkObjectId, NetworkObject);
+        Debug.LogAssertion("closingnetwork");
+
+        //Destroy(extHealthBar);
+
+        //base.OnNetworkDespawn();
+
+        //SteamLobbyManager.instance.LeaveLobby();
+
+
+
+    }
+
+    public void Player_OnDisconnect()
+    {
+        Destroy(extHealthBar);
+    }
+
+
+
+
+
+    /* public void SetHealth(int _health)
+     {
+         health = _health;
+     }
+
+     [Rpc(SendTo.SpecifiedInParams)]
+     public void SetHealthRPC(int _health, RpcParams _params)
+     {
+         health = _health;
+     }
+
+     public void Damage(int damage)
+     {
+ *//*        if (health < 0)
+         {
+             SendDamageOwnerRPC(damage, OwnerClientId, true);
+
+             return;
+         }*//*
+         health -= damage;
+         if (health < 0)
+         {
+             KillPlayerRPC();
+         }
+         SendDamageOwnerRPC(damage, OwnerClientId);
+     }
+
+     *//*    [Rpc(SendTo.NotMe)]
+         void SendDamageRPC(int damage)
+         {
+             health -= damage;
+         }*//*
+
+     [Rpc(SendTo.Owner)]
+     void SendDamageOwnerRPC(int damage, ulong damagerID)
+     {
+
+         health -= damage;
+         SetHealthRPC(health, RpcTarget.Single(damagerID, RpcTargetUse.Temp));
+         ulong[] IDS = new ulong[2];
+         IDS[0] = damagerID;
+         IDS[1] = OwnerClientId;
+         RelayDamageRPC(damage, RpcTarget.Not(IDS, RpcTargetUse.Temp));
+     }
+
+     [Rpc(SendTo.SpecifiedInParams)]
+     void RelayDamageRPC(int damage, RpcParams _params)
+     {
+         health -= damage;
+     }*/
+
+    [Rpc(SendTo.Owner)]
+    public void KillPlayerRPC()
+    {
+        if (CurrentPlayerState != DeathState) Game_GeneralManager.instance.Kill(this);
     }
 }

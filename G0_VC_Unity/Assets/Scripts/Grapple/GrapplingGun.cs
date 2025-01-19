@@ -144,9 +144,9 @@ public class GrapplingGun : NetworkBehaviour {
         if (CanGrapple(out hit)) 
         {
             grapplePoint = hit.point;
-            Vector3 relativeVelocity = Playercamera.InverseTransformVector(player.velocity);
+            Vector3 relativeVelocity = Playercamera.InverseTransformVector(player.linearVelocity);
             if (relativeVelocity.z < 0) relativeVelocity.z = 0f;
-            player.velocity = Playercamera.rotation * relativeVelocity;
+            player.linearVelocity = Playercamera.rotation * relativeVelocity;
             joint = player.gameObject.AddComponent<SpringJoint>();
             joint.autoConfigureConnectedAnchor = false;
             joint.connectedAnchor = grapplePoint;

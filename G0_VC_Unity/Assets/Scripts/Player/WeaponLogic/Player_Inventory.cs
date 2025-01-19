@@ -6,7 +6,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player_Inventory : NetworkBehaviour
+public class Player_Inventory : MonoBehaviour
 {
     [SerializeField] WeaponLookup WeaponLookup;
     [SerializeField] int MaxWeapons;
@@ -44,13 +44,13 @@ public class Player_Inventory : NetworkBehaviour
 
     Vector3 OwnerGunTip;
 
-    public override void OnNetworkSpawn()
+    public void Start()
     {
-        base.OnNetworkSpawn();
+
 
         EXT_IntitializeWeapons(EXT_GunParent);
 
-        if (IsOwner)
+        if (player.networkInfo._isOwner)
         {
             VP_IntitializeWeapons(VP_GunParent);
             
@@ -95,10 +95,7 @@ public class Player_Inventory : NetworkBehaviour
         //  currentWeapon = Weapon_Inventory[0];
         //ChangeCurrentWeapon_INDEX(0);
     }
-    private void Start()
-    {
 
-    }
     // Start is called before the first frame update
     void Awake()
     {
@@ -109,7 +106,7 @@ public class Player_Inventory : NetworkBehaviour
     private void Update()
     {
        // Debug.Log(IsOwner);
-        if (!IsOwner)
+        if (!player.networkInfo._isOwner)
         {
             if (internal_CurrentWeapon == 0) return;
             if (GetCurrentWeapon() == null)
@@ -210,7 +207,7 @@ public class Player_Inventory : NetworkBehaviour
         }
 
         currentWeapon = weapon;
-        if (IsOwner)
+        if (player.networkInfo._isOwner)
         {
             VP_currentAnimator = VP_weapon_Dict[currentWeapon.key].GetComponentInChildren<Animator>();
             VP_weapon_Dict[currentWeapon.key].SetActive(true);
@@ -231,11 +228,11 @@ public class Player_Inventory : NetworkBehaviour
         foreach (WeaponClass weaponclass in WeaponLookup.weaponLookup)
         {
             //Debug.Log(weaponclass.key);
-            GameObject gun = Instantiate(weaponclass.weaponData.weaponMesh, parent.transform);
+            GameObject gun = Instantiate(weaponclass.weaponData.Proxy_Prefab, parent.transform);
             gun.transform.parent = parent.transform;
             gun.transform.localPosition = Vector3.zero;
             SetLayerWITHChildren(gun.transform, viewport_Layer);
-            Animator weapon_animator = gun.AddComponent<Animator>();
+            Animator weapon_animator = gun.GetComponent<WeaponProxy>().animator_Object.AddComponent<Animator>();
             //weapon_animator = player.player_VP_GUN_anim_template;
             weapon_animator.runtimeAnimatorController = weaponclass.weaponData.VM_GUN_animatorOverrideController;
             gun.SetActive(false);
@@ -248,11 +245,11 @@ public class Player_Inventory : NetworkBehaviour
         foreach (WeaponClass weaponclass in WeaponLookup.weaponLookup)
         {
             //Debug.Log(weaponclass.key);
-            GameObject gun = Instantiate(weaponclass.weaponData.weaponMesh);
+            GameObject gun = Instantiate(weaponclass.weaponData.Proxy_Prefab);
             gun.transform.parent = parent.transform;
             gun.transform.localPosition = Vector3.zero;
             SetLayerWITHChildren(gun.transform, exterior_layer);
-            Animator weapon_animator = gun.AddComponent<Animator>();
+            Animator weapon_animator = gun.GetComponent<WeaponProxy>().animator_Object.AddComponent<Animator>();
             //weapon_animator = player.player_VP_GUN_anim_template;
             weapon_animator.runtimeAnimatorController = weaponclass.weaponData.EXT_GUN_animatorOverrideController;
             gun.SetActive(false);
@@ -287,6 +284,16 @@ public class Player_Inventory : NetworkBehaviour
         return EXT_currentAnimator;
     }
 
+    public GameObject VP_GetProxy()
+    {
+        return VP_weapon_Dict[currentWeapon.key];
+    }
+
+    public GameObject EXT_GetProxy()
+    {
+        return EXT_weapon_Dict[currentWeapon.key];
+    }
+
     void SetLayerWITHChildren(Transform root, string layer)
     {
         var children = root.GetComponentsInChildren<Transform>(includeInactive: true);
@@ -300,7 +307,7 @@ public class Player_Inventory : NetworkBehaviour
 
     public Vector3 GunTip()
     {
-        if (IsOwner)
+        if (player.networkInfo._isOwner)
         {
             return OwnerGunTip;
         }

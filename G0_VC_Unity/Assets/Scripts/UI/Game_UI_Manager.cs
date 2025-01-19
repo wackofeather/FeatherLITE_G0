@@ -3,62 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
+using Unity.Netcode;
+
 public class Game_UI_Manager : UI_Manager
 {
+    [SerializeField] Canvas ScreenCanvas;
+    [SerializeField] Canvas WorldCanvas;
+
+    [SerializeField] Image GrappleIndicator;
+    [SerializeField] Color NoGrappleColor;
+    [SerializeField] Color GrappleColor;
 
     new public static Game_UI_Manager instance { get; set; }
 
 
-
+    
 
 
 
 
     //GRAPPLE_INDICATOR
-    [SerializeField] Image GrappleIndicator;
-    [SerializeField] Color NoGrappleColor;
-    [SerializeField] Color GrappleColor;
-
     public void UpdateGrappleIndicator(bool canGrapple)
     {
         if (canGrapple) GrappleIndicator.color = GrappleColor;
         else GrappleIndicator.color = NoGrappleColor;
     }
 
-    //WEAPONPICKUP
-    [SerializeField] Image WeaponPickUpImageObject;
-    public void UpdateWeaponPickUI(Sprite sprite)
+    //HEALTH
+
+    [SerializeField] GameObject TextBarPrefab;
+    [SerializeField] TextMeshProUGUI HealthText;
+    public void UpdateHealth(float _health)
     {
-        if (sprite == null) WeaponPickUpImageObject.color = new Color(0, 0, 0, 0);
-        else
-        {
-            WeaponPickUpImageObject.sprite = sprite;
-            WeaponPickUpImageObject.color = new Color(1, 1, 1, 1);
-        }
+        HealthText.text = _health.ToString();
     }
 
-
-
-
-    //PLACEHOLDER LOADINGBAR
-    [SerializeField] TextMeshProUGUI WeaponPickUpCountdown;
-    public void SetCountdownText(float countDownNumber)
+    public void AddHealthBarToPlayer(PlayerStateMachine player)
     {
-        WeaponPickUpCountdown.SetAllDirty();
-        if (countDownNumber == 0)
-        {
-            float Test = -1;
-            WeaponPickUpCountdown.text = Test.ToString();
-            Debug.Log("CountdownStopped");
-        } 
-        else WeaponPickUpCountdown.text = countDownNumber.ToString();
-        //WeaponPickUpCountdown.ForceMeshUpdate(true);
+        
+        player.extHealthBar = Instantiate(TextBarPrefab, WorldCanvas.transform);
     }
-
-
-
-
-
+    public void UpdateDummyHealth(PlayerStateMachine player)
+    {
+        player.extHealthBar.GetComponentInChildren<TextMeshProUGUI>().text = player.health.ToString();
+        player.extHealthBar.transform.position = player.ExtHealthBarLocation.position;
+        player.GetComponent<PlayerStateMachine>().extHealthBar.transform.LookAt(new Vector3(Game_GeneralManager.instance.runtime_playerObj.GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.x, player.extHealthBar.transform.position.y, Game_GeneralManager.instance.runtime_playerObj.GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.z));
+    }
 
 
 
@@ -77,4 +68,6 @@ public class Game_UI_Manager : UI_Manager
             instance = this;
         }
     }
+
+    //s
 }

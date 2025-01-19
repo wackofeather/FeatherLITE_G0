@@ -18,7 +18,7 @@ public class WeaponSwitchState : BasePlayerState
         base.EnterState();
         player.isInteracting = true;
         timer = player.weapon_pickingUp.weaponData.pickUpTime;
-        ogVelocity = player.rb.velocity;
+        ogVelocity = player.rb.linearVelocity;
     }
 
     public override void AnimationTriggerEvent()
@@ -61,7 +61,9 @@ public class WeaponSwitchState : BasePlayerState
 
     public override void FixedUpdate()
     {
-        player.rb.AddForce(-player.rb.velocity * player.slowDownRate);
+        base.FixedUpdate();
+
+        player.rb.AddForce(-player.rb.linearVelocity * player.slowDownRate);
     }
 
     public override void LateUpdate()

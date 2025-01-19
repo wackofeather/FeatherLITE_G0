@@ -454,8 +454,9 @@ public class SelectiveScreenShader : ScriptableRendererFeature
             using (var builder = renderGraph.AddRasterRenderPass<PassData>(passName, out var passData))
             {
                 UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
-                //passData.cameraTexture = resourceData.cameraColor;
+                passData.cameraTexture = resourceData.activeColorTexture;
 
+                builder.AllowPassCulling(false);
                 //builder.AllowGlobalStateModification(true);
 
                 passData.screenMaterial = m_screenMaterial;
@@ -496,19 +497,22 @@ public class SelectiveScreenShader : ScriptableRendererFeature
                 }*/
 
 
+                builder.UseTexture(passData.cameraTexture);
+
+               // resourceData.cameraColor = passData.colorTexture;
                 builder.UseTexture(passData.colorTexture);
 
-               // builder.UseTexture(passData.cameraTexture);
-
                 //////resourceData.cameraColor = passData.cameraTexture;
+                //resourceData.cameraColor = passData.cameraTexture;
 
-                
 
-/*                RenderGraphUtils.BlitMaterialParameters para = new RenderGraphUtils.BlitMaterialParameters(passData.colorTexture, destination, m_screenMaterial, 0);
+                /*                RenderGraphUtils.BlitMaterialParameters para = new RenderGraphUtils.BlitMaterialParameters(passData.colorTexture, destination, m_screenMaterial, 0);
 
-                renderGraph.AddBlitPass(para, passName: m_PassName);*/
+                                renderGraph.AddBlitPass(para, passName: m_PassName);*/
 
                 //resourceData.cameraColor = destination;
+
+                Debug.LogWarning("meme");
 
                 builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
                 // builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
@@ -653,13 +657,13 @@ public class SelectiveScreenShader : ScriptableRendererFeature
         }
         static void ExecutePass(PassData data, RasterGraphContext context)
         {
+            //s
+
+            data.screenMaterial.SetTexture("_Test", data.colorTexture);
+            //Debug.Log(data.colorTexture);
+            Blitter.BlitTexture(context.cmd, data.cameraTexture, new Vector4(1, 1, 0, 0), data.screenMaterial, 0);
 
             
-
-            //Debug.Log(data.colorTexture);
-            Blitter.BlitTexture(context.cmd, data.colorTexture, new Vector4(1, 1, 0, 0), data.screenMaterial, 0);
-
-            //data.screenMaterial.SetTexture("_Test", data.cameraTexture);
         }
     }
 

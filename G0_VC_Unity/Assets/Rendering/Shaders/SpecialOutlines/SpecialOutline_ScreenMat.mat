@@ -59,6 +59,7 @@ Material:
     m_Floats:
     - _OVERLAY: 0
     - _Thickness: 1.54
+    - _testFloat: 0
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

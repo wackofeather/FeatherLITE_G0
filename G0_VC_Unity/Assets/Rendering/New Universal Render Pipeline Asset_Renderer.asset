@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: SelectiveScreenShader
   m_EditorClassIdentifier: 
   m_Active: 0
-  selectiveMaskList: []
+  selectiveMask:
+    serializedVersion: 2
+    m_Bits: 8
   renderFOV: 60
   uniqueFeatureTag: 1
   selective_injectionPoint: 550
   shader_injectionPoint: 600
   screen_material: {fileID: 2100000, guid: 80f9df04415a9f448910938dab0b012e, type: 2}
   object_material: {fileID: 2100000, guid: 3b49b105dbb296c4f9045eec0cc402f3, type: 2}
-  additive_screenMaterial: {fileID: 0}
+  testMaterial: {fileID: -876546973899608171, guid: 2fae032cb6d40734c84ec7f829baef2b, type: 3}
 --- !u!114 &-6692203459962225849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,7 +120,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: RenderPhysicalUITransparent
-    Event: 300
+    Event: 1000
     filterSettings:
       RenderQueueType: 1
       LayerMask:
@@ -272,10 +274,10 @@ MonoBehaviour:
   m_AssetVersion: 2
   m_OpaqueLayerMask:
     serializedVersion: 2
-    m_Bits: 5047
+    m_Bits: 951
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 5047
+    m_Bits: 951
   m_DefaultStencilState:
     overrideStencilState: 0
     stencilReference: 0
@@ -388,18 +390,16 @@ MonoBehaviour:
   m_Name: SelectiveScreenShader
   m_EditorClassIdentifier: 
   m_Active: 1
-  selectiveMaskList:
-  - serializedVersion: 2
+  selectiveMask:
+    serializedVersion: 2
     m_Bits: 64
-  - serializedVersion: 2
-    m_Bits: 8
   renderFOV: 40
   uniqueFeatureTag: 0
-  selective_injectionPoint: 550
-  shader_injectionPoint: 600
+  selective_injectionPoint: 300
+  shader_injectionPoint: 350
   screen_material: {fileID: 2100000, guid: 80f9df04415a9f448910938dab0b012e, type: 2}
   object_material: {fileID: 2100000, guid: 3b49b105dbb296c4f9045eec0cc402f3, type: 2}
-  additive_screenMaterial: {fileID: 0}
+  testMaterial: {fileID: -876546973899608171, guid: 2fae032cb6d40734c84ec7f829baef2b, type: 3}
 --- !u!114 &4824327859454418076
 MonoBehaviour:
   m_ObjectHideFlags: 0

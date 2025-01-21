@@ -133,13 +133,13 @@ public class SelectiveScreenShader : ScriptableRendererFeature
             }
 
             // Clear the render target to black
-            //context.cmd.ClearRenderTarget(true, true, Color.clear);
+            context.cmd.ClearRenderTarget(true, true, Color.clear);
 
             // Draw the objects in the list
             //context.cmd.DrawRendererList(data.rendererListHandle);
             context.cmd.DrawRendererList(data.rendererListHandle);
 
-            if (data.uniquepassTag == 0) data.screenMaterial.SetTexture("_Test", data.sourceTexture);
+            //if (data.uniquepassTag == 0) data.screenMaterial.SetTexture("_Test", data.sourceTexture);
 
             if (data.fov != 0)
             {
@@ -429,15 +429,15 @@ public class SelectiveScreenShader : ScriptableRendererFeature
             requiresIntermediateTexture = true;
         }
 
-/*        public class CustomData : ContextItem
-        {
-            public TextureHandle crossTexture;
+        /*        public class CustomData : ContextItem
+                {
+                    public TextureHandle crossTexture;
 
-            public override void Reset()
-            {
-                crossTexture = TextureHandle.nullHandle;
-            }
-        }*/
+                    public override void Reset()
+                    {
+                        crossTexture = TextureHandle.nullHandle;
+                    }
+                }*/
 
         class PassData
         {
@@ -447,95 +447,107 @@ public class SelectiveScreenShader : ScriptableRendererFeature
         }
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
+            //x
+            
 
-            m_PassName = "SpecialOutlinePass" + uniquepassTag.ToString();
+            //m_PassName = "SpecialOutlinePass" + uniquepassTag.ToString();
 
-
-            using (var builder = renderGraph.AddRasterRenderPass<PassData>(passName, out var passData))
-            {
-                UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
-                passData.cameraTexture = resourceData.activeColorTexture;
-
-                builder.AllowPassCulling(false);
-                //builder.AllowGlobalStateModification(true);
-
-                passData.screenMaterial = m_screenMaterial;
-                //
+            using var builder = renderGraph.AddRasterRenderPass( passName, out PassData passData );
+           
 
 
 
 
-/*
-                var destinationDesc = renderGraph.GetTextureDesc(passData.cameraTexture);
 
-                destinationDesc.clearBuffer = false;
+            UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
+            passData.cameraTexture = resourceData.activeColorTexture;
 
+            builder.AllowPassCulling(false);
+            //builder.AllowGlobalStateModification(true);
 
-
-                //TextureHandle test = renderGraph.CreateTexture(destinationDesc);
-                TextureHandle destination = renderGraph.CreateTexture(destinationDesc);*/
-
-                var customData = frameData.Get<SelectiveRenderPass.CustomData>();
-
-                //Debug.Log();
-
-                //TextureHandle color_Texture;
-                if (customData.textureHandles.ContainsKey(uniquepassTag)) passData.colorTexture = customData.textureHandles[uniquepassTag];//renderGraph.CreateTexture(customData.textureHandles[uniquepassTag].GetDescriptor(renderGraph));
-                else return;
-
-/*                if (uniquepassTag == 1) Debug.Log("blahashsjajaks");
-                if (uniquepassTag == 0)
-                {
-                    for (int i = 0; i < customData.textureHandles.Count; i++)
-                    {
-
-                        if (customData.textureHandles.ContainsKey(customData.textureHandles.Keys.ToList()[i])) customData.textureHandles.Remove(customData.textureHandles.Keys.ToList()[i]);
-                        //Debug.Log((Texture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]]);//(RenderTexture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]]);
-                        //if ((RenderTexture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]] == (RenderTexture)TextureHandle.nullHandle) customData.textureHandles.Remove(customData.textureHandles.Keys.ToList()[i]);
-                        //customData.textureHandles[] = TextureHandle.nullHandle;
-                    }
-                }*/
+            passData.screenMaterial = m_screenMaterial;
+            //
 
 
-                builder.UseTexture(passData.cameraTexture);
-
-               // resourceData.cameraColor = passData.colorTexture;
-                builder.UseTexture(passData.colorTexture);
-
-                //////resourceData.cameraColor = passData.cameraTexture;
-                //resourceData.cameraColor = passData.cameraTexture;
 
 
-                /*                RenderGraphUtils.BlitMaterialParameters para = new RenderGraphUtils.BlitMaterialParameters(passData.colorTexture, destination, m_screenMaterial, 0);
+            /*
+                            var destinationDesc = renderGraph.GetTextureDesc(passData.cameraTexture);
 
-                                renderGraph.AddBlitPass(para, passName: m_PassName);*/
+                            destinationDesc.clearBuffer = false;
 
-                //resourceData.cameraColor = destination;
 
-                Debug.LogWarning("meme");
 
-                builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
+                            //TextureHandle test = renderGraph.CreateTexture(destinationDesc);
+                            TextureHandle destination = renderGraph.CreateTexture(destinationDesc);*/
+
+            var customData = frameData.Get<SelectiveRenderPass.CustomData>();
+
+            //Debug.Log();
+
+            //TextureHandle color_Texture;
+            if (customData.textureHandles.ContainsKey(uniquepassTag)) passData.colorTexture = customData.textureHandles[uniquepassTag];//renderGraph.CreateTexture(customData.textureHandles[uniquepassTag].GetDescriptor(renderGraph));
+            else return;
+
+
+            builder.UseTexture(passData.cameraTexture);
+
+            // resourceData.cameraColor = passData.colorTexture;
+            builder.UseTexture(passData.colorTexture);
+
+
+            //resourceData.cameraColor = passData.colorTexture;
+            /*                if (uniquepassTag == 1) Debug.Log("blahashsjajaks");
+                            if (uniquepassTag == 0)
+                            {
+                                for (int i = 0; i < customData.textureHandles.Count; i++)
+                                {
+
+                                    if (customData.textureHandles.ContainsKey(customData.textureHandles.Keys.ToList()[i])) customData.textureHandles.Remove(customData.textureHandles.Keys.ToList()[i]);
+                                    //Debug.Log((Texture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]]);//(RenderTexture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]]);
+                                    //if ((RenderTexture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]] == (RenderTexture)TextureHandle.nullHandle) customData.textureHandles.Remove(customData.textureHandles.Keys.ToList()[i]);
+                                    //customData.textureHandles[] = TextureHandle.nullHandle;
+                                }
+                            }*/
+            //RenderTexture texture = new RenderTexture(passData.colorTexture);
+
+
+            //////resourceData.cameraColor = passData.cameraTexture;
+            //resourceData.cameraColor = passData.cameraTexture;
+
+
+            /*                RenderGraphUtils.BlitMaterialParameters para = new RenderGraphUtils.BlitMaterialParameters(passData.colorTexture, destination, m_screenMaterial, 0);
+
+                            renderGraph.AddBlitPass(para, passName: m_PassName);*/
+
+            //resourceData.cameraColor = passData.colorTexture;
+
+            //Debug.LogWarning((new RenderTexture(passData.colorTexture)).height);
+
+            //resourceData.cameraColor = passData.cameraTexture;
+
+            builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
                 // builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
 
 
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-              // return;
-
             
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // return;
+
+
             /*            var resourceData = frameData.Get<UniversalResourceData>();
 
 
@@ -567,103 +579,137 @@ public class SelectiveScreenShader : ScriptableRendererFeature
             //{
 
 
-                //builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
+            //builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
+
+
+            /* return; 
+             if (resourceData.isActiveTargetBackBuffer)
+             {
+                 Debug.LogAssertion("can't use backbuffer as texture input");
+                 return;
+             }
+
+             var customData = frameData.Get<SelectiveRenderPass.CustomData>();
+
+             TextureHandle color_Texture;
+             //TextureHandle color_Texture = customData.crossTexture;
+             if (customData.textureHandles.ContainsKey(uniquepassTag)) color_Texture = customData.textureHandles[uniquepassTag];
+             else return;
+             if (uniquepassTag == 1) Debug.Log("blahashsjajaks");
+             if (uniquepassTag == 0)
+             {
+                 for (int i = 0; i < customData.textureHandles.Count; i++)
+                 {
+
+                     if (customData.textureHandles.ContainsKey(customData.textureHandles.Keys.ToList()[i])) customData.textureHandles.Remove(customData.textureHandles.Keys.ToList()[i]);
+                     //Debug.Log((Texture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]]);//(RenderTexture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]]);
+                     //if ((RenderTexture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]] == (RenderTexture)TextureHandle.nullHandle) customData.textureHandles.Remove(customData.textureHandles.Keys.ToList()[i]);
+                     //customData.textureHandles[] = TextureHandle.nullHandle;
+                 }
+             }
+
+             //m_screenMaterial.SetTexture("_Test", color_Texture);
+
+             var source = resourceData.activeColorTexture;
+
+             var destinationDesc = renderGraph.GetTextureDesc(source);
+
+             destinationDesc.clearBuffer = false;
+
+
+
+             //TextureHandle test = renderGraph.CreateTexture(destinationDesc);
+             TextureHandle destination = renderGraph.CreateTexture(destinationDesc);
+
+
+ *//*
+             var textureDesc = resourceData.cameraDepthTexture.GetDescriptor(renderGraph);
+
+             textureDesc.msaaSamples = MSAASamples.None;
+             textureDesc.depthBufferBits = 0;
+             // Populate passData with the data needed by the rendering function
+             // of the render pass.
+             // Use the camera's active color texture
+             // as the source texture for the copy operation.
+
+             TextureHandle destination = renderGraph.CreateTexture(textureDesc);*//*
+
+             if (uniquepassTag == 0)
+             {
+ *//*                RenderGraphUtils.BlitMaterialParameters para = new RenderGraphUtils.BlitMaterialParameters(color_Texture, destination, m_screenMaterial, 0);
+
+                 renderGraph.AddBlitPass(para, passName: m_PassName);*//*
+
+
+
+
+                 resourceData.cameraColor = destination;
+             }
+             else
+             {
+                *//* RenderGraphUtils.BlitMaterialParameters para = new RenderGraphUtils.BlitMaterialParameters(color_Texture, destination, m_screenMaterial, 0);
+
+                 renderGraph.AddBlitPass(para, passName: m_PassName);*//*
+
+                 m_screenMaterial.SetTexture("_Test", resourceData.activeColorTexture);
+
+                 resourceData.cameraColor = destination;
+             }
+
+ *//*            RenderGraphUtils.BlitMaterialParameters para = new RenderGraphUtils.BlitMaterialParameters(color_Texture, destination, m_screenMaterial, 0);
+
+             renderGraph.AddBlitPass(para, passName: m_PassName);
+
+
+
+             if (uniquepassTag == 0) resourceData.cameraColor = destination;
+             else resourceData.cameraColor = resourceData.activeColorTexture;*//*
+
+             //}*/
+
            
-
-           /* return; 
-            if (resourceData.isActiveTargetBackBuffer)
-            {
-                Debug.LogAssertion("can't use backbuffer as texture input");
-                return;
-            }
-
-            var customData = frameData.Get<SelectiveRenderPass.CustomData>();
-
-            TextureHandle color_Texture;
-            //TextureHandle color_Texture = customData.crossTexture;
-            if (customData.textureHandles.ContainsKey(uniquepassTag)) color_Texture = customData.textureHandles[uniquepassTag];
-            else return;
-            if (uniquepassTag == 1) Debug.Log("blahashsjajaks");
-            if (uniquepassTag == 0)
-            {
-                for (int i = 0; i < customData.textureHandles.Count; i++)
-                {
-
-                    if (customData.textureHandles.ContainsKey(customData.textureHandles.Keys.ToList()[i])) customData.textureHandles.Remove(customData.textureHandles.Keys.ToList()[i]);
-                    //Debug.Log((Texture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]]);//(RenderTexture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]]);
-                    //if ((RenderTexture)customData.textureHandles[customData.textureHandles.Keys.ToList()[i]] == (RenderTexture)TextureHandle.nullHandle) customData.textureHandles.Remove(customData.textureHandles.Keys.ToList()[i]);
-                    //customData.textureHandles[] = TextureHandle.nullHandle;
-                }
-            }
-
-            //m_screenMaterial.SetTexture("_Test", color_Texture);
-
-            var source = resourceData.activeColorTexture;
-
-            var destinationDesc = renderGraph.GetTextureDesc(source);
-
-            destinationDesc.clearBuffer = false;
-
-            
-
-            //TextureHandle test = renderGraph.CreateTexture(destinationDesc);
-            TextureHandle destination = renderGraph.CreateTexture(destinationDesc);
-
-
-*//*
-            var textureDesc = resourceData.cameraDepthTexture.GetDescriptor(renderGraph);
-
-            textureDesc.msaaSamples = MSAASamples.None;
-            textureDesc.depthBufferBits = 0;
-            // Populate passData with the data needed by the rendering function
-            // of the render pass.
-            // Use the camera's active color texture
-            // as the source texture for the copy operation.
-
-            TextureHandle destination = renderGraph.CreateTexture(textureDesc);*//*
-
-            if (uniquepassTag == 0)
-            {
-*//*                RenderGraphUtils.BlitMaterialParameters para = new RenderGraphUtils.BlitMaterialParameters(color_Texture, destination, m_screenMaterial, 0);
-
-                renderGraph.AddBlitPass(para, passName: m_PassName);*//*
-
-                
-
-
-                resourceData.cameraColor = destination;
-            }
-            else
-            {
-               *//* RenderGraphUtils.BlitMaterialParameters para = new RenderGraphUtils.BlitMaterialParameters(color_Texture, destination, m_screenMaterial, 0);
-
-                renderGraph.AddBlitPass(para, passName: m_PassName);*//*
-
-                m_screenMaterial.SetTexture("_Test", resourceData.activeColorTexture);
-
-                resourceData.cameraColor = destination;
-            }
-
-*//*            RenderGraphUtils.BlitMaterialParameters para = new RenderGraphUtils.BlitMaterialParameters(color_Texture, destination, m_screenMaterial, 0);
-
-            renderGraph.AddBlitPass(para, passName: m_PassName);
-
-            
-
-            if (uniquepassTag == 0) resourceData.cameraColor = destination;
-            else resourceData.cameraColor = resourceData.activeColorTexture;*//*
-
-            //}*/
         }
+        void ExecutePass(PassData data, RasterGraphContext context)
+        {
+            //s
+            //RenderTexture texture = new RenderTexture(data.colorTexture);
+
+            //Debug.Log(texture.isReadable);
+            //data.screenMaterial.SetTexture("_Test", data.cameraTexture);
+            Blitter.BlitTexture(context.cmd, data.colorTexture, new Vector4(1, 1, 0, 0), data.screenMaterial, 0);
+
+
+
+        }
+
+    }
+
+    class WriteToOutlineShaderPass : ScriptableRenderPass
+    {
+        Material m_screenMaterial;
+        public void Setup(Material screenMat)
+        {
+            m_screenMaterial = screenMat;
+        }
+        class PassData
+        {
+            public TextureHandle cameraTexture;
+            public Material screenMat;
+        }
+        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+        {
+            using (var builder = renderGraph.AddRasterRenderPass<PassData>(passName, out var passData))
+            {
+                UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
+                passData.cameraTexture = resourceData.cameraColor;
+                passData.screenMat = m_screenMaterial;
+                builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
+            }
+        }
+
         static void ExecutePass(PassData data, RasterGraphContext context)
         {
-            //
-
-            data.screenMaterial.SetTexture("_Test", data.colorTexture);
-            //Debug.Log(data.colorTexture);
-            Blitter.BlitTexture(context.cmd, data.cameraTexture, new Vector4(1, 1, 0, 0), data.screenMaterial, 0);
-
-            
+            data.screenMat.SetTexture("_Test", data.cameraTexture);
         }
     }
 
@@ -680,17 +726,19 @@ public class SelectiveScreenShader : ScriptableRendererFeature
 
     SelectiveShaderClass m_SelectiveShaderPass;
 
+    WriteToOutlineShaderPass m_WriteToOutlineShaderPass;
+
     public RenderPassEvent selective_injectionPoint = RenderPassEvent.AfterRenderingPostProcessing;
     public RenderPassEvent shader_injectionPoint = RenderPassEvent.AfterRenderingPostProcessing;
+    public RenderPassEvent writing_injectionPoint = RenderPassEvent.AfterRenderingPostProcessing;
 
     public Material screen_material;
 
     public Material object_material;
 
     public Material testMaterial;
-
     
-    //
+    //s
     /// <inheritdoc/>
     public override void Create()
     {
@@ -698,6 +746,10 @@ public class SelectiveScreenShader : ScriptableRendererFeature
 
         // Configures where the render pass should be injected.
         m_SelectiveRenderPass.renderPassEvent = selective_injectionPoint;
+
+
+       // m_WriteToOutlineShaderPass = new WriteToOutlineShaderPass();
+       // m_WriteToOutlineShaderPass.renderPassEvent = writing_injectionPoint;
 
         m_SelectiveShaderPass = new SelectiveShaderClass();
 
@@ -711,8 +763,12 @@ public class SelectiveScreenShader : ScriptableRendererFeature
         //Debug.Log(uniqueFeatureTag.ToString() + m_SelectiveShaderPass);
         if (screen_material == null | object_material == null) return;
 
+        //Debug.Log(Camera.main);
         m_SelectiveRenderPass.Setup(object_material, screen_material, selectiveMask.value, renderFOV, uniqueFeatureTag, 60);
         renderer.EnqueuePass(m_SelectiveRenderPass);
+
+       // m_WriteToOutlineShaderPass.Setup(screen_material);
+        //renderer.EnqueuePass(m_WriteToOutlineShaderPass);
 
         m_SelectiveShaderPass.Setup(screen_material, uniqueFeatureTag, testMaterial);
         renderer.EnqueuePass(m_SelectiveShaderPass);

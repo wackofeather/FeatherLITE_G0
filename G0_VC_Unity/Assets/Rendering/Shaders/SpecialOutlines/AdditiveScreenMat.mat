@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Object_SpecialOutline_Mat
-  m_Shader: {fileID: -6465566751694194690, guid: 872b27586c61043478c38b17f986278d, type: 3}
+  m_Name: AdditiveScreenMat
+  m_Shader: {fileID: -6465566751694194690, guid: 2fae032cb6d40734c84ec7f829baef2b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -43,7 +43,7 @@ Material:
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &4445010026906139017
+--- !u!114 &8909602358725042482
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

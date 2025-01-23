@@ -34,12 +34,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: RenderObjects
+  m_Name: RenderExteriorOpaque
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    passTag: RenderObjects
-    Event: 1000
+    passTag: RenderExteriorOpaque
+    Event: 250
     filterSettings:
       RenderQueueType: 0
       LayerMask:
@@ -52,8 +52,8 @@ MonoBehaviour:
     overrideShaderPassIndex: 0
     overrideMode: 1
     overrideDepthState: 0
-    depthCompareFunction: 4
-    enableWrite: 1
+    depthCompareFunction: 0
+    enableWrite: 0
     stencilSettings:
       overrideStencilState: 0
       stencilReference: 0
@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: RenderExteriorOutlines
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
     passTag: RenderExteriorOutlines
     Event: 250
@@ -299,8 +299,8 @@ MonoBehaviour:
     probeSamplingDebugTexture: {fileID: 0}
     probeVolumeBlendStatesCS: {fileID: 0}
   m_RendererFeatures:
-  - {fileID: -7390697198514955929}
   - {fileID: -2818969625490625347}
+  - {fileID: -7390697198514955929}
   - {fileID: 1439922554848822598}
   - {fileID: 2601957733116269070}
   - {fileID: 7527854428169008231}
@@ -311,7 +311,7 @@ MonoBehaviour:
   - {fileID: -1043244039001234364}
   - {fileID: -8572204128387035342}
   - {fileID: -6692203459962225849}
-  m_RendererFeatureMap: 67990a380ef86e99bdec03a80f02e1d84645d641efa1fb130ed2f9c2c5021c246774ddd7b74f78689c1ccdb6a074f342f2fc5078680ef900010ae241cfa116e99a44726ad2c17ae744a449e912a785f1328f5a41c369098947bb4ff4688420a3
+  m_RendererFeatureMap: bdec03a80f02e1d867990a380ef86e994645d641efa1fb130ed2f9c2c5021c246774ddd7b74f78689c1ccdb6a074f342f2fc5078680ef900010ae241cfa116e99a44726ad2c17ae744a449e912a785f1328f5a41c369098947bb4ff4688420a3
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}

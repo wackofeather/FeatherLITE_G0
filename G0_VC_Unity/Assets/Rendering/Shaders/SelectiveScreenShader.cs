@@ -524,7 +524,7 @@ public class SelectiveScreenShader : ScriptableRendererFeature
 
             //Debug.LogWarning((new RenderTexture(passData.colorTexture)).height);
 
-            //resourceData.cameraColor = passData.cameraTexture;
+            //resourceData.cameraColor = passData.colorTexture;
 
             builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));
                 // builder.SetRenderFunc((PassData data, RasterGraphContext context) => ExecutePass(data, context));

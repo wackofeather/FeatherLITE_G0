@@ -75,6 +75,8 @@ public class Game_GeneralManager : GeneralManager
     private Coroutine HostMigrationCorT;
     private Coroutine JoiningGameCorT;
 
+    [SerializeField] GameObject Env_Container;
+
 
     private void Start()
     {
@@ -102,6 +104,9 @@ public class Game_GeneralManager : GeneralManager
             Debug.Log("hahahahajajajajaj" + NetworkManager.SceneManager.ClientSynchronizationMode);
             this.NetworkObject.DestroyWithScene = false;
             this.NetworkObject.DontDestroyWithOwner = true;
+
+            Env_Container.GetComponent<NetworkObject>().DestroyWithScene = false;
+            Env_Container.GetComponent<NetworkObject>().DontDestroyWithOwner = true;
 
             FindBackupHost();
         }

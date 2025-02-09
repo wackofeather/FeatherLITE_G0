@@ -179,8 +179,8 @@ public class SelectiveScreenShader : ScriptableRendererFeature
                 passData.screenMaterial = m_screenMaterial;
 
                 passData.sourceTexture = resourceData.activeColorTexture;
-
-                passData.fov = FOV + cameraData.camera.fieldOfView - baseFOV;
+                //Debug.Log(cameraData.camera.fieldOfView - baseFOV);
+                passData.fov = FOV; //FOV + cameraData.camera.fieldOfView - baseFOV;
 
                 passData.cameraData = cameraData;
 
@@ -718,7 +718,9 @@ public class SelectiveScreenShader : ScriptableRendererFeature
 
     [Header("0 is no FOV change")]
     //public bool specialFov;
-    public float renderFOV;
+
+    public RenderObjects rendererOpaque;
+    float renderFOV;
 
     public int uniqueFeatureTag;
 
@@ -764,7 +766,7 @@ public class SelectiveScreenShader : ScriptableRendererFeature
         if (screen_material == null | object_material == null) return;
 
         //Debug.Log(Camera.main);
-        m_SelectiveRenderPass.Setup(object_material, screen_material, selectiveMask.value, renderFOV, uniqueFeatureTag, 60);
+        m_SelectiveRenderPass.Setup(object_material, screen_material, selectiveMask.value, rendererOpaque.settings.cameraSettings.cameraFieldOfView, uniqueFeatureTag, 60);
         renderer.EnqueuePass(m_SelectiveRenderPass);
 
        // m_WriteToOutlineShaderPass.Setup(screen_material);

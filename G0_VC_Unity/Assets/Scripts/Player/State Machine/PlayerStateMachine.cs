@@ -464,11 +464,16 @@ public class PlayerStateMachine : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
-        CurrentPlayerState.OnCollisionEnter(collision);
+        //Debug.LogAssertion("ahhhhhhhhhhhhhhhh");
+        CurrentPlayerState.OnCollisionStay(collision);
     }
 
+/*    private void OnCollisionStay(Collision collision)
+    {
+        Debug.Log(collision.contactCount);
+    }*/
 
 
 

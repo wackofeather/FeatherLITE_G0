@@ -134,7 +134,7 @@ public class BasePlayerState
         //probably a useless function, just use the initialization in each state
     }
 
-    public virtual void OnCollisionEnter(Collision col)
+    public virtual void OnCollisionStay(Collision col)
     {
 
     }

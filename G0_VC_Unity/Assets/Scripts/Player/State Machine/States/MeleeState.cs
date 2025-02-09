@@ -194,6 +194,9 @@ public class MeleeState : BasePlayerState
 
         for (int i  = 0; i < player.ViewportRenderers.Count; i++)
         {
+            //Debug.LogWarning(fov_calc - viewportCamFOV);
+
+            //Debug.LogAssertion(fov_calc - 40);
             player.ViewportRenderers[i].settings.cameraSettings.cameraFieldOfView = fov_calc;
            // player.ViewportRenderers[i].SetDirty();
         }
@@ -222,23 +225,26 @@ public class MeleeState : BasePlayerState
         
     }
 
-    public override void OnCollisionEnter(Collision col)
+    public override void OnCollisionStay(Collision col)
     {
-        base.OnCollisionEnter(col);
+        base.OnCollisionStay(col);
 
         if (!player.networkInfo._isOwner) return;
 
-
+        
         if (col.gameObject.layer == LayerMask.NameToLayer(player.EnemyLayer)) return;
 
 
-        if (col.contacts.Length > 1)
+/*        if (col.contacts.Length > 1)
         {
             player.ChangeState(player.RegularState);
             return;
+        }*/
+        foreach (ContactPoint contact in col.contacts)
+        {
+            if (Vector3.Angle((contact.point - player.rb.position), meleeVector) < 90) { player.ChangeState(player.RegularState); break; }
         }
-
-        if (Vector3.Angle((col.contacts[0].point - player.rb.position), meleeVector) < 90) player.ChangeState(player.RegularState);
+        
     }
 
 

@@ -15,10 +15,13 @@ public class Game_UI_Manager : UI_Manager
     [SerializeField] Color NoGrappleColor;
     [SerializeField] Color GrappleColor;
 
-    new public static Game_UI_Manager instance { get; set; }
+    public static Game_UI_Manager game_instance { get; set; }
 
 
-    
+    private void Awake()
+    {
+        ConstructGameSingleton();
+    }
 
 
 
@@ -85,15 +88,15 @@ public class Game_UI_Manager : UI_Manager
 
 
 
-    public override void ConstructSingleton()
+    public void ConstructGameSingleton()
     {
-        if (instance != null && instance != this)
+        if (game_instance != null && game_instance != this)
         {
             Destroy(this);
         }
         else
         {
-            instance = this;
+            game_instance = this;
         }
     }
 

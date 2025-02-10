@@ -90,11 +90,11 @@ public class BasePlayerState
         if (!player.networkInfo._isOwner)
         {
             //Debug.LogAssertion("hoorah");
-            Game_UI_Manager.instance.UpdateDummyHealth(player);
+            Game_UI_Manager.game_instance.UpdateDummyHealth(player);
             return;
         }
-        Game_UI_Manager.instance.UpdateGrappleIndicator(player.CanGrapple());
-        Game_UI_Manager.instance.UpdateHealth(player.health);
+        Game_UI_Manager.game_instance.UpdateGrappleIndicator(player.CanGrapple());
+        Game_UI_Manager.game_instance.UpdateHealth(player.health);
     }
 
     public virtual void AnimationTriggerEvent()

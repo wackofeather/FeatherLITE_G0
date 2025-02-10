@@ -359,7 +359,7 @@ public class PlayerStateMachine : MonoBehaviour
         if (!networkInfo._isOwner)
         {
             VIEWPORT_lr.gameObject.SetActive(false);
-            Game_UI_Manager.instance.AddHealthBarToPlayer(this);
+            Game_UI_Manager.game_instance.AddHealthBarToPlayer(this);
             return;
         }
 

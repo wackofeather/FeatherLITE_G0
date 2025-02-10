@@ -18,7 +18,7 @@ public class Screen_UI : MonoBehaviour
     {
         UI_Manager.instance.SwitchScreens(newScreen);
         //GameObject.FindObjectOfType<UI_Manager>().instance.SwitchScreens(newScreen);
-        Debug.Log(UI_Manager.instance);
-        Debug.Log(newScreen);
+        //Debug.Log(UI_Manager.instance);
+        //Debug.Log(newScreen);
     }
 }

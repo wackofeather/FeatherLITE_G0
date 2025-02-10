@@ -13,6 +13,7 @@ using System;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using JetBrains.Annotations;
+using Unity.VisualScripting;
 
 
 public class Menu_UI_Manager : UI_Manager
@@ -21,6 +22,7 @@ public class Menu_UI_Manager : UI_Manager
     [SerializeField] public Button JoinGameButton;
     [HideInInspector] public int MainKey;
 
+    public Array serverArray;
 
 
 
@@ -33,26 +35,29 @@ public class Menu_UI_Manager : UI_Manager
 
     //use dictionary to pass in differnet key values to switch to, try and make this a parameter in a function instead of hardcoding numbers
 
-    //async void Start ()
-    //{
-    //    using (var list = new Steamworks.ServerList.Internet())
-    //    {
-    //        list.AddFilter("map", "de_dust");
-    //        await list.RunQueryAsync();
+    public async void AsyncGetServerList()
+    {
+            
+        serverArray = await SteamMatchmaking.LobbyList.RequestAsync();
+        Debug.Log("Activated");
+    }
 
-    //        foreach (var server in list.Responsive)
-    //        {
-    //            Debug.Log($"{server.Address} {server.Name}");
-    //        }
-    //    }
-    //}
+    public override void ChildAwake()
+    {
+
+        ConstructMenuSingleton();
+        AsyncGetServerList();
+    }
 
 
-  
+
+
+
+
 
     //void Update()
     //{
-        
+
     //}
 
 

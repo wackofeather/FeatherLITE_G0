@@ -464,6 +464,11 @@ public class SteamLobbyManager : MonoBehaviour
         {
             if (NetworkManager.Singleton.StartClient())
             {
+                while (NetworkManager.Singleton.GetComponent<FacepunchTransport>().connectionManager == null)
+                {
+                    Debug.LogWarning("waiting");
+                    await Task.Yield();
+                }
                 while (!NetworkManager.Singleton.GetComponent<FacepunchTransport>().connectionManager.Connected)
                 {
                     if (!NetworkManager.Singleton.GetComponent<FacepunchTransport>().connectionManager.Connecting)

@@ -4,7 +4,6 @@ using JetBrains.Annotations;
 using Steamworks;
 using Steamworks.Data;
 using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,7 +34,7 @@ public class Data_Display:MonoBehaviour
     }
     void UpdateLobbyListUI()
     {
-        foreach (Lobby servers in Menu_UI_Manager.Menu_instance.serverArray)
+        foreach (Lobby servers in Menu_UI_Manager.Menu_instance.LobbyList)
         {
             GameObject Button;
             if (lobbyList.ContainsKey(servers.Id))
@@ -68,7 +67,7 @@ public class Data_Display:MonoBehaviour
    
     void Update()
     {
-        Debug.Log("hello");
+        //Debug.Log("hello");
        
         //Debug.Log(MenuVector.transform);
 

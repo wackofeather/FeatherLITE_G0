@@ -1094,6 +1094,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f8e65902c662a4489c701c05e1c96ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentScreen: 0
   ScreenCanvas: {fileID: 2029530150}
   WorldCanvas: {fileID: 1994402647}
   GrappleIndicator: {fileID: 1556309192}

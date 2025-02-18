@@ -165,6 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkManager: {fileID: 825287896}
   playerPrefab: {fileID: 2920028746863420624, guid: 43ad05ca72a9d364e84520262e6f65e0, type: 3}
+  mapLookup: {fileID: 11400000, guid: 5c4561430f2808245beb6561f13e2cda, type: 2}
   GameScene: DevScene
   PreLoadScene: Game_PreLoadScene
   MenuScene: MenuScene

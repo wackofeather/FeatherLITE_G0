@@ -75,6 +75,8 @@ public class BasePlayerState
             }
         }
 
+        //Debug.LogWarning(player.rb.linearVelocity.magnitude);
+
     }
 
     public virtual void LateUpdate()

@@ -117,11 +117,12 @@ public class PlayerStateMachine : MonoBehaviour
     public float maxDistance = 100f;
     [System.NonSerialized] public SpringJoint joint;
     public InputActionReference Grapple;
-    [Range(0f, 100f)]
+    [Range(0f, 2000f)]
     public float grappleSpeed;
     public float jointDamper;
     public float jointSpring;
     public float jointMassScale;
+    public AnimationCurve jointSpringCurve;
 
     [Header("Rope Graphics")]
 
@@ -269,7 +270,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Start()
     {
-        if (networkInfo._isOwner) StartCoroutine(Testcoroutine());
+        if (networkInfo._isOwner) { StartCoroutine(Testcoroutine()); }
     }
 
     IEnumerator Testcoroutine()

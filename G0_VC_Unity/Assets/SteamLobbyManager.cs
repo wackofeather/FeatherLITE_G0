@@ -4,6 +4,7 @@ using Steamworks.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Netcode;
 
@@ -21,7 +22,7 @@ public class SteamLobbyManager : MonoBehaviour
 
     public GameObject playerPrefab;
 
-    
+    public MapLookup mapLookup;
 
     private void Awake()
     {
@@ -107,7 +108,8 @@ public class SteamLobbyManager : MonoBehaviour
 
     private void OnRegularSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
-        if (scene.name == GameScene) gameSceneLoaded = true;
+        //if (scene.name == GameScene) gameSceneLoaded = true;
+        if (mapLookup.GetMapLookUp().Values.Contains(scene.name)) gameSceneLoaded = true;
     }
 
     /*    void OnLobbyInvite(Friend friend, Lobby lobby)
@@ -226,9 +228,9 @@ public class SteamLobbyManager : MonoBehaviour
                 return false;
             }
             currentLobby = createLobbyOutput.Value;
-            currentLobby.SetPublic();
-            //currentLobby.SetPrivate();
-            currentLobby.SetJoinable(true);
+            currentLobby.SetData("GameMode", "FFA");
+            currentLobby.SetData("Map", "Test");
+            
 
             StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(currentLobby.Owner.Id, true, false));
 
@@ -313,7 +315,7 @@ public class SteamLobbyManager : MonoBehaviour
 
                 SceneManager.sceneLoaded += OnRegularSceneLoaded;
 
-                SceneManager.LoadScene(SteamLobbyManager.instance.GameScene, LoadSceneMode.Single);
+                SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
 
 
 
@@ -345,7 +347,12 @@ public class SteamLobbyManager : MonoBehaviour
                 yield break;
             }
 
-
+            if (!_reconnecting)
+            {
+                currentLobby.SetPublic();
+                //currentLobby.SetPrivate();
+                currentLobby.SetJoinable(true);
+            }
             //Debug.Log(Game_GeneralManager.instance != null);
             //Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId);
             Debug.Log(NetworkManager.Singleton.IsConnectedClient);
@@ -387,7 +394,7 @@ public class SteamLobbyManager : MonoBehaviour
 
                 SceneManager.sceneLoaded += OnRegularSceneLoaded;
 
-                SceneManager.LoadScene(SteamLobbyManager.instance.GameScene, LoadSceneMode.Single);
+                SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
 
 
 
@@ -428,7 +435,7 @@ public class SteamLobbyManager : MonoBehaviour
                         }*/
 
             //Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId);
-            Debug.LogWarning(NetworkManager.Singleton.IsConnectedClient);
+            Debug.LogWarning("kiki " + currentLobby.GetData("GameMode"));
         }
 
 

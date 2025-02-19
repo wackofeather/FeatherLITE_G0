@@ -81,7 +81,7 @@ public class GrapplingState : BasePlayerState
         player.joint.spring = player.jointSpringCurve.Evaluate(distanceFromPoint / player.maxDistance);
         player.joint.damper = player.jointDamper;
         player.joint.massScale = player.jointMassScale;
-        Debug.LogWarning(player.joint.spring);
+        //Debug.LogWarning(player.joint.spring);
         player.isGrappling = true;
 
         player.VIEWPORT_grappleHand.SetActive(true);

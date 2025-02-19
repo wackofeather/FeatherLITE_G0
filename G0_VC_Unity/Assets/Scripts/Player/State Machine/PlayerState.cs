@@ -42,9 +42,9 @@ public class BasePlayerState
         }
 
         player.inputVector = player.move.action.ReadValue<Vector3>();
-        float mouseX = Input.GetAxis("Mouse X") * player.mouseSens;
+        float mouseX = player.look.action.ReadValue<Vector2>().x;//Input.GetAxis("Mouse X") * player.mouseSens;
 
-        float mouseY = Input.GetAxis("Mouse Y") * player.mouseSens;
+        float mouseY = player.look.action.ReadValue<Vector2>().y;//Input.GetAxis("Mouse Y") * player.mouseSens;
 
 
 

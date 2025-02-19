@@ -37,6 +37,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     public Rigidbody rb;
     public InputActionReference move;
+    public InputActionReference look;
     public InputActionReference fire;
     public InputActionReference scope;
     public InputActionReference pause;

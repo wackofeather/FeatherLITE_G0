@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 public class MapLookup : ScriptableObject//, ISerializationCallbackReceiver
 {
     public List<MapData> MapDatas;
+    //public 
     //public Dictionary<string, string> MapLookupDict;
 
 

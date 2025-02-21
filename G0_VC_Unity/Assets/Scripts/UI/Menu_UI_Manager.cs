@@ -4,7 +4,6 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEngine;
 using Steamworks;
 using Netcode.Transports.Facepunch;
 using System.Threading.Tasks;

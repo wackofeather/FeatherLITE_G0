@@ -420,7 +420,7 @@ public class PlayerStateMachine : MonoBehaviour
         }
         if (deleteTimer < 0)
         {
-            if (Game_GeneralManager.instance.reconnecting) return;
+            if (SteamLobbyManager.instance.reconnecting) return;
             Player_OnNetworkDespawn();
             Player_OnDisconnect();
 
@@ -618,6 +618,6 @@ public class PlayerStateMachine : MonoBehaviour
     [Rpc(SendTo.Owner)]
     public void KillPlayerRPC()
     {
-        if (CurrentPlayerState != DeathState) Game_GeneralManager.instance.Kill(this);
+        if (CurrentPlayerState != DeathState) Game_GeneralManager.game_instance.Kill(this);
     }
 }

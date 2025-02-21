@@ -24,6 +24,10 @@ public class SteamLobbyManager : MonoBehaviour
 
     public MapLookup mapLookup;
 
+    public string gameSetupScene;
+
+    [HideInInspector] public bool reconnecting;
+
     private void Awake()
     {
         ConstructSingleton();
@@ -315,8 +319,8 @@ public class SteamLobbyManager : MonoBehaviour
 
                 SceneManager.sceneLoaded += OnRegularSceneLoaded;
 
-                SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
-
+                //SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
+                SceneManager.LoadScene(gameSetupScene);
 
 
                 while (true)
@@ -339,7 +343,7 @@ public class SteamLobbyManager : MonoBehaviour
             {
                 if (_reconnecting) 
                 { 
-                    Game_GeneralManager.instance.reconnecting = false; 
+                    reconnecting = false; 
                 }
 
                 RevertToMenu();
@@ -394,8 +398,8 @@ public class SteamLobbyManager : MonoBehaviour
 
                 SceneManager.sceneLoaded += OnRegularSceneLoaded;
 
-                SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
-
+                //SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
+                SceneManager.LoadScene(gameSetupScene);
 
 
                 while (true)
@@ -415,7 +419,7 @@ public class SteamLobbyManager : MonoBehaviour
             {
                 if (_reconnecting)
                 {
-                    Game_GeneralManager.instance.reconnecting = false;
+                    reconnecting = false;
                 }
 
                 RevertToMenu();
@@ -447,8 +451,8 @@ public class SteamLobbyManager : MonoBehaviour
             Debug.Log(NetworkManager.Singleton.IsConnectedClient);
             yield return null;
         }
-        Debug.LogWarning("spawning player");
-        Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId, NetworkManager.Singleton.LocalClientId, _reconnecting);
+        Debug.LogWarning(GeneralManager.instance);
+        GeneralManager.instance.OnConnectedToSession(_reconnecting);
 
         //Game_GeneralManager.instance.SpawnPlayerRPC(NetworkManager.Singleton.LocalClientId);
 

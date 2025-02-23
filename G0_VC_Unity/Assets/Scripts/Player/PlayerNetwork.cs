@@ -52,10 +52,10 @@ public class PlayerNetwork : NetworkBehaviour
         }
 
         GameObject _playerObj;
-        if (!Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.ContainsKey(_SteamID.Value)) { _playerObj = Instantiate(playerObj); reconnecting = false; }
-        else { _playerObj = Game_GeneralManager.instance.PlayerGameObject_LocalLookUp[_SteamID.Value].gameObject; reconnecting = true; }
+        if (!Game_GeneralManager.game_instance.PlayerGameObject_LocalLookUp.ContainsKey(_SteamID.Value)) { _playerObj = Instantiate(playerObj); reconnecting = false; }
+        else { _playerObj = Game_GeneralManager.game_instance.PlayerGameObject_LocalLookUp[_SteamID.Value].gameObject; reconnecting = true; }
 
-        if (!Game_GeneralManager.instance.reconnecting) _playerObj.transform.position = new Vector3(-1000, -1000, -1000);
+        if (!SteamLobbyManager.instance.reconnecting) _playerObj.transform.position = new Vector3(-1000, -1000, -1000);
         playerStateMachine = _playerObj.GetComponent<PlayerStateMachine>();
         _rb = playerStateMachine.GetComponent<Rigidbody>();
         playerStateMachine.playerNetwork = this;
@@ -64,7 +64,7 @@ public class PlayerNetwork : NetworkBehaviour
                     Game_GeneralManager.instance.Player_LookUp[_SteamID.Value] = data;*/
         SendNetworkInfo();
 
-        if (IsOwner) Game_GeneralManager.instance.runtime_playerObj = _playerObj;
+        if (IsOwner) Game_GeneralManager.game_instance.runtime_playerObj = _playerObj;
         inventory = playerStateMachine.gameObject.GetComponentInChildren<Player_Inventory>();
         Exterior = playerStateMachine.Exterior.gameObject;
         Viewport = playerStateMachine.Viewport.gameObject;
@@ -78,14 +78,14 @@ public class PlayerNetwork : NetworkBehaviour
 
 
         Debug.LogWarning("reconnecting is" + reconnecting);
-        if (!Game_GeneralManager.instance.reconnecting)
+        if (!SteamLobbyManager.instance.reconnecting)
         {
             
             if (IsOwner)
             {
-                Game_GeneralManager.instance.Server_SpawnPlayerForGameRPC(GetComponent<NetworkObject>(), OwnerClientId);
+                Game_GeneralManager.game_instance.Server_SpawnPlayerForGameRPC(GetComponent<NetworkObject>(), OwnerClientId);
             }
-            Game_GeneralManager.instance.InitPlayer(IsOwner, this);
+            Game_GeneralManager.game_instance.InitPlayer(IsOwner, this);
         }
         yield break;
     }
@@ -141,7 +141,7 @@ public class PlayerNetwork : NetworkBehaviour
         //else
             //TransmitStateServerRpc(state);
 
-        Game_GeneralManager.instance.myPlayerState = state;
+        Game_GeneralManager.game_instance.myPlayerState = state;
 
         
     }
@@ -150,7 +150,7 @@ public class PlayerNetwork : NetworkBehaviour
     public void TransmitState(PlayerNetworkState state)
     {
         _playerState.Value = state;
-        Game_GeneralManager.instance.myPlayerState = state;
+        Game_GeneralManager.game_instance.myPlayerState = state;
         Debug.LogAssertion("abajalsjsaaaaaaaaaaa" + _playerState.Value.Position);
         ConsumeState();
         FixedConsumeState();
@@ -391,22 +391,22 @@ public class PlayerNetwork : NetworkBehaviour
     void AddSelfToLookups()
     {
         Debug.LogWarning("socatoa " + OwnerClientId);
-        if (Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.ContainsKey(_SteamID.Value))
+        if (Game_GeneralManager.game_instance.PlayerGameObject_LocalLookUp.ContainsKey(_SteamID.Value))
         {
-            Game_GeneralManager.instance.PlayerGameObject_LocalLookUp[_SteamID.Value] = playerStateMachine;
+            Game_GeneralManager.game_instance.PlayerGameObject_LocalLookUp[_SteamID.Value] = playerStateMachine;
         }
         else
         {
-            Game_GeneralManager.instance.PlayerGameObject_LocalLookUp.Add(_SteamID.Value, playerStateMachine);
+            Game_GeneralManager.game_instance.PlayerGameObject_LocalLookUp.Add(_SteamID.Value, playerStateMachine);
         }
 
-        if (Game_GeneralManager.instance.Player_LookUp.ContainsKey(_SteamID.Value))
+        if (Game_GeneralManager.game_instance.Player_LookUp.ContainsKey(_SteamID.Value))
         {
-            Game_GeneralManager.instance.Player_LookUp[_SteamID.Value] = new PlayerData(playerStateMachine.transform.position, 100, _SteamID.Value, OwnerClientId);
+            Game_GeneralManager.game_instance.Player_LookUp[_SteamID.Value] = new PlayerData(playerStateMachine.transform.position, 100, _SteamID.Value, OwnerClientId);
         }
         else
         {
-            Game_GeneralManager.instance.Player_LookUp.Add(_SteamID.Value, new PlayerData(playerStateMachine.transform.position, 100, _SteamID.Value, OwnerClientId));
+            Game_GeneralManager.game_instance.Player_LookUp.Add(_SteamID.Value, new PlayerData(playerStateMachine.transform.position, 100, _SteamID.Value, OwnerClientId));
         }
     }
 

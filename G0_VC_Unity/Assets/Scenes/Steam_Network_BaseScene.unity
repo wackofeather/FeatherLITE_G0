@@ -165,6 +165,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   networkManager: {fileID: 825287896}
   playerPrefab: {fileID: 2920028746863420624, guid: 43ad05ca72a9d364e84520262e6f65e0, type: 3}
+  mapLookup: {fileID: 11400000, guid: 5c4561430f2808245beb6561f13e2cda, type: 2}
+  gameSetupScene: GameSetupScene
+  reconnecting: 0
   GameScene: DevScene
   PreLoadScene: Game_PreLoadScene
   MenuScene: MenuScene
@@ -179,11 +182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 825287902}
   - component: {fileID: 825287901}
-  - component: {fileID: 825287900}
-  - component: {fileID: 825287899}
-  - component: {fileID: 825287898}
   - component: {fileID: 825287897}
-  - component: {fileID: 825287903}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -206,63 +205,6 @@ MonoBehaviour:
   steamAppId: 3488780
   targetSteamId: 0
   userSteamId: 0
---- !u!114 &825287898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825287896}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6960e84d07fb87f47956e7a81d71c4e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ProtocolType: 0
-  m_UseWebSockets: 0
-  m_UseEncryption: 0
-  m_MaxPacketQueueSize: 128
-  m_MaxPayloadSize: 6144
-  m_HeartbeatTimeoutMS: 500
-  m_ConnectTimeoutMS: 1000
-  m_MaxConnectAttempts: 60
-  m_DisconnectTimeoutMS: 30000
-  ConnectionData:
-    Address: 127.0.0.1
-    Port: 7777
-    ServerListenAddress: 127.0.0.1
-  DebugSimulator:
-    PacketDelayMS: 0
-    PacketJitterMS: 0
-    PacketDropRate: 0
---- !u!114 &825287899
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825287896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e650d3d331d3d444da08a18c2e664539, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &825287900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825287896}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3466ff8d8c109e4399212637490ab57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unityNetworkManager: {fileID: 0}
-  transport: {fileID: 0}
-  LobbyID_Input: Put Steam Lobby ID Here
-  playerPrefab: {fileID: 0}
 --- !u!114 &825287901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,12 +219,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NetworkConfig:
     ProtocolVersion: 0
-    NetworkTransport: {fileID: 825287898}
+    NetworkTransport: {fileID: 825287897}
     PlayerPrefab: {fileID: 0}
     Prefabs:
       NetworkPrefabsLists:
       - {fileID: 11400000, guid: 6cc1aaf105d93b144bbdfb2e6e2b19f0, type: 2}
-    TickRate: 30
+    TickRate: 60
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
     ConnectionData: 
@@ -299,7 +241,7 @@ MonoBehaviour:
     EnableNetworkLogs: 1
     OldPrefabList: []
   RunInBackground: 1
-  LogLevel: 1
+  LogLevel: 0
 --- !u!4 &825287902
 Transform:
   m_ObjectHideFlags: 0
@@ -315,18 +257,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &825287903
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825287896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 672faa3b86743fa4eb811361bbd77d58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

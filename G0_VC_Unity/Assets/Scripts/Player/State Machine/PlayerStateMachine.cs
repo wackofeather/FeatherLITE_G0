@@ -37,6 +37,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     public Rigidbody rb;
     public InputActionReference move;
+    public InputActionReference look;
     public InputActionReference fire;
     public InputActionReference scope;
     public InputActionReference pause;
@@ -117,11 +118,12 @@ public class PlayerStateMachine : MonoBehaviour
     public float maxDistance = 100f;
     [System.NonSerialized] public SpringJoint joint;
     public InputActionReference Grapple;
-    [Range(0f, 100f)]
+    [Range(0f, 2000f)]
     public float grappleSpeed;
     public float jointDamper;
     public float jointSpring;
     public float jointMassScale;
+    public AnimationCurve jointSpringCurve;
 
     [Header("Rope Graphics")]
 
@@ -269,7 +271,7 @@ public class PlayerStateMachine : MonoBehaviour
 
     private void Start()
     {
-        if (networkInfo._isOwner) StartCoroutine(Testcoroutine());
+        if (networkInfo._isOwner) { StartCoroutine(Testcoroutine()); }
     }
 
     IEnumerator Testcoroutine()
@@ -418,7 +420,7 @@ public class PlayerStateMachine : MonoBehaviour
         }
         if (deleteTimer < 0)
         {
-            if (Game_GeneralManager.instance.reconnecting) return;
+            if (SteamLobbyManager.instance.reconnecting) return;
             Player_OnNetworkDespawn();
             Player_OnDisconnect();
 
@@ -616,6 +618,6 @@ public class PlayerStateMachine : MonoBehaviour
     [Rpc(SendTo.Owner)]
     public void KillPlayerRPC()
     {
-        if (CurrentPlayerState != DeathState) Game_GeneralManager.instance.Kill(this);
+        if (CurrentPlayerState != DeathState) Game_GeneralManager.game_instance.Kill(this);
     }
 }

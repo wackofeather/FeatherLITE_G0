@@ -4,7 +4,6 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEngine;
 using Steamworks;
 using Netcode.Transports.Facepunch;
 using System.Threading.Tasks;
@@ -22,11 +21,11 @@ public class Menu_UI_Manager : UI_Manager
     [SerializeField] public Button JoinGameButton;
     [HideInInspector] public int MainKey;
 
-    public Array serverArray;
+    Lobby[] serverArray;
+    public List<Lobby> LobbyList = new List<Lobby>();
 
 
-
-
+    //ss
     public static Menu_UI_Manager Menu_instance { get; set; }
 
     //instead of adding listeners, just reference function through inspector
@@ -39,6 +38,7 @@ public class Menu_UI_Manager : UI_Manager
     {
             
         serverArray = await SteamMatchmaking.LobbyList.RequestAsync();
+        if (serverArray != null) LobbyList = serverArray.ToList();
         Debug.Log("Activated");
     }
 

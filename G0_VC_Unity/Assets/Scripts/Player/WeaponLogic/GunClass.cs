@@ -1,3 +1,4 @@
+using CGT.Pooling;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -78,13 +79,19 @@ public class GunClass : WeaponClass
                 if (player.isMelee) break;
                 RaycastHit hit = new RaycastHit();
                 //if (Physics.Raycast(inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position, ))
-                if (Physics.Raycast(player.PlayerCamera.transform.position, player.PlayerCamera.TransformDirection(Vector3.forward), out hit, 500f, (1 << LayerMask.NameToLayer("ENEMY")))) 
-                { 
-                    Debug.LogAssertion("hit!");
-                    hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(1);
+                if (Physics.Raycast(player.PlayerCamera.transform.position, player.PlayerCamera.TransformDirection(Vector3.forward), out hit, 500f))
+                {
+                    HS_Poolable toShoot = HS_PoolableManager.instance.GetInstanceOf(gunData.bulletFX.GetComponent<HS_Poolable>());
+                    toShoot.transform.position = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position;
+                    toShoot.transform.rotation = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.rotation;
+                    toShoot.gameObject.SetActive(true);
+
+                    if (hit.collider.gameObject.layer == (1 << LayerMask.NameToLayer("ENEMY"))) { hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(1); Debug.LogAssertion("hit!"); }
                 }
-                //Debug.LogWarning(player);
-                yield return new WaitForSeconds(1 / weaponData.BPS);
+
+
+            //Debug.LogWarning(player);
+            yield return new WaitForSeconds(1 / weaponData.BPS);
             }
             inventory.isShooting = false;
             yield break;

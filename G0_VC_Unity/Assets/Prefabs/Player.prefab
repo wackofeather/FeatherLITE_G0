@@ -1224,7 +1224,7 @@ MonoBehaviour:
       m_Calls: []
   m_ActionEvents: []
   m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_DefaultControlScheme: KBM
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -1242,6 +1242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 2920028746863420625}
   move: {fileID: -2513984626473278120, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
+  look: {fileID: 4987557742370737317, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   fire: {fileID: 1203331415346767575, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   scope: {fileID: -2653568425862354484, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
   pause: {fileID: -3210920384054898338, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
@@ -1277,10 +1278,61 @@ MonoBehaviour:
     m_Bits: 768
   maxDistance: 100
   Grapple: {fileID: -6912044076580143309, guid: 60d69e64b56c7e84aae00b78830cad02, type: 3}
-  grappleSpeed: 53.2
+  grappleSpeed: 40
   jointDamper: 7
   jointSpring: 4.5
   jointMassScale: 4.5
+  jointSpringCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 15
+      inSlope: -6.4897876
+      outSlope: -2.5063043
+      tangentMode: 65
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.13607349
+      value: 14.658958
+      inSlope: -2.5063043
+      outSlope: -152.80504
+      tangentMode: 69
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.17781307
+      value: 8.28094
+      inSlope: -37.209805
+      outSlope: -34.99564
+      tangentMode: 65
+      weightedMode: 0
+      inWeight: 0.06105407
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2858534
+      value: 4.5
+      inSlope: -34.99564
+      outSlope: Infinity
+      tangentMode: 101
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 4.5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   quality: 500
   damper: 14
   strength: 800

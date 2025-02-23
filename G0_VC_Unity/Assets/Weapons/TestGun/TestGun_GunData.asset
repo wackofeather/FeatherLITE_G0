@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxAmmo_Inventory: 0
   BPS: 0
+  bulletFX: {fileID: 1564468091806366, guid: f1dc4df701f37324c98ea16f41770afc, type: 3}

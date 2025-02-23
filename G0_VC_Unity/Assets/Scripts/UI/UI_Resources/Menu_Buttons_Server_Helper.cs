@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Menu_Buttons_Server_Helper:MonoBehaviour
 {
-     public ulong value;
+     public Lobby lobby;
      public TMP_Text TextMeshPro;
     //public string serverId;
 
@@ -17,7 +17,7 @@ public class Menu_Buttons_Server_Helper:MonoBehaviour
     }
     public void OnClick()
     {
-        SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(value));
+        SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(lobby.Id));
     }
 
 }

@@ -44,7 +44,8 @@ public class Menu_UI_Manager : UI_Manager
 
     public override void ChildAwake()
     {
-
+        Debug.Log("ChildAwakeCalled");
+        InvokeRepeating("AsyncGetServerList", 0, 10);
         ConstructMenuSingleton();
         AsyncGetServerList();
     }

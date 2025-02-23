@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Screen_UI : MonoBehaviour
 {
-    [SerializeField] public GameObject Container;
-
+    public GameObject Container;
+    public Screen_UI_Controller controller;
     public int Key;
 
     public virtual void EnableScreen()
@@ -16,7 +16,7 @@ public class Screen_UI : MonoBehaviour
     }
     public virtual void OnScreenSwitch(int newScreen)
     {
-        UI_Manager.instance.SwitchScreens(newScreen);
+        controller.SwitchScreens(newScreen);
         //GameObject.FindObjectOfType<UI_Manager>().instance.SwitchScreens(newScreen);
         //Debug.Log(UI_Manager.instance);
         //Debug.Log(newScreen);

@@ -21,7 +21,7 @@ public class Menu_UI_Manager : UI_Manager
     [SerializeField] public Button JoinGameButton;
     [HideInInspector] public int MainKey;
 
-    Lobby[] serverArray;
+    public Lobby[] serverArray;
     public List<Lobby> LobbyList = new List<Lobby>();
 
 

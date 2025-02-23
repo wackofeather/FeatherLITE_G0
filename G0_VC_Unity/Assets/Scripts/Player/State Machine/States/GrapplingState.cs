@@ -68,16 +68,20 @@ public class GrapplingState : BasePlayerState
         player.joint.connectedAnchor = player.grapplePoint;
 
         float distanceFromPoint = Vector3.Distance(player.rb.position, player.grapplePoint);
-
+        
         //The distance grapple will try to keep from grapple point. 
+
+        player.joint.anchor = new Vector3(0, 0, 0);
         player.joint.maxDistance = distanceFromPoint * 1f;
         player.joint.minDistance = 0.25f; //distanceFromPoint * 0.25f;
 
+        player.joint.connectedAnchor = player.grapplePoint;
+
         //Adjust these values to fit your game.
-        player.joint.spring = player.jointSpring;
+        player.joint.spring = player.jointSpringCurve.Evaluate(distanceFromPoint / player.maxDistance);
         player.joint.damper = player.jointDamper;
         player.joint.massScale = player.jointMassScale;
-
+        //Debug.LogWarning(player.joint.spring);
         player.isGrappling = true;
 
         player.VIEWPORT_grappleHand.SetActive(true);
@@ -141,10 +145,17 @@ public class GrapplingState : BasePlayerState
 
         if (!player.networkInfo._isOwner) return;
 
-        if (Vector3.Distance(player.rb.position, player.grapplePoint) > 0.25f)
+        if (Vector3.Distance(player.rb.position, player.grapplePoint) > 1)
         {
+            player.joint.connectedAnchor = player.grapplePoint;
+
+            //player.
+            //player.joint.connectedAnchor = player.grapplePoint + (player.rb.position - player.grapplePoint).normalized * ((player.rb.position - player.grapplePoint).magnitude - Time.deltaTime * player.grappleSpeed); //Mathf.Min((player.grappleSpeed + Mathf.Abs(Vector3.Cross((player.rb.position - player.grapplePoint).normalized, player.rb.linearVelocity).magnitude)) * Time.fixedDeltaTime, (player.rb.position - player.grapplePoint).magnitude));
             //if (Vector3.Distance(player.position, grapplePoint) < joint.maxDistance - grappleSpeed * Time.deltaTime) joint.maxDistance = Vector3.Distance(player.position, grapplePoint);
-            player.joint.maxDistance -= player.grappleSpeed * Time.fixedDeltaTime;
+            player.joint.maxDistance -= player.grappleSpeed * Time.fixedDeltaTime;// * Vector3.Distance(player.rb.position, player.grapplePoint)/startingDistance;
+            //Debug.Log(Mathf.Max((player.grappleSpeed + Mathf.Abs(Vector3.Cross((player.rb.position - player.grapplePoint).normalized, player.rb.linearVelocity).magnitude))));
+            //Debug.Log(Mathf.Max((player.grappleSpeed + Mathf.Min(Vector3.Cross((player.rb.position - player.grapplePoint).normalized, player.rb.linearVelocity).magnitude, 0))));
+            //Debug.Log(player.joint.maxDistance);
         }
 
     }

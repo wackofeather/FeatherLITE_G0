@@ -10,18 +10,35 @@ public class Game_UI_Manager : UI_Manager
 {
     [SerializeField] Canvas ScreenCanvas;
     [SerializeField] Canvas WorldCanvas;
+    public GameObject sharedScreen;
+    public GameObject regularScreen;
+
 
     [SerializeField] Image GrappleIndicator;
     [SerializeField] Color NoGrappleColor;
     [SerializeField] Color GrappleColor;
 
-    new public static Game_UI_Manager instance { get; set; }
+    public static Game_UI_Manager game_instance { get; set; }
 
+    public List<BaseGameMode_UI> gameModeUIs;
 
-    
+    [HideInInspector] public BaseGameMode_UI sessionGameModeUI;
+    private void Awake()
+    {
+        sharedScreen.SetActive(true);
+        sessionGameModeUI = gameModeUIs.Find(UI => UI.GameMode == SteamLobbyManager.currentLobby.GetData("GameMode"));
+        sessionGameModeUI.gameObject.SetActive(true);
+        ConstructGameSingleton();
+    }
 
-
-
+    private void Start()
+    {
+        sessionGameModeUI.ModeUI_Start();
+    }
+    private void Update()
+    {
+        sessionGameModeUI.ModeUI_Update();
+    }
 
     //GRAPPLE_INDICATOR
     public void UpdateGrappleIndicator(bool canGrapple)
@@ -48,7 +65,7 @@ public class Game_UI_Manager : UI_Manager
     {
         player.extHealthBar.GetComponentInChildren<TextMeshProUGUI>().text = player.health.ToString();
         player.extHealthBar.transform.position = player.ExtHealthBarLocation.position;
-        player.GetComponent<PlayerStateMachine>().extHealthBar.transform.LookAt(new Vector3(Game_GeneralManager.instance.runtime_playerObj.GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.x, player.extHealthBar.transform.position.y, Game_GeneralManager.instance.runtime_playerObj.GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.z));
+        player.GetComponent<PlayerStateMachine>().extHealthBar.transform.LookAt(new Vector3(Game_GeneralManager.game_instance.runtime_playerObj.GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.x, player.extHealthBar.transform.position.y, Game_GeneralManager.game_instance.runtime_playerObj.GetComponent<PlayerStateMachine>().PlayerCamera.transform.position.z));
     }
 
     //WEAPONPICKUP
@@ -85,15 +102,15 @@ public class Game_UI_Manager : UI_Manager
 
 
 
-    public override void ConstructSingleton()
+    public void ConstructGameSingleton()
     {
-        if (instance != null && instance != this)
+        if (game_instance != null && game_instance != this)
         {
             Destroy(this);
         }
         else
         {
-            instance = this;
+            game_instance = this;
         }
     }
 

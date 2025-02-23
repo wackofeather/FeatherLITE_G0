@@ -16,13 +16,56 @@ MonoBehaviour:
   selectiveMask:
     serializedVersion: 2
     m_Bits: 8
-  renderFOV: 60
+  rendererOpaque: {fileID: 0}
   uniqueFeatureTag: 1
-  selective_injectionPoint: 550
-  shader_injectionPoint: 600
+  selective_injectionPoint: 0
+  shader_injectionPoint: 250
+  writing_injectionPoint: 600
   screen_material: {fileID: 2100000, guid: 80f9df04415a9f448910938dab0b012e, type: 2}
   object_material: {fileID: 2100000, guid: 3b49b105dbb296c4f9045eec0cc402f3, type: 2}
   testMaterial: {fileID: -876546973899608171, guid: 2fae032cb6d40734c84ec7f829baef2b, type: 3}
+--- !u!114 &-7390697198514955929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: RenderExteriorOpaque
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: RenderExteriorOpaque
+    Event: 550
+    filterSettings:
+      RenderQueueType: 0
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 8
+      PassNames: []
+    overrideMaterial: {fileID: 0}
+    overrideMaterialPassIndex: 0
+    overrideShader: {fileID: 0}
+    overrideShaderPassIndex: 0
+    overrideMode: 1
+    overrideDepthState: 1
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
 --- !u!114 &-6692203459962225849
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35,7 +78,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b00045f12942b46c698459096c89274e, type: 3}
   m_Name: FullScreenPassRendererFeature
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   injectionPoint: 450
   fetchColorBuffer: 1
   requirements: 6
@@ -73,28 +116,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
-  m_Name: RenderExteriorOpaque
+  m_Name: RenderExteriorOutlines
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
-    passTag: RenderExteriorOpaque
-    Event: 550
+    passTag: RenderExteriorOutlines
+    Event: 250
     filterSettings:
       RenderQueueType: 0
       LayerMask:
         serializedVersion: 2
         m_Bits: 8
       PassNames: []
-    overrideMaterial: {fileID: 0}
+    overrideMaterial: {fileID: 2100000, guid: 8b008816ba5b55f46b839232c8911940, type: 2}
     overrideMaterialPassIndex: 0
     overrideShader: {fileID: 0}
     overrideShaderPassIndex: 0
     overrideMode: 1
     overrideDepthState: 0
-    depthCompareFunction: 4
+    depthCompareFunction: 0
     enableWrite: 1
     stencilSettings:
-      overrideStencilState: 1
+      overrideStencilState: 0
       stencilReference: 1
       stencilCompareFunction: 8
       passOperation: 0
@@ -162,7 +205,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: RenderViewportTransparent2
-    Event: 600
+    Event: 550
     filterSettings:
       RenderQueueType: 1
       LayerMask:
@@ -256,18 +299,20 @@ MonoBehaviour:
     probeSamplingDebugTexture: {fileID: 0}
     probeVolumeBlendStatesCS: {fileID: 0}
   m_RendererFeatures:
+  - {fileID: -2818969625490625347}
+  - {fileID: -7390697198514955929}
+  - {fileID: 1439922554848822598}
+  - {fileID: 2601957733116269070}
   - {fileID: 7527854428169008231}
   - {fileID: 4824327859454418076}
   - {fileID: 70103111058914546}
   - {fileID: -1650954301849073151}
   - {fileID: -1766886794316331878}
   - {fileID: -1043244039001234364}
-  - {fileID: -2818969625490625347}
-  - {fileID: 1439922554848822598}
-  - {fileID: 2601957733116269070}
-  - {fileID: -8572204128387035342}
   - {fileID: -6692203459962225849}
-  m_RendererFeatureMap: 6774ddd7b74f78689c1ccdb6a074f342f2fc5078680ef900010ae241cfa116e99a44726ad2c17ae744a449e912a785f1bdec03a80f02e1d84645d641efa1fb130ed2f9c2c5021c24328f5a41c369098947bb4ff4688420a3
+  - {fileID: -8572204128387035342}
+  - {fileID: 3121572306324459887}
+  m_RendererFeatureMap: bdec03a80f02e1d867990a380ef86e994645d641efa1fb130ed2f9c2c5021c246774ddd7b74f78689c1ccdb6a074f342f2fc5078680ef900010ae241cfa116e99a44726ad2c17ae744a449e912a785f147bb4ff4688420a3328f5a41c36909896f912a4b790d522b
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -288,7 +333,7 @@ MonoBehaviour:
   m_ShadowTransparentReceive: 1
   m_RenderingMode: 0
   m_DepthPrimingMode: 0
-  m_CopyDepthMode: 0
+  m_CopyDepthMode: 1
   m_DepthAttachmentFormat: 0
   m_DepthTextureFormat: 0
   m_AccurateGbufferNormals: 0
@@ -350,7 +395,7 @@ MonoBehaviour:
   m_Active: 1
   settings:
     passTag: RenderExteriorTransparent
-    Event: 250
+    Event: 550
     filterSettings:
       RenderQueueType: 1
       LayerMask:
@@ -393,13 +438,121 @@ MonoBehaviour:
   selectiveMask:
     serializedVersion: 2
     m_Bits: 64
-  renderFOV: 40
+  rendererOpaque: {fileID: 7527854428169008231}
   uniqueFeatureTag: 0
-  selective_injectionPoint: 300
-  shader_injectionPoint: 350
+  selective_injectionPoint: 0
+  shader_injectionPoint: 550
+  writing_injectionPoint: 500
   screen_material: {fileID: 2100000, guid: 80f9df04415a9f448910938dab0b012e, type: 2}
-  object_material: {fileID: 2100000, guid: 3b49b105dbb296c4f9045eec0cc402f3, type: 2}
+  object_material: {fileID: 2100000, guid: c1edb0eb010430344b21c8d03a7d68ae, type: 2}
   testMaterial: {fileID: -876546973899608171, guid: 2fae032cb6d40734c84ec7f829baef2b, type: 3}
+--- !u!114 &3121572306324459887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a052916d162d3448e654173d8cc8e3, type: 3}
+  m_Name: MKEdgeDetectionRendererFeature
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  workMode: 1
+  precision:
+    _value: 0
+  largeKernel:
+    _value: 0
+  mediumKernel:
+    _value: 0
+  smallKernel:
+    _value: 0
+  inputData:
+    _value: 3
+  lineHardness:
+    _value: 0.5
+    _minValue: 0
+    _maxValue: 1
+  fade:
+    _value: 0
+  lineSizeMatchFactor:
+    _value: 0.5
+    _minValue: 0
+    _maxValue: 1
+  globalLineSize:
+    _value: 1
+    _minValue: 0
+    _maxValue: 3
+  depthLineSize:
+    _value: 1
+    _minValue: 0
+    _maxValue: 2
+  normalLineSize:
+    _value: 1
+    _minValue: 0
+    _maxValue: 2
+  depthFadeLimits:
+    _minValue: 0
+    _maxValue: 1
+    _minLimit: 0
+    _maxLimit: 1
+  normalFadeLimits:
+    _minValue: 0
+    _maxValue: 1
+    _minLimit: 0
+    _maxLimit: 1
+  depthThreshold:
+    _minValue: 0.1
+    _maxValue: 1
+    _minLimit: 0
+    _maxLimit: 1
+  lineColor:
+    _value: {r: 0, g: 0, b: 0, a: 1}
+    _useAlpha: 1
+    _useHDR: 0
+  overlayColor:
+    _value: {r: 1, g: 1, b: 1, a: 0}
+    _useAlpha: 1
+    _useHDR: 0
+  depthNearFade:
+    _value: 10
+  depthFarFade:
+    _value: 30
+  normalNearFade:
+    _value: 5
+  normalsFarFade:
+    _value: 20
+  normalThreshold:
+    _minValue: 0.1
+    _maxValue: 0.20329669
+    _minLimit: 0
+    _maxLimit: 1
+  sceneColorThreshold:
+    _minValue: 0.1
+    _maxValue: 1
+    _minLimit: 0
+    _maxLimit: 1
+  sceneColorLineSize:
+    _value: 1
+    _minValue: 0
+    _maxValue: 2
+  sceneColorNearFade:
+    _value: 0
+  sceneColorFarFade:
+    _value: 10
+  sceneColorFadeLimits:
+    _minValue: 0
+    _maxValue: 1
+    _minLimit: 0
+    _maxLimit: 1
+  visualizeEdges:
+    _value: 0
+  enhanceDetails:
+    _value: 1
+  workflow:
+    _value: 0
+  _propertiesInitialized: 1
 --- !u!114 &4824327859454418076
 MonoBehaviour:
   m_ObjectHideFlags: 0

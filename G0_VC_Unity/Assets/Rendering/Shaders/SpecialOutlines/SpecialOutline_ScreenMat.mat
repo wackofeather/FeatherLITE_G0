@@ -58,7 +58,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _OVERLAY: 0
-    - _Thickness: 1.54
+    - _Thickness: 2.64
     - _testFloat: 0
     m_Colors: []
   m_BuildTextureStacks: []

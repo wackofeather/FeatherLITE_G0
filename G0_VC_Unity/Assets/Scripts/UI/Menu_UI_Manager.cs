@@ -4,44 +4,82 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEngine;
 using Steamworks;
 using Netcode.Transports.Facepunch;
 using System.Threading.Tasks;
 using Steamworks.Data;
 using System;
 using UnityEngine.SceneManagement;
+using System.Linq;
+using JetBrains.Annotations;
+using Unity.VisualScripting;
 
 
-public class Menu_UI_Manager:UI_Manager
+public class Menu_UI_Manager : UI_Manager
 {
     [SerializeField] public Button CreateGameButton;
-    [SerializeField] public NetworkManager NetworkManager;
+    [SerializeField] public Button JoinGameButton;
+    [HideInInspector] public int MainKey;
 
-    new private static Menu_UI_Manager instance { get; set; }
+    Lobby[] serverArray;
+    public List<Lobby> LobbyList = new List<Lobby>();
 
-    void Start()
+
+    //ss
+    public static Menu_UI_Manager Menu_instance { get; set; }
+
+    //instead of adding listeners, just reference function through inspector
+
+    //declare a list of Screen_UIs, but then in runtime turn the listttttttt into a dictionary
+
+    //use dictionary to pass in differnet key values to switch to, try and make this a parameter in a function instead of hardcoding numbers
+
+    public async void AsyncGetServerList()
     {
-        NetworkManager = GetComponent<NetworkManager>();
-
-        CreateGameButton.onClick.AddListener(onClicky);
-
+            
+        serverArray = await SteamMatchmaking.LobbyList.RequestAsync();
+        if (serverArray != null) LobbyList = serverArray.ToList();
+        Debug.Log("Activated");
     }
 
-    void onClicky()
+    public override void ChildAwake()
     {
-        NetworkManager.Singleton.StartHost();
 
+        ConstructMenuSingleton();
+        AsyncGetServerList();
     }
-    public override void ConstructSingleton()
+
+
+
+
+
+
+
+    //void Update()
+    //{
+
+    //}
+
+
+    public void onClicky()
     {
-        if (instance != null && instance != this)
+        //NetworkManager.Singleton.StartHost();
+        SteamLobbyManager.instance.CreateLobby();
+       
+    }
+    //public void onClicky2()
+    //{
+    //    Debug.Log("mimi"); 
+    //}
+    public void ConstructMenuSingleton()
+    {
+        if (Menu_instance != null && Menu_instance != this)
         {
-            Destroy(this);
+            Destroy(this); 
         }
         else
         {
-            instance = this;
+            Menu_instance = this;
         }
     }
 

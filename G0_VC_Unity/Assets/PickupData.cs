@@ -36,13 +36,13 @@ public class PickupData : MonoBehaviour, IInteractable
         {
             if (frameTimer == 0)
             {
-                Game_UI_Manager.instance.UpdateWeaponPickUI(null);
+                Game_UI_Manager.game_instance.UpdateWeaponPickUI(null);
                 isCoroutineRunning = false;
                 break;
             }
             if (frameTimer == 1)
             {
-                Game_UI_Manager.instance.UpdateWeaponPickUI(correspondingWeapon.weaponData.gunPickUpImage);
+                Game_UI_Manager.game_instance.UpdateWeaponPickUI(correspondingWeapon.weaponData.gunPickUpImage);
                 frameTimer = 0;
             }
             yield return null;

@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Screen_UI : MonoBehaviour
@@ -6,13 +7,15 @@ public class Screen_UI : MonoBehaviour
     public Screen_UI_Controller controller;
     public int Key;
 
-    public virtual void EnableScreen()
+    public async virtual Task<bool> EnableScreen()
     {
         Container.SetActive(true);
+        return true;
     }
-    public virtual void DisableScreen()
+    public async virtual Task<bool> DisableScreen()
     {
         Container.SetActive(false);
+        return true;
     }
     public virtual void OnScreenSwitch(int newScreen)
     {

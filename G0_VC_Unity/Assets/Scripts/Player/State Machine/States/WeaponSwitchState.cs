@@ -35,7 +35,7 @@ public class WeaponSwitchState : BasePlayerState
 
 
         timer -= Time.deltaTime;
-        Game_UI_Manager.instance.SetCountdownText(timer);
+        Game_UI_Manager.game_instance.SetCountdownText(timer);
 
 
 
@@ -78,6 +78,6 @@ public class WeaponSwitchState : BasePlayerState
         player.isInteracting = false;
         player.InteractCoolDownTimer = player.pickupCooldownTime;
         player.hasPickedUpInteractButton = false;
-        Game_UI_Manager.instance.SetCountdownText(0);
+        Game_UI_Manager.game_instance.SetCountdownText(0);
     }
 }

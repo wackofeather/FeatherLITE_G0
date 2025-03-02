@@ -19,9 +19,9 @@ public class FFA_gameMode : BaseGameMode
 
         playerNetworkObject.TryGet(out NetworkObject playerObj);
         Debug.Log("networkobject is" + Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count]);
-        playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.rb.MovePosition(Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position);//.rb.MovePosition(SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position);
+        playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.gameObject.transform.position = Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position;//.rb.MovePosition(SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position);
         playerObj.gameObject.GetComponent<PlayerNetwork>().SetHealthRPC(100, Game_GeneralManager.game_instance.RpcTarget.Owner);
-        //Debug.LogWarning(SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position);
+        Debug.LogWarning(Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position + "missed the train");
     }
 
     public override void ServerSideRespawnplayer(NetworkObjectReference playerNetworkObject, ulong NetworkID)

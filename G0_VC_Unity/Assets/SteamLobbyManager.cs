@@ -452,7 +452,7 @@ public class SteamLobbyManager : MonoBehaviour
             yield return null;
         }
         Debug.LogWarning(GeneralManager.instance);
-        GeneralManager.instance.OnConnectedToSession(_reconnecting);
+        //GeneralManager.instance.OnConnectedToSession(_reconnecting);
 
         //Game_GeneralManager.instance.SpawnPlayerRPC(NetworkManager.Singleton.LocalClientId);
 
@@ -548,7 +548,7 @@ public class SteamLobbyManager : MonoBehaviour
             return false;
         }
     }*/
-
+    
     public void LeaveLobby()
     {
         try

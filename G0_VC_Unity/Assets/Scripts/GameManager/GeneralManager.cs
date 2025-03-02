@@ -47,6 +47,7 @@ public class GeneralManager : NetworkBehaviour
 
     private void Start()
     {
+        
         _Start();
     }
 
@@ -65,6 +66,7 @@ public class GeneralManager : NetworkBehaviour
 
     public virtual void OnLobbyDataChange(Lobby newLobbyData)
     {
+        Debug.LogWarning("yeeyee ass haircut" + newLobbyData.GetData("Map"));
         Debug.LogAssertion("jeez louise  " + newLobbyData.Owner.Id + "   " + currentLobbyOwner);
         //if (!wantConnection) return;
         if (currentLobbyOwner != newLobbyData.Owner.Id)
@@ -77,10 +79,10 @@ public class GeneralManager : NetworkBehaviour
             HostMigrationCorT = StartCoroutine(HostMigrationCoroutine());
         }
     }
-    public virtual void OnConnectedToSession(bool _reconnecting)
+/*    public virtual void OnConnectedToSession(bool _reconnecting)
     {
 
-    }
+    }*/
     public virtual void PrepareHM()
     {
 
@@ -314,7 +316,7 @@ public class GeneralManager : NetworkBehaviour
         }
     }
 
-    public void OnDestroy()
+/*    public void OnDestroy()
     {
 
 
@@ -322,5 +324,5 @@ public class GeneralManager : NetworkBehaviour
         // wantConnection = false;
         SteamLobbyManager.instance.LeaveLobby();
         Debug.LogAssertion("hoooooha");
-    }
+    }*/
 }

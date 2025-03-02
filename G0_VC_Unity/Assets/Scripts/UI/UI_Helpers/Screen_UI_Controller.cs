@@ -20,7 +20,6 @@ public class Screen_UI_Controller : MonoBehaviour
             ScreenDict.Add(screen.Key, screen);
             if (screen.Key == 0)//Default Screen is 0, that's why its 0.
             {
-                Debug.Log("ScreenKEy=0");
                 screen.EnableScreen();
                 currentScreen = 0;
 

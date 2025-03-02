@@ -294,7 +294,7 @@ public class GeneralManager : NetworkBehaviour
 
     public virtual void _Update()
     {
-        Debug.Log("testing this");
+        //Debug.Log("testing this");
         if (IsServer)
         {
             CurrentHost.Value = SteamClient.SteamId;

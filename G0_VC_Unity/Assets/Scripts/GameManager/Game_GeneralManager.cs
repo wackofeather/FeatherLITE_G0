@@ -102,11 +102,6 @@ public class Game_GeneralManager : GeneralManager
         currentMap = GameObject.FindFirstObjectByType<Runtime_MapData>();
 
         Env_Container = currentMap.gameObject;
-    }
-
-    public override void _OnNetworkSpawn()
-    {
-        base._OnNetworkSpawn();
 
         if (IsHost)
         {
@@ -119,6 +114,13 @@ public class Game_GeneralManager : GeneralManager
         {
             gameMode = new FFA_gameMode();
         }
+    }
+
+    public override void _OnNetworkSpawn()
+    {
+        base._OnNetworkSpawn();
+
+       
 
         //DontDestroyOnLoad(this.gameObject);
 

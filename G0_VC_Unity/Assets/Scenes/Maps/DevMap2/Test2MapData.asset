@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1627a639f673328468aacb5101700a5e, type: 3}
-  m_Name: MapLookup
+  m_Script: {fileID: 11500000, guid: 10fb0143c952bb743a21f267757c370d, type: 3}
+  m_Name: Test2MapData
   m_EditorClassIdentifier: 
-  MapDatas:
-  - {fileID: 11400000, guid: 743adf2c9051a084dbe21a7796b74fa4, type: 2}
-  - {fileID: 11400000, guid: d3e5b7ca7e3593e4f86b08bbf6c86941, type: 2}
+  MapName: Test2
+  MapSceneName: Scene2

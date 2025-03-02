@@ -66,6 +66,7 @@ public class Menu_UI_Manager : UI_Manager
     {
         //NetworkManager.Singleton.StartHost();
         SteamLobbyManager.instance.CreateLobby();
+        //SceneManager.LoadScene("LobbyScene");
        
     }
     //public void onClicky2()

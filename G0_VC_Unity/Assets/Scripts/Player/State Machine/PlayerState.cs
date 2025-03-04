@@ -37,7 +37,14 @@ public class BasePlayerState
             
             if (player.internal_CurrentState != key) player.ChangeState(player.stateDictionary[player.internal_CurrentState]);
 
-            if (player.inventory.GetCurrentWeapon() != null) { player.inventory.GetCurrentWeapon().Weapon_Update(); }
+            if (player.inventory.GetCurrentWeapon() != null) 
+            { 
+                player.inventory.GetCurrentWeapon().Weapon_Update();
+/*                foreach (WeaponClass weapon in player.inventory.Weapon_Inventory)
+                {
+                    weapon.Weapon_PersistentUpdate();
+                }*/
+            }
             return;
         }
 
@@ -63,7 +70,15 @@ public class BasePlayerState
 
         //player.playerNetwork.TransmitState();
 
-        if (player.inventory.GetCurrentWeapon() != null) { player.inventory.GetCurrentWeapon().Weapon_Update(); }
+        if (player.inventory.GetCurrentWeapon() != null) 
+        { 
+            player.inventory.GetCurrentWeapon().Weapon_Update(); 
+/*            foreach (WeaponClass weapon in player.inventory.Weapon_Inventory)
+            {
+                weapon.Weapon_PersistentUpdate();
+            }*/
+        
+        }
     }
     public virtual void FixedUpdate()
     {

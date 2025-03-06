@@ -6,7 +6,7 @@ using UnityEngine;
 public class GunData : ScriptableObject
 {
 
-    public float maxAmmo_Inventory;
+    [SerializeField] float maxAmmo_Inventory;
     [Space]
     [SerializeField] float BPS;
     public GameObject bulletFX;

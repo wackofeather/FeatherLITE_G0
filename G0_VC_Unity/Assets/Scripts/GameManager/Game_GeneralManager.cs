@@ -102,6 +102,11 @@ public class Game_GeneralManager : GeneralManager
         currentMap = GameObject.FindFirstObjectByType<Runtime_MapData>();
 
         Env_Container = currentMap.gameObject;
+    }
+
+    public override void _OnNetworkSpawn()
+    {
+        base._OnNetworkSpawn();
 
         if (IsHost)
         {
@@ -115,22 +120,13 @@ public class Game_GeneralManager : GeneralManager
             gameMode = new FFA_gameMode();
         }
 
-        OnConnectedToSession(false);
-    }
-
-    public override void _OnNetworkSpawn()
-    {
-        base._OnNetworkSpawn();
-
-       
-
         //DontDestroyOnLoad(this.gameObject);
 
     }
 
     public override void OnLobbyDataChange(Lobby newLobbyData)
     {
-        //Debug.LogAssertion("jeez louise  " + newLobbyData.Owner.Id + "   " + currentLobbyOwner);
+        Debug.LogAssertion("jeez louise  " + newLobbyData.Owner.Id + "   " + currentLobbyOwner);
         //if (!wantConnection) return;
         if (currentLobbyOwner != newLobbyData.Owner.Id)
         {
@@ -308,8 +304,9 @@ public class Game_GeneralManager : GeneralManager
         }
     }
 
-    public void OnConnectedToSession(bool _reconnecting)
+    public override void OnConnectedToSession(bool _reconnecting)
     {
+        base.OnConnectedToSession(_reconnecting);
         SpawnPlayerRPC(Steamworks.SteamClient.SteamId, NetworkManager.Singleton.LocalClientId, _reconnecting);
     }
 
@@ -363,14 +360,12 @@ public class Game_GeneralManager : GeneralManager
     [Rpc(SendTo.Server, RequireOwnership = false)]
     public virtual void Server_SpawnPlayerForGameRPC(NetworkObjectReference playerNetworkObject, ulong NetworkID)
     {
-       
         gameMode.ServerSideRespawnplayer(playerNetworkObject, NetworkID);
     }
 
     [Rpc(SendTo.SpecifiedInParams, RequireOwnership = false)]
     public virtual void Owner_SpawnPlayerForGameRPC(NetworkObjectReference playerNetworkObject,  int SpawnTicker, RpcParams _param)
     {
-        
         gameMode.OwnerSideRespawnPlayer(playerNetworkObject, SpawnTicker, _param);
 
     }

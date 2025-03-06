@@ -20,16 +20,6 @@ public class WeaponClass : ScriptableObject , IWeaponable
     [HideInInspector] public PlayerStateMachine player;
     [HideInInspector] public Player_Inventory inventory;
     protected float shootingTimer;
-
-    public void OnEnable()
-    {
-        _OnEnable();
-    }
-
-    public virtual void _OnEnable()
-    {
-
-    }
     public virtual void Weapon_Update() 
     {
 
@@ -40,11 +30,6 @@ public class WeaponClass : ScriptableObject , IWeaponable
 
 
         if (!player.isMelee) inventory.ChangeCurrentWeapon((int)inventory.SwitchWeapon.action.ReadValue<float>());
-    }
-
-    public virtual void Weapon_PersistentUpdate()
-    {
-
     }
 
     public virtual void EnterWeapon()

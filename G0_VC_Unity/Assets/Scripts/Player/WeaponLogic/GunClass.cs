@@ -1,7 +1,6 @@
 using CGT.Pooling;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,14 +9,8 @@ using UnityEngine.InputSystem;
 public class GunClass : WeaponClass
 {
     public GunData gunData;
+    [HideInInspector] float maxAmmo_Mag;
     [SerializeField] GameObject bullet;
-    [HideInInspector] public float currentAmmo;
-
-    public override void _OnEnable()
-    {
-        base._OnEnable();
-        currentAmmo = gunData.maxAmmo_Inventory;
-    }
 
     public override void EnterWeapon()
     {
@@ -60,11 +53,11 @@ public class GunClass : WeaponClass
 
 
         if (shootingTimer > 0) return;
-        if (inventory.isReloading) return;
 
 
 
-        if (weaponData.fireInput.action.IsPressed() && !player.isMelee && !inventory.isShooting && currentAmmo > 0) Shoot();
+
+        if (weaponData.fireInput.action.IsPressed() && !player.isMelee && !inventory.isShooting) inventory.StartCoroutine(shootCoroutine());
 
 
         if (weaponData.scope.action.IsPressed() && !player.isMelee) StartScope();
@@ -75,20 +68,6 @@ public class GunClass : WeaponClass
     public void StartScope() { inventory.isScoping = true; }
     public void StopScope() { inventory.isScoping = false; }
 
-    public virtual void Shoot()
-    {
-        if (currentAmmo < 0 && !inventory.isReloading) Reload();
-        inventory.StartCoroutine(shootCoroutine());
-    }
-
-    public virtual async void Reload()
-    {
-        inventory.isReloading = true;
-        while (true)
-        {
-            Task.Yield();
-        }
-    }
     public virtual IEnumerator shootCoroutine()
     {
 /*        if (player.IsOwner) 
@@ -98,7 +77,6 @@ public class GunClass : WeaponClass
             {
                 if (!weaponData.fireInput.action.IsPressed()) break;
                 if (player.isMelee) break;
-                if (currentAmmo <= 0) break;
                 RaycastHit hit = new RaycastHit();
                 //if (Physics.Raycast(inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position, ))
                 if (Physics.Raycast(player.PlayerCamera.transform.position, player.PlayerCamera.TransformDirection(Vector3.forward), out hit, 500f))
@@ -110,7 +88,7 @@ public class GunClass : WeaponClass
 
                     if (hit.collider.gameObject.layer == (1 << LayerMask.NameToLayer("ENEMY"))) { hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(1); Debug.LogAssertion("hit!"); }
                 }
-                currentAmmo -= 1;
+
 
             //Debug.LogWarning(player);
             yield return new WaitForSeconds(1 / weaponData.BPS);

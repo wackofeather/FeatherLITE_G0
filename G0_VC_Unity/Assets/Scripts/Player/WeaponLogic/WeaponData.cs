@@ -21,6 +21,7 @@ public class WeaponData : ScriptableObject
 
     public float enterStateTime;
     public float pickUpTime;
+    public float reloadTime;
 
     public float maxAmmo_Inventory;
     [Space]

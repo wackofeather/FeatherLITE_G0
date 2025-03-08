@@ -106,6 +106,48 @@ MonoBehaviour:
   passIndex: 0
   bindDepthStencilAttachment: 0
   m_Version: 1
+--- !u!114 &-3196655645798452366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: RenderPhysicalUIOpaque
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    passTag: RenderPhysicalUIOpaque
+    Event: 300
+    filterSettings:
+      RenderQueueType: 0
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 4096
+      PassNames: []
+    overrideMaterial: {fileID: 0}
+    overrideMaterialPassIndex: 0
+    overrideShader: {fileID: 0}
+    overrideShaderPassIndex: 0
+    overrideMode: 1
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 1
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
 --- !u!114 &-2818969625490625347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,11 +350,12 @@ MonoBehaviour:
   - {fileID: 70103111058914546}
   - {fileID: -1650954301849073151}
   - {fileID: -1766886794316331878}
+  - {fileID: -3196655645798452366}
   - {fileID: -1043244039001234364}
   - {fileID: -6692203459962225849}
   - {fileID: -8572204128387035342}
   - {fileID: 3121572306324459887}
-  m_RendererFeatureMap: bdec03a80f02e1d867990a380ef86e994645d641efa1fb130ed2f9c2c5021c246774ddd7b74f78689c1ccdb6a074f342f2fc5078680ef900010ae241cfa116e99a44726ad2c17ae744a449e912a785f147bb4ff4688420a3328f5a41c36909896f912a4b790d522b
+  m_RendererFeatureMap: bdec03a80f02e1d867990a380ef86e994645d641efa1fb130ed2f9c2c5021c246774ddd7b74f78689c1ccdb6a074f342f2fc5078680ef900010ae241cfa116e99a44726ad2c17ae772b3ef72a032a3d344a449e912a785f147bb4ff4688420a3328f5a41c36909896f912a4b790d522b
   m_UseNativeRenderPass: 0
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}

@@ -42,6 +42,7 @@ public class Player_Inventory : MonoBehaviour
     [HideInInspector] public bool isScoping;
     [HideInInspector] public bool isReloading;
 
+
     Vector3 OwnerGunTip;
 
     public void Start()
@@ -175,6 +176,7 @@ public class Player_Inventory : MonoBehaviour
         weapon_copy.inventory = this;
 
         Weapon_Inventory.Insert(current_Index, weapon_copy);//weapon.clone(Weapon_Inventory.Count + 1));
+        weapon_copy.Weapon_Init();
         changeWeapon_Internal(weapon_copy);
 
         /* for (int i = 0; i < Weapon_Inventory.Count; i++)

@@ -130,6 +130,7 @@ public class PlayerNetwork : NetworkBehaviour
             Rotation = new Vector2(playerStateMachine.xRotation, playerStateMachine.yRotation),
             isScoping_internal = inventory.isScoping,
             isShooting_internal = inventory.isShooting,
+            isReloading_internal = inventory.isReloading,
             GrapplePosition = playerStateMachine.grapplePoint,
             currentPlayerState_fl_internal = playerStateMachine.CurrentPlayerState.key,
             currentWeapon_fl_internal = inventory.currentWeapon.key,
@@ -187,6 +188,7 @@ public class PlayerNetwork : NetworkBehaviour
         if (_playerState.Value.currentWeapon_fl_internal != 0) inventory.internal_CurrentWeapon = _playerState.Value.currentWeapon_fl_internal;
         inventory.isScoping = _playerState.Value.isScoping_internal;
         inventory.isShooting = _playerState.Value.isShooting_internal;
+        inventory.isReloading = _playerState.Value.isReloading_internal;
         playerStateMachine.grapplePoint = _playerState.Value.GrapplePosition;
         playerStateMachine.updown_Blendconstant = Mathf.Lerp(playerStateMachine.updown_Blendconstant, (_playerState.Value.Rotation.x + 90) / 180, 0.3f);
         playerStateMachine.health = _playerState.Value.Health;
@@ -248,6 +250,8 @@ public class PlayerNetwork : NetworkBehaviour
         private bool isScoping;
 
         private bool isShooting;
+
+        private bool isReloading;
 
         private float currentPlayerState_fl;
 
@@ -311,6 +315,15 @@ public class PlayerNetwork : NetworkBehaviour
             set
             {
                 isShooting = value;
+            }
+        }
+
+        internal bool isReloading_internal
+        {
+            get => isReloading;
+            set
+            {
+                isReloading = value;
             }
         }
 

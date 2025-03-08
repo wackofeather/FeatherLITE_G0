@@ -349,7 +349,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8896149714867225894}
   - component: {fileID: 930950947033205134}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Exterior_GrapplingLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -519,7 +519,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5268612320518702280}
   - component: {fileID: 8217942930679748817}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Viewport_GrapplingLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1475,7 +1475,6 @@ MonoBehaviour:
   player_VP_ARM_anim_controller: {fileID: 8585395096242110883}
   player_EXT_ARM_anim_controller: {fileID: 2523672247751498225}
   isGrappling: 0
-  isScoping: 0
   isMelee: 0
   updown_Blendconstant: 0
   ViewportFOV: 40

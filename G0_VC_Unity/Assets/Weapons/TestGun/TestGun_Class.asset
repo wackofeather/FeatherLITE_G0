@@ -17,4 +17,5 @@ MonoBehaviour:
   player: {fileID: 0}
   inventory: {fileID: 0}
   gunData: {fileID: 11400000, guid: 7a9171828a76b3647ae8293baffe1adf, type: 2}
-  bullet: {fileID: 0}
+  muzzleFlash: {fileID: 198381662199079310, guid: 26299ec0a7ce6a14cb5d9381c0b5ca7e, type: 3}
+  bullet: {fileID: 5063894466379890091, guid: d9dea424039fdf14796606317a8f1088, type: 3}

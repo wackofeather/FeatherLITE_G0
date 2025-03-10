@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 public class GunClass : WeaponClass
 {
     public GunData gunData;
+    public ParticleSystem muzzleFlash;
     [HideInInspector] float maxAmmo_Mag;
     [SerializeField] GameObject bullet;
 
@@ -84,8 +85,12 @@ public class GunClass : WeaponClass
                     HS_Poolable toShoot = HS_PoolableManager.instance.GetInstanceOf(gunData.bulletFX.GetComponent<HS_Poolable>());
                     toShoot.transform.position = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position;
                     toShoot.transform.rotation = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.rotation;
+                    BulletVFX bulletVFX = toShoot.GetComponent<BulletVFX>();
+                    bulletVFX.end = hit.transform;
+                    bulletVFX.maxTravelPerFrame = gunData.maxTravelPerFrame;
                     toShoot.gameObject.SetActive(true);
 
+                    muzzleFlash.Play();
                     if (hit.collider.gameObject.layer == (1 << LayerMask.NameToLayer("ENEMY"))) { hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(1); Debug.LogAssertion("hit!"); }
                 }
 
@@ -94,6 +99,9 @@ public class GunClass : WeaponClass
             yield return new WaitForSeconds(1 / weaponData.BPS);
             }
             inventory.isShooting = false;
+            ParticleSystem.MainModule main = muzzleFlash.main;
+            main.loop = false;
+            // This just doesn't work for some reason muzzleFlash.main.loop = true;
             yield break;
 /*        }*/
 /*        else

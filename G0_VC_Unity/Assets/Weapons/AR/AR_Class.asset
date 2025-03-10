@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45b5b5ae217611047a71caf1eddf20f5, type: 3}
   m_Name: AR_Class
   m_EditorClassIdentifier: 
-  key: 1
   weaponData: {fileID: 11400000, guid: 629825ea64fc92443a981341272a8b51, type: 2}
+  key: 1
   player: {fileID: 0}
   inventory: {fileID: 0}
-  maxAmmo_Inventory: 100
-  BPS: 10
+  gunData: {fileID: 0}
+  muzzleFlash: {fileID: 198381662199079310, guid: 26299ec0a7ce6a14cb5d9381c0b5ca7e, type: 3}
+  bullet: {fileID: 5063894466379890091, guid: d9dea424039fdf14796606317a8f1088, type: 3}

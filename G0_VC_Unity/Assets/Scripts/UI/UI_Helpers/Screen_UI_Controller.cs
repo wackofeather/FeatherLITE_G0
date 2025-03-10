@@ -33,6 +33,7 @@ public class Screen_UI_Controller : MonoBehaviour
         await ScreenDict[currentScreen].DisableScreen();
         await ScreenDict[newScreen].EnableScreen();
         currentScreen = newScreen;
+        Debug.Log("Now_working");
     }
     void Start()
     {

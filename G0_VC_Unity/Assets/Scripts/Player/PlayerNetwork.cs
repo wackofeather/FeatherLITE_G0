@@ -25,7 +25,7 @@ public class PlayerNetwork : NetworkBehaviour
     private PlayerNetworkState last_playerState;
     private Rigidbody _rb;
     public GameObject playerObj;
-    private NetworkVariable<ulong> _SteamID;
+    public NetworkVariable<ulong> _SteamID;
     public PlayerNetworkState GetState()
     {
         return _playerState.Value;
@@ -424,7 +424,7 @@ public class PlayerNetwork : NetworkBehaviour
     }
 
     
-
+    /// Helper RPCs
 
     [Rpc(SendTo.Owner)]
     public void DamageRPC(int _damage)
@@ -443,5 +443,13 @@ public class PlayerNetwork : NetworkBehaviour
     public void SetHealthRPC(int _health, RpcParams _params)
     {
         playerStateMachine.health = _health;
+    }
+
+
+    public NetworkVariable<BeamPath> currentRailPath = new NetworkVariable<BeamPath>(null, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    [Rpc(SendTo.NotOwner)]
+    public void DummyShootRPC()
+    {
+        if ((playerStateMachine.inventory.GetCurrentWeapon() as GunClass) != null) (playerStateMachine.inventory.GetCurrentWeapon() as GunClass).DummyShoot();
     }
 }

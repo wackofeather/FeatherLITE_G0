@@ -45,6 +45,8 @@ public class Player_Inventory : MonoBehaviour
 
     Vector3 OwnerGunTip;
 
+    public LineRenderer railgun_PredictPathRenderer;
+
     public void Start()
     {
 
@@ -303,7 +305,7 @@ public class Player_Inventory : MonoBehaviour
         foreach (var child in children)
         {
             //Debug.Log(child.name);
-            child.gameObject.layer = LayerMask.NameToLayer(layer);
+            if (child.gameObject.layer == 0) child.gameObject.layer = LayerMask.NameToLayer(layer);
         }
     }
 

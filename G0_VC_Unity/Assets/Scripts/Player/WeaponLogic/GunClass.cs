@@ -99,19 +99,12 @@ public class GunClass : WeaponClass
             if (currentAmmo <= 0) break;
             if (!weaponData.fireInput.action.IsPressed()) break;
             if (player.isMelee) break;
-            RaycastHit hit = new RaycastHit();
-            //if (Physics.Raycast(inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position, ))
-            if (Physics.Raycast(player.PlayerCamera.transform.position, player.PlayerCamera.TransformDirection(Vector3.forward), out hit, 500f))
-            {
-                HS_Poolable toShoot = HS_PoolableManager.instance.GetInstanceOf(gunData.bulletFX.GetComponent<HS_Poolable>());
-                toShoot.transform.position = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position;
-                toShoot.transform.rotation = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.rotation;
-                toShoot.gameObject.SetActive(true);
 
-                if (hit.collider.gameObject.layer == (1 << LayerMask.NameToLayer("ENEMY"))) { hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(1); Debug.LogAssertion("hit!"); }
-            }
+            ShootLogic();
 
             currentAmmo -= 1;
+
+            if (player.playerNetwork != null) player.playerNetwork.DummyShootRPC();
             //Debug.LogWarning(player);
             //yield return new WaitForSeconds(1 / weaponData.BPS);
             await Task.Delay((int)(1/weaponData.BPS * 1000));
@@ -140,7 +133,27 @@ public class GunClass : WeaponClass
         }*/
         
     }
+    public virtual async Task<bool> ShootLogic()
+    {
+        RaycastHit hit = new RaycastHit();
+        //if (Physics.Raycast(inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position, ))
+        if (Physics.Raycast(player.PlayerCamera.transform.position, player.PlayerCamera.TransformDirection(Vector3.forward), out hit, 500f))
+        {
+            HS_Poolable toShoot = HS_PoolableManager.instance.GetInstanceOf(gunData.bulletFX.GetComponent<HS_Poolable>());
+            toShoot.transform.position = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position;
+            toShoot.transform.rotation = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.rotation;
+            toShoot.gameObject.SetActive(true);
 
+            if (hit.collider.gameObject.layer == (1 << LayerMask.NameToLayer("ENEMY"))) { hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(1); Debug.LogAssertion("hit!"); }
+        }
+
+        return true;
+    }
+
+    public virtual async Task<bool> DummyShoot()
+    {
+        return true;
+    }
     public virtual async Task Reload()
     {
         Debug.LogWarning("reloading");

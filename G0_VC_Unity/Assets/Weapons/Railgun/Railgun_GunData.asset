@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5a052094a65e604aa11ba65ac67bace, type: 3}
-  m_Name: WeaponLookup
+  m_Script: {fileID: 11500000, guid: dafeb43a1405e1d47aa51c6abce2ffde, type: 3}
+  m_Name: Railgun_GunData
   m_EditorClassIdentifier: 
-  weaponLookup:
-  - {fileID: 11400000, guid: f656973d38ebccb4197ee1bb392d99a5, type: 2}
-  - {fileID: 11400000, guid: bc915204247dfcc4d9f2b81d3cad7c14, type: 2}
+  maxAmmo_Inventory: 0
+  BPS: 0
+  bulletFX: {fileID: 1564468091806366, guid: f1dc4df701f37324c98ea16f41770afc, type: 3}

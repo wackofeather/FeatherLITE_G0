@@ -754,7 +754,7 @@ GameObject:
   - component: {fileID: 2237375671541017615}
   - component: {fileID: 2237375671541017613}
   - component: {fileID: 2237375671541017614}
-  m_Layer: 12
+  m_Layer: 15
   m_Name: Wind Effect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1016,6 +1016,7 @@ MonoBehaviour:
   isShooting: 0
   isScoping: 0
   isReloading: 0
+  railgun_PredictPathRenderer: {fileID: 0}
 --- !u!1 &2844048075828827684
 GameObject:
   m_ObjectHideFlags: 0

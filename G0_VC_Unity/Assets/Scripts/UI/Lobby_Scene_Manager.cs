@@ -1,8 +1,11 @@
 using System.Linq;
 using NUnit.Framework;
 using Steamworks;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using OpenCover.Framework.Model;
 
 public class Lobby_Scene_Manager : UI_Manager
 {
@@ -10,25 +13,16 @@ public class Lobby_Scene_Manager : UI_Manager
     public GameObject MenuPrefabButton;
     public Transform MenuVector;
     public VerticalLayoutGroup VerticalLayoutGroup;
+    public List<GameObject> Buttons;
     public static Lobby_Scene_Manager LobbyUIManager_Instance { get; set; }
 
    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void UpdateMemberListUI()
-    {
-        GameObject Button;
-        foreach (Friend members in LobbyManager.LobbyManager_Instance.memberList)
-        {
-            Debug.Log(members);
-            Button = Instantiate(MenuPrefabButton, MenuVector.transform);
 
-        }
-        VerticalLayoutGroup.CalculateLayoutInputVertical();
-    }
     public override void ChildAwake()
     {
-
-        InvokeRepeating("UpdateMemberListUI", 0, 10);
+        base.ChildAwake();
+        
         CounstructLobbyManagerSingleton();
     }
     public void CounstructLobbyManagerSingleton()

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Screen_UI_Controller : MonoBehaviour
 {
-    Dictionary<int, Screen_UI> ScreenDict = new Dictionary<int, Screen_UI>();
+    internal Dictionary<int, Screen_UI> ScreenDict = new Dictionary<int, Screen_UI>();
     public int currentScreen;
     public List<Screen_UI> ScreenList = new List<Screen_UI>();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,7 +26,7 @@ public class Screen_UI_Controller : MonoBehaviour
             }
         }
     }
-    public void SwitchScreens(int newScreen)
+    public virtual void SwitchScreens(int newScreen)
     {
         ScreenDict[currentScreen].DisableScreen();
         ScreenDict[newScreen].EnableScreen();

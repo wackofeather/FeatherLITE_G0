@@ -399,7 +399,7 @@ public class SteamLobbyManager : MonoBehaviour
                 SceneManager.sceneLoaded += OnRegularSceneLoaded;
 
                 //SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
-                SceneManager.LoadScene(gameSetupScene);
+                SceneManager.LoadScene("LobbyScene");
 
 
                 while (true)

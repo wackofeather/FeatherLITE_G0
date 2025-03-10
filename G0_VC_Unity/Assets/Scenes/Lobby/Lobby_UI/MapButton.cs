@@ -8,7 +8,6 @@ public class MapButton : NetworkBehaviour
     public NetworkVariable<int> voteCount = new NetworkVariable<int>();
     public MapData mapData;
     public SortingGroup sortingGroup;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     
     public void OnHoverEnter()
@@ -21,6 +20,7 @@ public class MapButton : NetworkBehaviour
         gameObject.transform.localScale /= 1.1f;
         sortingGroup.sortingOrder = 0;
     }
+
     public void OnVoteChanged(Toggle toggle)
     {
         if (toggle.isOn)

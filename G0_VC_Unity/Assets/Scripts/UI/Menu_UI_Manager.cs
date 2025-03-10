@@ -1,18 +1,9 @@
 using UnityEngine.UI;
 using UnityEngine;
-using TMPro;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.Netcode;
 using Steamworks;
-using Netcode.Transports.Facepunch;
-using System.Threading.Tasks;
 using Steamworks.Data;
-using System;
-using UnityEngine.SceneManagement;
 using System.Linq;
-using JetBrains.Annotations;
-using Unity.VisualScripting;
 
 
 public class Menu_UI_Manager : UI_Manager
@@ -39,12 +30,10 @@ public class Menu_UI_Manager : UI_Manager
             
         serverArray = await SteamMatchmaking.LobbyList.RequestAsync();
         if (serverArray != null) LobbyList = serverArray.ToList();
-        Debug.Log("Activated");
     }
 
     public override void ChildAwake()
     {
-        Debug.Log("ChildAwakeCalled");
         InvokeRepeating("AsyncGetServerList", 0, 10);
         ConstructMenuSingleton();
         AsyncGetServerList();

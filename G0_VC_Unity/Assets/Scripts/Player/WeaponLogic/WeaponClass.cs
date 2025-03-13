@@ -20,6 +20,12 @@ public class WeaponClass : ScriptableObject , IWeaponable
     [HideInInspector] public PlayerStateMachine player;
     [HideInInspector] public Player_Inventory inventory;
     protected float shootingTimer;
+    protected float currentAmmo;
+
+    public virtual void Weapon_Init()
+    {
+        
+    }
     public virtual void Weapon_Update() 
     {
 

@@ -5,5 +5,5 @@ using UnityEngine;
 public class GunProxy : WeaponProxy
 {
     public GameObject gunTip;
-
+    public ParticleSystem muzzleFlash;
 }

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Linq;
-using Unity.VisualScripting;
+
 
 public class FFA_LobbyGameMode : Base_LobbyGameMode
 {
@@ -23,6 +22,18 @@ public class FFA_LobbyGameMode : Base_LobbyGameMode
         }
         VerticalLayoutGroup.CalculateLayoutInputVertical();
     
+    }
+
+    public override void GameMode_MemberJoined(Friend friend)
+    {
+        base.GameMode_MemberJoined(friend);
+        UpdateUIList();
+    }
+    public override void GameMode_MemberLeave(Friend friend)
+    {
+        base.GameMode_MemberLeave(friend);
+        UpdateUIList();
+        
     }
     public void OnEnable()
     {

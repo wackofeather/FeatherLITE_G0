@@ -5,7 +5,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using OpenCover.Framework.Model;
 
 public class Lobby_Scene_Manager : UI_Manager
 {

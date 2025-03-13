@@ -8,19 +8,40 @@ using Steamworks.Data;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Netcode;
 
-public class GameModeToggle : MonoBehaviour
+public class GameModeToggle : NetworkBehaviour
 {
     public ToggleGroup toggleGroup;
     public GameMode_ScreenUI_Controller controller;
     private int currentGameMode;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
+    // This method is called when the network object is spawned
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        Initialize();
+    }
+
+    // Initialization logic
+    private void Initialize()
+    {
+        currentGameMode = controller.currentScreen;
+        Debug.Log(IsHost.ToString());
+        if (!IsOwner)
+        {
+            Debug.Log("ishost");
+            toggleGroup.gameObject.SetActive(false);
+        }
+    }
+
+    // This method is called to control the game mode based on the active toggle
     public void GameModeController()
     {
         Toggle activeToggle = toggleGroup.ActiveToggles().FirstOrDefault();
         if (activeToggle != null)
         {
-            if(activeToggle.name == "TD toggle")
+            if (activeToggle.name == "TD toggle")
             {
                 currentGameMode = 1;
             }
@@ -29,30 +50,16 @@ public class GameModeToggle : MonoBehaviour
                 currentGameMode = 0;
             }
             controller.OnGameModeSwitch(currentGameMode);
-            //if (activeToggle.name == "TD toggle")
-            //{
-            //    //slider.gameObject.SetActive(true);
-            //    //TeamSetting(); // Call TeamSetting once when the toggle is active
-            //    //Lobby_Scene_Manager.LobbyUIManager_Instance.UpdateTeamListUI(ListClass);
-            //}
-            //else
-            //{
-            //    slider.gameObject.SetActive(false);
-            //}
         }
         else
         {
             Debug.Log("No active toggle");
         }
     }
-    void Start()
-    {
-        currentGameMode = controller.currentScreen;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // Remove the Start method as it is no longer needed
+    // private void Start()
+    // {
+    //     currentGameMode = controller.currentScreen;
+    // }
 }

@@ -8,8 +8,8 @@ using Unity.VisualScripting;
 using System;
 using UnityEngine.UIElements;
 using System.ComponentModel;
-using UnityEditor;
 using TMPro;
+using Steamworks.Data;
 
 
 [Serializable]
@@ -121,15 +121,15 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     public NetworkVariable<TeamList> TeamContainer = new NetworkVariable<TeamList>(); //change to TeamList
     public UnityEngine.UI.Slider slider;
     public GameObject scroll;
-    
-    //change to userList
+    [HideInInspector] public List<GameObject> Scrolls;
 
+    //change to userList
 
     public void TeamSetting()
     {
-        TeamContainer.Value.ListClass.Clear();
+        Debug.Log("IAMCLALED");
         List<Friend> FriendList = new List<Friend>(LobbyManager.LobbyManager_Instance.memberList);
-
+        TeamContainer.Value.ListClass.Clear();
         int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
         Debug.Log("SliderValue: " + slider.value);
         Debug.Log("TeamSize: " + teamSize);
@@ -145,21 +145,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
             }
             TeamContainer.Value.ListClass.Add(teamClass);
         }
-
-        //Debug.Log("Total Teams: " + ListClass.Count);
-        //foreach (TeamClass teamClass in ListClass)
-        //{
-        //    Debug.Log("TeamClass2: " + teamClass);
-        //    Debug.Log("ListClassCount2: " + ListClass.Count);
-        //    Debug.Log("This is the length of teamClass for this2" + teamClass.Friends.Count);
-        //    foreach (ulong teamId in teamClass.Friends)
-        //    {
-
-        //        Debug.Log("Team Member ID2: " + teamId);
-        //    }
-        //}
     }
-
 
     public override void GameMode_MemberJoined(Friend friend)
     {
@@ -168,15 +154,15 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
         int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
         Debug.Log("This is the new teamSize" + teamSize);
         List<Friend> localUserList = new List<Friend>();
+        localUserList.Add(friend);
         foreach (TeamClass teamClass in TeamContainer.Value.ListClass)
         {
-            if (teamClass.Friends.Count > teamSize)
+            if (teamClass.Friends.Count - 2 > teamSize)
             {
                 for (int j = 0; j < (teamClass.Friends.Count - teamSize); j++)
                 {
                     localUserList.Add(LobbyManager.LobbyManager_Instance.memberList.Find(x => x.Id == teamClass.Friends[0]));
                     teamClass.Friends.RemoveAt(0);
-                    
                 }
             }
             else if (teamClass.Friends.Count < teamSize)
@@ -192,17 +178,17 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
             UpdateUIList();
         }
 
-        //foreach (TeamClass teamClass in ListClass)
-        //{
-        //    Debug.Log("ListClassCount: " +ListClass.Count);
-        //    Debug.Log("This is the length of teamClass for this" + teamClass.Friends.Count);
-        //    foreach (ulong teamId in teamClass.Friends)
-        //    {
-
-        //        Debug.Log("Team Member ID: " + teamId);
-        //    }
-        //}
+        foreach (TeamClass teamClass in TeamContainer.Value.ListClass)
+        {
+            Debug.Log("ListClassCount: " + TeamContainer.Value.ListClass.Count);
+            Debug.Log("This is the length of teamClass for this" + teamClass.Friends.Count);
+            foreach (ulong teamId in teamClass.Friends)
+            {
+                Debug.Log("Team Member ID: " + teamId);
+            }
+        }
     }
+
     public override void GameMode_MemberLeave(Friend friend)
     {
         base.GameMode_MemberLeave(friend);
@@ -210,7 +196,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
         int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
         foreach (TeamClass teamClass in TeamContainer.Value.ListClass)
         {
-            if (teamClass.Friends.Count > teamSize)
+            if (teamClass.Friends.Count - 2 > teamSize)
             {
                 for (int j = 0; j < (teamClass.Friends.Count - teamSize); j++)
                 {
@@ -230,49 +216,49 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
             }
             UpdateUIList();
         }
-        
-        //foreach (TeamClass teamClass in ListClass)
-        //{
-        //    Debug.Log("ListClassCount: " + ListClass.Count);
-        //    Debug.Log("This is the length of teamClass for this" + teamClass.Friends.Count);
-        //    foreach (ulong teamId in teamClass.Friends)
-        //    {
-
-        //        Debug.Log("Team Member ID: " + teamId);
-        //    }
-        //}
     }
 
-    public  void OnEnable()
+    public virtual void OnEnable()
     {
         TeamSetting();
         UpdateUIList();
     }
 
- 
+    public void ClearList()
+    {
+        foreach (GameObject scroll in Scrolls)
+        {
+            Destroy(scroll);
+        }
+        Scrolls.Clear();
+    }
+
+    public void SpecialUpdate()
+    {
+        ClearButtons();
+    }
+
     public override void UpdateUIList()
     {
         base.UpdateUIList();
+        ClearList();
         ClearButtons();
-        
+        Debug.Log("Update Triggered");
+
         GameObject scrollRect;
-        
         foreach (TeamClass team in TeamContainer.Value.ListClass)
         {
-            
-            if (team.Friends.Count>0)
+            Debug.Log("THISISTEAMFRIENDS" + team.Friends.Count);
+            scrollRect = Instantiate(scroll, MenuVector.transform);
+            scrollRect.GetComponent<JoinGameManager>().OnDefine(team, UpdateUIList,TeamContainer.Value.ListClass,((int)slider.value));
+            Scrolls.Add(scrollRect);
+
+            foreach (ulong friend in team.Friends)
             {
-                Debug.Log("THISISTEAMFRIENDS" + team.Friends.Count);
-                scrollRect = Instantiate(scroll, MenuVector.transform);
-                foreach (ulong friend in team.Friends)
-                {
-                    Debug.Log("IAMTRIGGERING"+friend);
-                    ScrollRectRenderer.scrollRectRendererInstance.CreateButton(friend);
-                    VerticalLayoutGroup.CalculateLayoutInputVertical();
-                }
+                Debug.Log("IAMTRIGGERING" + friend);
+                ScrollRectRenderer.scrollRectRendererInstance.CreateButton(friend, Buttons, scrollRect.transform);
+                Debug.Log("ths is button count" + Buttons.Count);
                 VerticalLayoutGroup.CalculateLayoutInputVertical();
-
-
             }
         }
         VerticalLayoutGroup.CalculateLayoutInputVertical();

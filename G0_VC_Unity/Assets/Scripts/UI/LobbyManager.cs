@@ -11,12 +11,17 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-public class LobbyManager:GeneralManager
+public class LobbyManager : GeneralManager
 {
     public List<Friend> memberList;
-    
+
     public string preGameScene;
     public NetworkVariable<float> countDown = new NetworkVariable<float>();
+
+    public int map1 = 0;
+    public int map2 = 0;
+
+    public int totalVotes;
     public static LobbyManager LobbyManager_Instance { get; set; }
 
     public List<MapButton> MapButtonList = new List<MapButton>();
@@ -25,29 +30,26 @@ public class LobbyManager:GeneralManager
 
     public NetworkVariable<int> CurrentGameMode_Int = new NetworkVariable<int>();
 
-    public int totalVotes;
-    // Start is called once before the first execution of Update after the MonoBehaviour is create
-
-
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        if(IsServer)
+
+        if (IsServer && IsHost)
         {
-            countDown.Value = 31;
+            countDown.Value = 110;
+            totalVotes = 0;
         }
     }
+
     private void Update()
     {
         if (IsServer)
         {
-            CurrentGameMode_Int.Value = CurrentGameMode.GameModeKey;
+            //CurrentGameMode_Int.Value = CurrentGameMode.GameModeKey;
             countDown.Value -= Time.deltaTime;
             if (countDown.Value <= 0)
             {
-
-                SteamLobbyManager.currentLobby.SetData("Map",GetVotedMap().MapName);
-
+                SteamLobbyManager.currentLobby.SetData("Map", GetVotedMap().MapName);
                 GoToGame();
             }
         }
@@ -57,56 +59,60 @@ public class LobbyManager:GeneralManager
             {
                 GoToGame();
             }
-
-
         }
     }
+
     public MapData GetVotedMap()
     {
-        MapButton winningMap = MapButtonList[0];
-        foreach (MapButton mapButton in MapButtonList)
+        int winningMap = 0;
+        if (map2 > map1)
         {
-            if(mapButton.voteCount.Value > winningMap.voteCount.Value)
-            {
-                winningMap = mapButton;
-         
-            }
+            winningMap = 1;
+        }else 
+        {
+            winningMap = 0;
         }
-        return winningMap.mapData;
+        Debug.Log("winningMap" + MapButtonList[winningMap].mapData);
+        return MapButtonList[winningMap].mapData;
     }
 
-    public void TotalMapVotes()
+    private void TotalMapVotes()
     {
-            totalVotes = MapButtonList[0].voteCount.Value + MapButtonList[1].voteCount.Value;
-        
-            if (totalVotes == memberList.Count)
-            {
+        Debug.Log("totalMapVoteVoting");
+        Debug.Log("thisismemberlist" + memberList.Count);
+        Debug.Log("thisistotalvalue" + totalVotes);
+
+        if (totalVotes == memberList.Count)
+        {
             Debug.Log("hoolalala" + totalVotes);
-            countDown.Value = 6;
-                CancelInvoke("TotalMapVotes");
-            }
-        
-    }    
+            countDown.Value = 10;
+        }
+    }
 
     public void GoToGame()
     {
         NetworkManager.SceneManager.LoadScene(preGameScene, LoadSceneMode.Single);
     }
+
     public void VoteFor()
     {
 
     }
+
     public void ReloadMemberList()
     {
+        
         memberList = SteamLobbyManager.currentLobby.Members.ToList<Friend>();
         Debug.Log("memberList" + memberList.Count);
     }
+
     public override void _Start()
     {
         base._Start();
+        ReloadMemberList();
+        Debug.Log("MapButtonList count: " + MapButtonList.Count);
         SteamMatchmaking.OnLobbyMemberJoined += OnLobbyMemberJoined;
-        SteamMatchmaking.OnLobbyMemberLeave+= OnLobbyMemberLeave;
-        InvokeRepeating("TotalMapVotes", 0, 1);
+        SteamMatchmaking.OnLobbyMemberLeave += OnLobbyMemberLeave;
     }
 
     private void OnLobbyMemberJoined(Lobby lobby, Friend friend)
@@ -114,11 +120,13 @@ public class LobbyManager:GeneralManager
         ReloadMemberList();
         CurrentGameMode.GameMode_MemberJoined(friend);
     }
+
     private void OnLobbyMemberLeave(Lobby lobby, Friend friend)
     {
         ReloadMemberList();
         CurrentGameMode.GameMode_MemberLeave(friend);
     }
+
     public override void _Awake()
     {
         base._Awake();
@@ -126,11 +134,12 @@ public class LobbyManager:GeneralManager
         CounstructLobbyManagerSingleton();
         ReloadMemberList();
     }
+
     public override void OnNetworkDespawn()
     {
         base.OnNetworkDespawn();
-        
     }
+
     public void CounstructLobbyManagerSingleton()
     {
         if (LobbyManager_Instance != null && LobbyManager_Instance != this)
@@ -142,4 +151,21 @@ public class LobbyManager:GeneralManager
             LobbyManager_Instance = this;
         }
     }
+
+    public void UpdateVoteServer(int map1Change, int map2Change)
+    {
+        if(IsHost)
+        {
+            Debug.Log("ServerRpc called");
+            map1 += map1Change;
+            map2 += map2Change;
+            totalVotes += map1Change + map2Change;
+            Debug.Log("map1" + map1);
+            Debug.Log("map2" + map2);
+            Debug.Log("totalVotes" + totalVotes);
+            TotalMapVotes();
+        }
+    }
 }
+
+

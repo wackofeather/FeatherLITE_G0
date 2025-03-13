@@ -376,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1506377076
+  GlobalObjectIdHash: 585117191
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 0
@@ -687,6 +687,10 @@ PrefabInstance:
       value: map
       objectReference: {fileID: 0}
     - target: {fileID: 7470345875887283051, guid: c610c40e3ebcd8847ad45a15ea2136e0, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7470345875887283051, guid: c610c40e3ebcd8847ad45a15ea2136e0, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 149492a4b17462c47a0527917c5d2b18, type: 2}
@@ -728,5 +732,5 @@ MeshCollider:
   m_Enabled: 1
   serializedVersion: 5
   m_Convex: 0
-  m_CookingOptions: 30
+  m_CookingOptions: -1
   m_Mesh: {fileID: 5296447179174535161, guid: c610c40e3ebcd8847ad45a15ea2136e0, type: 3}

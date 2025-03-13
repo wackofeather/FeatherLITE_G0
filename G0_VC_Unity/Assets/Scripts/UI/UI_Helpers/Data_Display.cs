@@ -108,9 +108,7 @@ public class Data_Display:MonoBehaviour
     }
     public void LobbyJoiner()
     {
-        
-        Debug.Log(LobbyInput.text);
-        //SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(LobbyId));
+        SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(LobbyInput.text));
     }
     //void Update()
     //{

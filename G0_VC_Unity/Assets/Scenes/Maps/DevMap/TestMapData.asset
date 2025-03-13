@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: TestMapData
   m_EditorClassIdentifier: 
   MapName: Test
-  MapSceneName: DevScene_Srihari
+  MapSceneName: DevScene

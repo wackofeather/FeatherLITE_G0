@@ -166,7 +166,6 @@ public class PlayerStateMachine : MonoBehaviour
     public Animator player_VP_ARM_anim_controller;
     public Animator player_EXT_ARM_anim_controller;
     public bool isGrappling;
-    public bool isScoping;
     public bool isMelee;
     [HideInInspector] public float updown_Blendconstant;
 
@@ -369,7 +368,7 @@ public class PlayerStateMachine : MonoBehaviour
         EXTERIOR_lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
 
         isGrappling = false;
-        isScoping = false;
+        inventory.isScoping = false;
         isMelee = false;
 
         Cursor.visible = false;

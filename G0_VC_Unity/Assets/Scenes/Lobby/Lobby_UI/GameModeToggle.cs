@@ -27,11 +27,18 @@ public class GameModeToggle : NetworkBehaviour
     private void Initialize()
     {
         currentGameMode = controller.currentScreen;
-        Debug.Log(IsHost.ToString());
+       
+    }
+
+    private void Update()
+    {
         if (!IsOwner)
         {
-            Debug.Log("ishost");
             toggleGroup.gameObject.SetActive(false);
+        }
+        else
+        {
+            toggleGroup.gameObject.SetActive(true);
         }
     }
 
@@ -53,7 +60,7 @@ public class GameModeToggle : NetworkBehaviour
         }
         else
         {
-            Debug.Log("No active toggle");
+            return;
         }
     }
 

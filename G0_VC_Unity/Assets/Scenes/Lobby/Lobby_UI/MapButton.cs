@@ -36,47 +36,41 @@ public class MapButton : NetworkBehaviour
 
     public void OnVoteChanged(Toggle toggle)
     {
-        Debug.Log("HELLO2" + IsClient.ToString());
-        Debug.Log("HELLO2" + IsHost.ToString());
         if (!IsHost)
         {
-            Debug.Log("IAMCLIENT" + SteamLobbyManager.currentLobby.Owner.Id);
             UpdateVoteClientClientRpc(toggle.isOn);
-            Debug.Log("hello" + IsClient.ToString());
         }
         else
         {
-            Debug.Log("hello" + IsHost.ToString());
             if (toggle.isOn)
             {
                 LobbyManager.LobbyManager_Instance.map1 += 1;
+                LobbyManager.LobbyManager_Instance.TotalMapVotes();
             }
             else
             {
                 LobbyManager.LobbyManager_Instance.map1 -= 1;
+                LobbyManager.LobbyManager_Instance.TotalMapVotes();
             }
         }
     }
     public void OnVoteChanged2(Toggle toggle)
     {
-        Debug.Log("HELLO2" + IsClient.ToString());
-        Debug.Log("HELLO2" + IsHost.ToString());
         if (!IsHost)
         {
-            Debug.Log("IAMCLIENT" + SteamLobbyManager.currentLobby.Owner.Id);
             UpdateVote2ClientClientRpc(toggle.isOn);
-            Debug.Log("hello" + IsClient.ToString());
         }
         else
         {
-            Debug.Log("hello" + IsHost.ToString());
             if (toggle.isOn)
             {
                 LobbyManager.LobbyManager_Instance.map2 += 1;
+                LobbyManager.LobbyManager_Instance.TotalMapVotes();
             }
             else
             {
                 LobbyManager.LobbyManager_Instance.map2 -= 1;
+                LobbyManager.LobbyManager_Instance.TotalMapVotes();
             }
         }
     }

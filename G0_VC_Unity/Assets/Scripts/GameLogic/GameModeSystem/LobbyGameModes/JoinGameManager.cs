@@ -10,10 +10,9 @@ using TMPro;
 public class JoinGameManager : NetworkBehaviour
 {
     [HideInInspector] public ulong GameID;
-    public GameObject scrolled;
     public TeamClass teamContained;
-    public Action updateUIList;
-    public List<TeamClass> teamClasses;
+    public List<TeamClass> teamClasses = new List<TeamClass>();
+    public NetworkVariable<TeamList> teamContainer;
     public int sliderValued;
 
     public void Start()
@@ -21,77 +20,20 @@ public class JoinGameManager : NetworkBehaviour
         GameID = SteamClient.SteamId;
     }
 
-    public void OnDefine(TeamClass teamContain, Action updateUI, List<TeamClass> teamClass,int sliderValue)
+    public void OnDefine(TeamClass teamContain, NetworkVariable<TeamList> teamContainer, int sliderValue)
     {
         teamContained = teamContain;
-        updateUIList = updateUI;
-        teamClasses = teamClass;
+        this.teamContainer = teamContainer;
+        teamClasses = teamContainer.Value.ListClass;
         sliderValued = sliderValue;
     }
 
-    public void OnClick()
+
+
+    private void UpdateTeamContainer()
     {
-        Debug.Log("HELLO");
-        Debug.Log("teamContain" + teamContained.Friends.Count);
-        Debug.Log("IOAMHOST");
-
-        if (teamContained.Friends.Count == 0)
-        {
-            RemovePlayerFromOtherTeams(GameID);
-            teamContained.Friends.Add(GameID);
-            Debug.Log("OEKGOEKPEGEGK");
-
-            updateUIList.Invoke();
-            return;
-        }else if(teamContained.Friends.Count>sliderValued+2)
-        {
-            return;
-        }
-
-        foreach (ulong member in teamContained.Friends)
-        {
-            Debug.Log("RUNNING");
-            Debug.Log("GEOKGE" + GameID);
-
-            if (member == GameID)
-            {
-                Debug.Log("IAM RETURNED");
-                return;
-            }
-        }
-
-        Debug.Log("OEKGOEKPEGEGK");
-        RemovePlayerFromOtherTeams(GameID);
-        teamContained.Friends.Add(GameID);
-        
-        updateUIList.Invoke();
+        teamContainer.Value.ListClass = teamClasses;
     }
-
-    private void RemovePlayerFromOtherTeams(ulong gameId)
-    {
-        foreach (TeamClass team in teamClasses)
-        {
-            team.Friends.Remove(gameId);
-            Debug.Log("lhoeoe" + team.Friends.Count);
-        }
-    }
-
-    //public void UpdateNetworkVariable(ulong gameId)
-    //{
-    //    if (IsHost)
-    //    {
-    //        foreach (TeamClass team in teamClasses)
-    //        {
-    //            team.Friends.Remove(gameId);
-    //        }
-    //    }
-    //}
-
-    //[Rpc(SendTo.Everyone)]
-    //private void UpdateMainNetworkVariableClientRpc()
-    //{
-    //    UpdateNetworkVariable(GameID);
-    //}
 }
 
 

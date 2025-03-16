@@ -33,9 +33,10 @@ public class LobbyManager : GeneralManager
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-
+        ReloadMemberList();
         if (IsServer && IsHost)
         {
+
             countDown.Value = 110;
             totalVotes = 0;
         }
@@ -72,19 +73,16 @@ public class LobbyManager : GeneralManager
         {
             winningMap = 0;
         }
-        Debug.Log("winningMap" + MapButtonList[winningMap].mapData);
         return MapButtonList[winningMap].mapData;
     }
 
-    private void TotalMapVotes()
+    public void TotalMapVotes()
     {
-        Debug.Log("totalMapVoteVoting");
-        Debug.Log("thisismemberlist" + memberList.Count);
-        Debug.Log("thisistotalvalue" + totalVotes);
+        
+        totalVotes = map1 + map2;
 
         if (totalVotes == memberList.Count)
         {
-            Debug.Log("hoolalala" + totalVotes);
             countDown.Value = 10;
         }
     }
@@ -103,14 +101,12 @@ public class LobbyManager : GeneralManager
     {
         
         memberList = SteamLobbyManager.currentLobby.Members.ToList<Friend>();
-        Debug.Log("memberList" + memberList.Count);
     }
 
     public override void _Start()
     {
         base._Start();
         ReloadMemberList();
-        Debug.Log("MapButtonList count: " + MapButtonList.Count);
         SteamMatchmaking.OnLobbyMemberJoined += OnLobbyMemberJoined;
         SteamMatchmaking.OnLobbyMemberLeave += OnLobbyMemberLeave;
     }
@@ -159,7 +155,6 @@ public class LobbyManager : GeneralManager
             Debug.Log("ServerRpc called");
             map1 += map1Change;
             map2 += map2Change;
-            totalVotes += map1Change + map2Change;
             Debug.Log("map1" + map1);
             Debug.Log("map2" + map2);
             Debug.Log("totalVotes" + totalVotes);

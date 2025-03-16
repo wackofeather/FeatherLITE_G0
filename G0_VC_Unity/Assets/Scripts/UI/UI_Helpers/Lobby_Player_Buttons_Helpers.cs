@@ -28,14 +28,11 @@ public class Lobby_Player_Buttons_Helpers : MonoBehaviour
     }
     public void ConstructTeamButton(ulong clasp)
     {
-        //button.colors = textColor[0].ConvertTo<ColorBlock>();
-        //textColor.RemoveAt(0);
-
-        //button.gameObject.GetComponent<Renderer>().material.color = Color.white;
-        //foreach (ulong friend in clasp.Friends)
-        //{
-            tmpText2.text += LobbyManager.LobbyManager_Instance.memberList.Find(x => x.Id == clasp).Name;
-        //}
+        //Color randomColor = new Color(Random.value, Random.value, Random.value);
+        //ColorBlock colorBlock = button.colors;
+        //colorBlock.normalColor = randomColor;
+        //button.colors = colorBlock;
+        tmpText2.text += LobbyManager.LobbyManager_Instance.memberList.Find(x => x.Id == clasp).Name;
     }
     public void ConstructButton2(int TeamNumber)
     {

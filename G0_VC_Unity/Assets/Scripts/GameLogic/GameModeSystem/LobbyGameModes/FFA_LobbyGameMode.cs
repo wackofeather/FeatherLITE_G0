@@ -1,6 +1,7 @@
 using Steamworks;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -39,4 +40,9 @@ public class FFA_LobbyGameMode : Base_LobbyGameMode
     {
         UpdateUIList();
     }
+
+    //public void Start()
+    //{
+    //    UpdateUIList();
+    //}
 }

@@ -134,7 +134,6 @@ public class Game_GeneralManager : GeneralManager
         //if (!wantConnection) return;
         if (currentLobbyOwner != newLobbyData.Owner.Id)
         {
-            Debug.LogAssertion("loooooooooooooooooooooook");
             if (HostMigrationCorT != null) StopCoroutine(HostMigrationCorT);
             if (JoiningGameCorT != null) StopCoroutine(JoiningGameCorT);
 

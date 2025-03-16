@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameMode_ScreenUI_Controller : Screen_UI_Controller
 {
+
     public void OnGameModeSwitch(int newGameMode)
     {
        SwitchScreens(newGameMode);
@@ -27,13 +28,12 @@ public class GameMode_ScreenUI_Controller : Screen_UI_Controller
 
     private void Update()
     {
-        Debug.Log("IAMUPDATINMG"+LobbyManager.LobbyManager_Instance.CurrentGameMode_Int.Value);
         if(!LobbyManager.LobbyManager_Instance.IsHost)
         {
             
             if (LobbyManager.LobbyManager_Instance.CurrentGameMode_Int.Value != currentScreen)
             {
-                SwitchScreens(currentScreen);
+                SwitchScreens(LobbyManager.LobbyManager_Instance.CurrentGameMode_Int.Value);
             }
         }
     }

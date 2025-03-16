@@ -30,6 +30,7 @@ public abstract class Base_LobbyGameMode:NetworkBehaviour
         
     }
 
+  
     public virtual void ClearButtons()
     {
         foreach (GameObject button in Buttons)

@@ -33,14 +33,14 @@ public class TeamClass : INetworkSerializable, IEquatable<TeamClass>
             Friends = new List<ulong>(count);
         }
 
-        for (int i = 0; i < count &&count>0; i++)
+        for (int i = 0; i < count; i++)
         {
             ulong friend = serializer.IsReader ? 0 : Friends[i];
             serializer.SerializeValue(ref friend);
-            //if (serializer.IsReader)
-            //{
-            //    Friends[i] = friend;
-            //}
+            if (serializer.IsReader)
+            {
+                Friends[i] = friend;
+            }
         }
     }
 
@@ -54,7 +54,7 @@ public class TeamClass : INetworkSerializable, IEquatable<TeamClass>
         }
         return true;
     }
-
+    //ogogeke
     public override int GetHashCode()
     {
         int hash = 17;
@@ -69,8 +69,9 @@ public class TeamClass : INetworkSerializable, IEquatable<TeamClass>
 [Serializable]
 public class TeamList : INetworkSerializable, IEquatable<TeamList>
 {
+    public float test = 0;
     public List<TeamClass> ListClass = new List<TeamClass>();
-
+    public List<int> ListIndex = new List<int>();
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         int count = ListClass.Count;
@@ -85,10 +86,10 @@ public class TeamList : INetworkSerializable, IEquatable<TeamList>
         {
             TeamClass team = serializer.IsReader ? new TeamClass() : ListClass[i];
             serializer.SerializeValue(ref team);
-            //if (serializer.IsReader)
-            //{
-            //    ListClass[i] = team;
-            //}
+            if (serializer.IsReader)
+            {
+                ListClass[i] = team;
+            }
         }
     }
 
@@ -119,11 +120,14 @@ public class TeamList : INetworkSerializable, IEquatable<TeamList>
 
 public class TDM_LobbyGameMode : Base_LobbyGameMode
 {
-    public NetworkVariable<TeamList> TeamContainer = new NetworkVariable<TeamList>();
+    
     public UnityEngine.UI.Slider slider;
     public GameObject spacerObject;
     public GameObject JoinTeamButton;
     public GameObject Trigger;
+    //public TeamList teamLists;
+    NetworkVariable<TeamList> teamLists = new NetworkVariable<TeamList>();
+
     [HideInInspector] public ulong GameID;
 
     //private void Awake()
@@ -142,48 +146,75 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     //    UpdateUIList();
     //}
 
-    private void CheckForEnable()
-    {
-        if (LobbyManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 1)
-        { 
-                if (LobbyManager.LobbyManager_Instance.IsHost)
-                {
-                    TeamContainer.Value = TeamContainer.Value;
-                    TeamSetting();
-
-                CancelInvoke("CheckForEnable");
-
-            }
-
-                GameID = SteamClient.SteamId;
-
-        }
-    }
-
-    //public void OnEnable()
+    //public  void Start()
     //{
-    //    if(LobbyManager.LobbyManager_Instance.IsHost)
+    //    Debug.Log("STARTING");  
+    //    if (LobbyManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 1)
     //    {
-    //        TeamContainer.Value = TeamContainer.Value;
-    //        TeamSetting();
+    //        if (LobbyManager.LobbyManager_Instance.IsHost)
+    //        {
+    //            TeamContainer.Value = TeamContainer.Value;
+    //            TeamSetting();
+    //        }
+    //        else
+    //        {
+    //            Debug.Log("Not Host" + TeamContainer.Value.ListClass.Count);
+    //            UpdateUIList();
+    //        }
+    //        GameID = SteamClient.SteamId;
+    //    }
+    //}
 
+    //private void Update()
+    //{
+    //    Debug.Log("UPDATING" + TeamContainer.Value.ListClass.Count);
+    //}
+    //private void CheckForEnable()
+    //{
+    //    if (LobbyManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 1)
+    //    {
+    //        if (LobbyManager.LobbyManager_Instance.IsHost)
+    //        {
+    //            TeamSetting();
+    //            //UpDaterCatchServerRpc();
+    //            CancelInvoke("CheckForEnable");
 
+    //        }
+    //        else
+    //        {
+    //            CancelInvoke("CheckForEnable");
+    //        }
+
+    //        GameID = SteamClient.SteamId;
 
     //    }
-
-    //    GameID = SteamClient.SteamId;
     //}
-    public void Start()
+    //}
+
+    public void OnEnable()
     {
-        InvokeRepeating("CheckForEnable", 0, 1);    
+        if (LobbyManager.LobbyManager_Instance.IsHost)
+        {
+            //teamLists.Value = teamLists.Value;
+            ////TeamSetting();
+            //Debug.Log(teamLists.Value.ListClass.Count);
+            Debug.Log(teamLists.Value.ListIndex.Count);
+
+        }
+
+        GameID = SteamClient.SteamId;
     }
+    //public void Start()
+    //{
+    //    InvokeRepeating("CheckForEnable", 0, 1);
+    //}
 
     public void TeamSetting()
     {
         if (!LobbyManager.LobbyManager_Instance.IsHost) return;
         Debug.Log("IAMCLALED");
         List<Friend> FriendList = new List<Friend>(LobbyManager.LobbyManager_Instance.memberList);
-        TeamContainer.Value.ListClass.Clear();
+        teamLists.Value.ListClass.Clear();
         int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
         Debug.Log("SliderValue: " + slider.value);
         Debug.Log("TeamSize: " + teamSize);
@@ -196,10 +227,11 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
                 teamClass.AddFriend(FriendList[0].Id);
                 FriendList.RemoveAt(0);
             }
-            TeamContainer.Value.ListClass.Add(teamClass);
+            teamLists.Value.ListClass.Add(teamClass);
+            Debug.Log("teamListCount" + teamLists.Value.ListClass.Count);
         }
         UpdateUIList();
-        UpdateClient();
+        //UpdateClient();
 
     }
 
@@ -214,7 +246,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
         Debug.Log("This is the new teamSize" + teamSize);
         List<Friend> localUserList = new List<Friend>();
         localUserList.Add(friend);
-        foreach (TeamClass teamClass in TeamContainer.Value.ListClass)
+        foreach (TeamClass teamClass in teamLists.Value.ListClass)
         {
             if (teamClass.Friends.Count > teamSize)
             {
@@ -238,13 +270,12 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
             {
                 TeamClass teamClasses = new TeamClass();
                 teamClasses.AddFriend(localUserList[0].Id);
-                TeamContainer.Value.ListClass.Add(teamClasses);
+                teamLists.Value.ListClass.Add(teamClasses);
                 localUserList.RemoveAt(0);
             }
-        }
-        TeamContainer.SetDirty(true); // Mark the NetworkVariable as dirty to ensure the change is propagated
+        } // Mark the NetworkVariable as dirty to ensure the change is propagated
         UpdateUIList();
-        UpdateClient();
+        //UpdateClient();
     }
 
     public override void GameMode_MemberLeave(Friend friend)
@@ -256,7 +287,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
         Debug.Log("team member left");
         List<Friend> localUserList = new List<Friend>();
         int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
-        foreach (TeamClass teamClass in TeamContainer.Value.ListClass)
+        foreach (TeamClass teamClass in teamLists.Value.ListClass)
         {
             if (teamClass.Friends.Count > teamSize)
             {
@@ -280,10 +311,9 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
             {
                 teamClass.Friends.Remove(friend.Id);
             }
-        }
-        TeamContainer.SetDirty(true); // Mark the NetworkVariable as dirty to ensure the change is propagated
+        }// Mark the NetworkVariable as dirty to ensure the change is propagated
         UpdateUIList();
-        UpdateClient();
+        //UpdateClient();
     }
 
     public override void UpdateUIList()
@@ -294,7 +324,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
 
         GameObject Button;
         GameObject Button2;
-        foreach (TeamClass team in TeamContainer.Value.ListClass)
+        foreach (TeamClass team in teamLists.Value.ListClass)
         {
             Debug.Log("THISISTEAMFRIENDS" + team.Friends.Count);
             UnityEngine.Color randomColor = new UnityEngine.Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
@@ -362,41 +392,45 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
 
     private void RemovePlayerFromOtherTeams(ulong gameId)
     {
-        foreach (TeamClass team in TeamContainer.Value.ListClass)
+        foreach (TeamClass team in teamLists.Value.ListClass)
         {
             team.Friends.Remove(gameId);
             Debug.Log("lhoeoe" + team.Friends.Count);
         }
     }
 
-    private void UpdateClient()
-    {
-        if (IsHost)
-        {
-            Debug.Log("TRIGGERED");
 
-            UpDaterCatchServerRpc();
-        }
+    //[Rpc(SendTo.NotServer)]
+
+    //private void UpdateClientRpc(TeamList check)
+    //{
+    //    Debug.Log("TRIGGERED"+teamLists.ListClass.Count);
+    //    //Debug.Log("TRIGGERED" + check.ListClass.Count);
+    //    if (!IsHost)
+    //    {
+    //        Debug.Log(teamLists.ListClass.Count);
+    //        Debug.Log("IAMCALLEDHAHAH");
+    //        Debug.Log(check.ListClass.Count);
+    //        teamLists = check;
+    //        UpdateUIList();
+    //    }
+
+
+
+    //}
+
+    //[Rpc(SendTo.Server)]
+    //public void UpDaterCatchServerRpc(int mini)
+    //{
+    //    Debug.Log("TRIGGERED" + teamLists.ListClass.Count);
+    //    UpdateClientRpc(teamLists);
 
     }
 
-    [Rpc(SendTo.Server)]
-    public void UpDaterCatchServerRpc()
-    {
-        Debug.Log("TRIGGERED" + TeamContainer.Value.ListClass.Count);
-        UpdateClientRpc();
+  
+    //public void UpdateClient (int mini)
+    //{
 
-    }
-    [Rpc(SendTo.Everyone)]
-
-    public void UpdateClientRpc()
-    {
-        Debug.Log("TRIGGERED" + TeamContainer.Value.ListClass.Count);
-        if (!IsHost)
-        {
-            UpdateUIList();
-        }
-    }
-}
+    //}//wgwogo
 
 

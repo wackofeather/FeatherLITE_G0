@@ -213,7 +213,9 @@ public class PlayerStateMachine : MonoBehaviour
     public NetworkInfo networkInfo;
 
     float deleteTimer = 5;
-    
+
+    [Header("Shooting")]
+    public LayerMask enemyMask;
 
     public RaycastHit GrappleCheck()
     {

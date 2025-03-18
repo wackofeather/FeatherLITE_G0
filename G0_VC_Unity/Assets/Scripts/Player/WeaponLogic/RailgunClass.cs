@@ -11,7 +11,7 @@ public class RailgunClass : GunClass
     public int bounceNumber;
     public float maxHitDistance;
     public LayerMask endHitMask;
-    public LayerMask enemymask;
+    //public LayerMask enemymask;
     BeamPath path;
     public float beamSpeed;
     public override void Weapon_Update()
@@ -112,10 +112,19 @@ public class RailgunClass : GunClass
             BounceHit hit = path.points[i];
             player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.SetPosition(i, hit.point);
 
-            if (hit.hitType == 2) { try { Game_GeneralManager.game_instance.PlayerGameObject_LocalLookUp[hit.playerHitID].playerNetwork.DamageRPC(100); } catch { } }
-
             await Task.Delay((int)(1 / beamSpeed));
         }
+
+        await Task.Delay(1000);
+
+
+        while (player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.a > 0)
+        {
+            player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color = new Color(player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.r, player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.g, player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.b, (float)(player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.a - 10 * Time.deltaTime));
+            await Task.Yield();
+        }
+        player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.positionCount = 0;
+
         return true;
     }
 
@@ -139,7 +148,7 @@ public class RailgunClass : GunClass
                 Debug.Log(hit.collider.gameObject.layer);
                 hitDistance -= Vector3.Distance(hit.point, path.points[i - 1].point);
 
-                if (hit.collider.gameObject.layer == Mathf.RoundToInt(Mathf.Log(enemymask.value, 2))) { path.points.Add(new BounceHit(hit.point, 2, hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork._SteamID.Value)); continue; }
+                if (hit.collider.gameObject.layer == Mathf.RoundToInt(Mathf.Log(player.enemyMask.value, 2))) { path.points.Add(new BounceHit(hit.point, 2, hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork._SteamID.Value)); continue; }
                 else
                 {
                         

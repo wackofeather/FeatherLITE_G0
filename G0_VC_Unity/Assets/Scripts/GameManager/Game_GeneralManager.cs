@@ -528,11 +528,19 @@ public class Game_GeneralManager : GeneralManager
     {
         StartCoroutine(KillCoroutine(player));
     }
-
-    IEnumerator KillCoroutine(PlayerStateMachine player)
+    public void LocalKill(PlayerStateMachine player)
     {
         player.ChangeState(player.DeathState);
         player.rb.MovePosition(new Vector3(0, 0, -10000));
+    }
+    void KillInit(PlayerStateMachine player)
+    {
+        player.ChangeState(player.DeathState);
+        player.rb.MovePosition(new Vector3(0, 0, -10000));
+    }
+    IEnumerator KillCoroutine(PlayerStateMachine player)
+    {
+        KillInit(player);
         float timer = 3;
         while (timer > 0) 
         { 

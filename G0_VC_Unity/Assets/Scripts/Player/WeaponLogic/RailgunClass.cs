@@ -81,7 +81,7 @@ public class RailgunClass : GunClass
 
             if (hit.hitType == 2) 
             { 
-                try { Game_GeneralManager.game_instance.PlayerGameObject_LocalLookUp[hit.playerHitID].playerNetwork.DamageRPC(100); } 
+                try { Game_GeneralManager.game_instance.PlayerGameObject_LocalLookUp[hit.playerHitID].LocalDamage(100); } 
                 catch { } 
                 continue; 
             }
@@ -89,12 +89,12 @@ public class RailgunClass : GunClass
             await Task.Delay((int)(1 / beamSpeed * 1000));
         }
 
-        await Task.Delay(1000);
+        await Task.Delay(200);
 
 
         while (player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.a > 0)
         {
-            player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color = new Color(player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.r, player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.g, player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.b, (float)(player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.a - 10 * Time.deltaTime));
+            player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color = new Color(player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.r, player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.g, player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.b, (float)(player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.a - 2 * Time.deltaTime));
             await Task.Yield();
         }
         player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.positionCount = 0;
@@ -115,12 +115,12 @@ public class RailgunClass : GunClass
             await Task.Delay((int)(1 / beamSpeed));
         }
 
-        await Task.Delay(1000);
+        await Task.Delay(200);
 
 
         while (player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.a > 0)
         {
-            player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color = new Color(player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.r, player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.g, player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.b, (float)(player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.a - 10 * Time.deltaTime));
+            player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color = new Color(player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.r, player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.g, player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.b, (float)(player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.a - 2 * Time.deltaTime));
             await Task.Yield();
         }
         player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.positionCount = 0;

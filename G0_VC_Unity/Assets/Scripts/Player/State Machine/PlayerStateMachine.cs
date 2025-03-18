@@ -627,4 +627,14 @@ public class PlayerStateMachine : MonoBehaviour
     {
         if (CurrentPlayerState != DeathState) Game_GeneralManager.game_instance.Kill(this);
     }
+
+
+    public void LocalDamage(int _damage)
+    {
+        if (health - _damage <= 0)
+        {
+            Game_GeneralManager.game_instance.LocalKill(this);
+        }
+        playerNetwork.DamageRPC(_damage);
+    }
 }

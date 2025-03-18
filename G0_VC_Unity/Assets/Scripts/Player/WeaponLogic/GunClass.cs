@@ -144,7 +144,7 @@ public class GunClass : WeaponClass
             toShoot.transform.rotation = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.rotation;
             toShoot.gameObject.SetActive(true);*/
 
-            if (hit.collider.gameObject.layer == Mathf.RoundToInt(Mathf.Log(player.enemyMask.value, 2))) { hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(1); Debug.LogAssertion("hit!"); }
+            if (hit.collider.gameObject.layer == Mathf.RoundToInt(Mathf.Log(player.enemyMask.value, 2))) { hit.collider.gameObject.GetComponent<PlayerStateMachine>().LocalDamage(1); Debug.LogAssertion("hit!"); }
         }
 
         return true;

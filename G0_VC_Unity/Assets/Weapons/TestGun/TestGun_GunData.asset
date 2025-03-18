@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: TestGun_GunData
   m_EditorClassIdentifier: 
   maxAmmo_Inventory: 0
-  BPS: 0
-  bulletFX: {fileID: 1564468091806366, guid: f1dc4df701f37324c98ea16f41770afc, type: 3}
+  BPS: 100
+  maxTravelPerFrame: 0.5
+  bulletFX: {fileID: 5063894466379890091, guid: d9dea424039fdf14796606317a8f1088, type: 3}

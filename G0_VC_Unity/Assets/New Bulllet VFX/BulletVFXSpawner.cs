@@ -5,7 +5,7 @@ public class BulletVFXSpawner : MonoBehaviour
 {
     public GameObject bullet;
     public Transform start;
-    public Transform end;
+    public Vector3 end;
     public float maxTravelPerFrame;
 
     private void Update()

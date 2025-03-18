@@ -13,6 +13,7 @@ public class GunClass : WeaponClass
     public GunData gunData;
     [HideInInspector] float maxAmmo_Mag;
     [SerializeField] GameObject bullet;
+    [SerializeField] float bulletSpeed;
     
 
     public override void Weapon_Init()
@@ -110,7 +111,7 @@ public class GunClass : WeaponClass
             await Task.Delay((int)(1/weaponData.BPS * 1000));
         }
         inventory.isShooting = false;
-        ParticleSystem.MainModule main = player.inventory.VP_GetProxy().GetComponent<GunProxy>().muzzleFlash.main;
+        var main = player.inventory.VP_GetProxy().GetComponent<GunProxy>().muzzleFlash.main;
         main.loop = false;
         // This just doesn't work for some reason muzzleFlash.main.loop = true;
         ///yield break;
@@ -144,11 +145,14 @@ public class GunClass : WeaponClass
         {
             HS_Poolable toShoot = HS_PoolableManager.instance.GetInstanceOf(gunData.bulletFX.GetComponent<HS_Poolable>());
             toShoot.transform.position = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position;
+            Debug.Log("Pre-Pre-Pre-Chipotle");
             toShoot.transform.rotation = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.rotation;
-            BulletVFX bulletVFX = toShoot.GetComponent<BulletVFX>();
-            bulletVFX.end = hit.transform;
-            bulletVFX.maxTravelPerFrame = gunData.maxTravelPerFrame;
+            Debug.Log("Pre-Pre-Chipotle");
+            toShoot.gameObject.GetComponent<BulletVFX>().maxTravelPerFrame = bulletSpeed;
+            toShoot.gameObject.GetComponent<BulletVFX>().end = hit.point;
+            Debug.Log("Pre-Chipotle");
             toShoot.gameObject.SetActive(true);
+            Debug.Log("Chipotle");
 
             player.inventory.VP_GetProxy().GetComponent<GunProxy>().muzzleFlash.Play();
 

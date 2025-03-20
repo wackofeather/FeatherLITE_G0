@@ -93,7 +93,7 @@ public class BeamPath : INetworkSerializable, IEquatable<BeamPath>
     }
 }
 
-    [System.Serializable]
+[System.Serializable]
 public class BounceHit : INetworkSerializable, IEquatable<BounceHit>
 {
     public BounceHit(Vector3 _point, int _hitType, ulong _ID)

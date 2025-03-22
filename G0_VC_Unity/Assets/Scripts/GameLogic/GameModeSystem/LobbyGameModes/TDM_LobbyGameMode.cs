@@ -126,7 +126,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     public GameObject JoinTeamButton;
     public GameObject Trigger;
     //public TeamList teamLists;
-    NetworkVariable<TeamList> teamLists = new NetworkVariable<TeamList>();
+    NetworkVariable<TeamList> teamLists = new NetworkVariable<TeamList>(null);
 
     [HideInInspector] public ulong GameID;
 
@@ -195,14 +195,19 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     {
         if (LobbyManager.LobbyManager_Instance.IsHost)
         {
-            //teamLists.Value = teamLists.Value;
-            ////TeamSetting();
+            teamLists.Value = new TeamList();
+            TeamSetting();
             //Debug.Log(teamLists.Value.ListClass.Count);
-            Debug.Log(teamLists.Value.ListIndex.Count);
+            
 
         }
 
         GameID = SteamClient.SteamId;
+    }
+
+    public void Update()
+    {
+       // Debug.Log(teamLists.Value);
     }
     //public void Start()
     //{

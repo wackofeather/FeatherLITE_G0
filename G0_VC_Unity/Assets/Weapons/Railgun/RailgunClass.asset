@@ -23,7 +23,7 @@ MonoBehaviour:
   endHitMask:
     serializedVersion: 2
     m_Bits: 257
-  enemymask:
-    serializedVersion: 2
-    m_Bits: 256
   beamSpeed: 10
+  shootAnimTime: 2
+  chargeProgress: 0
+  chargingSpeed: 1

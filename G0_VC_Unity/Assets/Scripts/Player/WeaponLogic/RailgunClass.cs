@@ -14,6 +14,23 @@ public class RailgunClass : GunClass
     //public LayerMask enemymask;
     BeamPath path;
     public float beamSpeed;
+    public float shootAnimTime;
+    //public AnimationCurve chargeCurve;
+    [HideInInspector] public float chargeProgress;
+    public float chargingSpeed;
+
+    float leaveTime;
+
+    public override void EnterWeapon()
+    {
+        base.EnterWeapon();
+
+        if (!player.networkInfo._isOwner) return;
+        if (chargeProgress > 0) chargeProgress = Mathf.Clamp(chargeProgress - (Time.time - leaveTime), 0, 1); //s
+
+        Debug.Log(player.inventory.isShooting);
+        Debug.Log(inventory.VP_GetCurrentWeaponAnimator().GetBool("Firing"));
+    }
     public override void Weapon_Update()
     {
         base.Weapon_Update();
@@ -32,6 +49,21 @@ public class RailgunClass : GunClass
                 player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().predictivePath.SetPosition(i, path.points[i].point);
 
             }
+
+
+            if (currentAmmo == 0)
+            {
+                if (weaponData.fireInput.action.IsPressed()) chargeProgress += chargingSpeed * Time.deltaTime;
+                else if (chargeProgress > 0) { chargeProgress -= chargingSpeed * Time.deltaTime * 0.5f; }
+
+
+
+                if (chargeProgress >= 1) { currentAmmo = 1; shootingTimer = 1f; chargeProgress = -0.2f; }
+
+                Debug.LogAssertion(chargeProgress + "  " + weaponData.fireInput.action.IsPressed());
+            }
+
+            
         }
         else
         {
@@ -46,6 +78,7 @@ public class RailgunClass : GunClass
             }
         }
 
+
     }
 
     public override void ExitWeapon()
@@ -56,13 +89,37 @@ public class RailgunClass : GunClass
         {
             player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().predictivePath.positionCount = 0;
             player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.positionCount = 0;
+
+            leaveTime = Time.time;
         }
         else
         {
             player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().predictivePath.positionCount = 0;
             player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().shootPath.positionCount = 0;
         }
+
+        
     }
+
+
+    public override async void shootCoroutine()
+    {
+        if (currentAmmo <= 0) return;
+        if (!weaponData.fireInput.action.IsPressed()) return;
+        if (player.isMelee) return;
+
+
+        player.inventory.isShooting = true;
+        ShootLogic();
+        currentAmmo = 0;
+
+        if (player.playerNetwork != null) player.playerNetwork.DummyShootRPC();
+
+        await Task.Delay((int)(shootAnimTime * 1000) + 1);
+
+        player.inventory.isShooting = false;
+    }
+
     public async override Task<bool> ShootLogic()
     {
         BeamPath shootPathContainer = path;
@@ -145,7 +202,7 @@ public class RailgunClass : GunClass
                 
 
 
-                Debug.Log(hit.collider.gameObject.layer);
+                //Debug.Log(hit.collider.gameObject.layer);
                 hitDistance -= Vector3.Distance(hit.point, path.points[i - 1].point);
 
                 if (hit.collider.gameObject.layer == Mathf.RoundToInt(Mathf.Log(player.enemyMask.value, 2))) { path.points.Add(new BounceHit(hit.point, 2, hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork._SteamID.Value)); continue; }

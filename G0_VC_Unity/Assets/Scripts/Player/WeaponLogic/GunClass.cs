@@ -29,8 +29,9 @@ public class GunClass : WeaponClass
 
     public override void Weapon_Update()
     {
+        base.Weapon_Update();
         //Debug.Log(player.inventory.isScoping);
-        //if (!player.networkInfo._isOwner) Debug.LogWarning("Blah");
+
         player.player_EXT_ARM_anim_controller.SetBool("Scoping", inventory.isScoping);
 
         player.player_EXT_ARM_anim_controller.SetBool("Firing", inventory.isShooting);
@@ -52,9 +53,7 @@ public class GunClass : WeaponClass
             return;
         }
 
-        Debug.LogWarning(player.inventory.isReloading);
-        base.Weapon_Update();
-
+        
         player.player_VP_ARM_anim_controller.SetBool("Scoping", inventory.isScoping);
 
         player.player_VP_ARM_anim_controller.SetBool("Firing", inventory.isShooting);
@@ -67,10 +66,13 @@ public class GunClass : WeaponClass
 
         inventory.VP_GetCurrentWeaponAnimator().SetBool("Reloading", inventory.isReloading);
 
+        if (shootingTimer > 0) return;
+
         if (player.inventory.isReloading) { return; }
 
 
         if (weaponData.fireInput.action.IsPressed() && !player.isMelee && !inventory.isShooting) shootCoroutine();
+        
 
 
         if (player.inventory.isReloading) { return; }
@@ -86,19 +88,23 @@ public class GunClass : WeaponClass
     public virtual async void shootCoroutine()
     {
 
+        if (shootingTimer > 0) return;
         if (currentAmmo <= 0)
         {
             if (!player.inventory.isReloading) Reload();
             return;
         }
-/*        if (player.IsOwner) 
-    {*/
+        /*        if (player.IsOwner) 
+            {*/
+
+        Debug.Log("sheet  " + key + "   " + player.inventory.GetCurrentWeapon());
         inventory.isShooting = true;
         while (true)
         {
             if (currentAmmo <= 0) break;
             if (!weaponData.fireInput.action.IsPressed()) break;
             if (player.isMelee) break;
+            if (!player.inventory.isShooting) break;
 
             ShootLogic();
             Debug.Log(currentAmmo);
@@ -170,6 +176,7 @@ public class GunClass : WeaponClass
 
         while (Time.time - reloadStartTime < weaponData.reloadTime)
         {
+            if (Time.time - reloadStartTime > weaponData.reloadTime * 0.93f) currentAmmo = weaponData.maxAmmo_Inventory;
             if (!player.inventory.isReloading) return;
             await Task.Yield();
         }
@@ -178,6 +185,7 @@ public class GunClass : WeaponClass
         player.ChangeState(player.RegularState);
 
         currentAmmo = weaponData.maxAmmo_Inventory;
+
         player.inventory.isReloading = false;
     }
 

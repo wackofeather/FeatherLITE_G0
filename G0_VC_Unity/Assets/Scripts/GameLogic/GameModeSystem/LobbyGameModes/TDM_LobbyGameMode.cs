@@ -84,6 +84,10 @@ public class TeamList : INetworkSerializable, IEquatable<TeamList>
         if (serializer.IsReader)
         {
             ListClass = new List<TeamClass>(count);
+            for (int j = 0; j < count; j++)
+            {
+                ListClass.Add(null); // Add default elements to avoid "index out of range"
+            }
         }
 
         for (int i = 0; i < count; i++)
@@ -177,7 +181,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     public GameObject JoinTeamButton;
     public GameObject Trigger;
     public NetworkVariable<TeamList> teamLists = new NetworkVariable<TeamList>(null);
-    public NetworkVariable<int> teamSize = new NetworkVariable<int>(0);
+    public NetworkVariable<int> teamSize = new NetworkVariable<int>();
     [HideInInspector] public ulong GameID;
 
     //public void OnEnable()
@@ -193,35 +197,42 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
-        if (LobbyManager.LobbyManager_Instance.IsHost)
+        if (IsHost)
         {
-            //teamLists.Value = new TeamList();
-            //teamLists.Value.ListIndex.Add(1);
-            //TeamList newList = new TeamList();
-            //TeamList newList = new TeamList();
-            //newList.ListClass.Add(new TeamClass());
-            //teamLists.Value = newList;
-            //Debug.Log("WOLOLO" + teamLists.Value.ListClass.Count);
-            teamSize.Value += 1;
-            Debug.Log(teamSize.Value);
-            //TeamSetting();
+            TeamList list = new TeamList();
+            list.ListClass.Add(new TeamClass());
+            teamLists.Value = list;
         }
-        else
-        {
-            Debug.Log("WOLOLO" + teamLists.Value.ListClass.Count);
-            //Debug.Log("Iamtriggered");
-            //Debug.Log(",miniingin" + teamLists.Value.ListClass);
-            //Debug.Log(",miniingin" + teamLists.Value.ListIndex.Count);
-            Debug.Log(teamSize.Value);
-            //UpdateUIList();
-        }
+        /*        if (LobbyManager.LobbyManager_Instance.IsHost)
+                {
+                    //teamLists.Value = new TeamList();
+                    //teamLists.Value.ListIndex.Add(1);
+                    //TeamList newList = new TeamList();
+                    //TeamList newList = new TeamList();
+                    //newList.ListClass.Add(new TeamClass());
+                    //teamLists.Value = newList;
+                    //Debug.Log("WOLOLO" + teamLists.Value.ListClass.Count);
+                    teamSize.Value += 1;
+                    Debug.Log(teamSize.Value);
+                    //TeamSetting();
+                }
+                else
+                {
+                    Debug.Log("WOLOLO" + teamLists.Value.ListClass.Count);
+                    //Debug.Log("Iamtriggered");
+                    //Debug.Log(",miniingin" + teamLists.Value.ListClass);
+                    //Debug.Log(",miniingin" + teamLists.Value.ListIndex.Count);
+                    Debug.Log(teamSize.Value);
+                    //UpdateUIList();
+                }
 
-        GameID = SteamClient.SteamId;
+                GameID = SteamClient.SteamId;*/
     }
 
     private void Update()
     {
-         Debug.Log(teamSize.Value);
+        
+        Debug.Log(teamLists.Value.ListClass.Count);
     }
     //public override void OnGameModeSwitch(int previousValue, int currentValue)
     //{

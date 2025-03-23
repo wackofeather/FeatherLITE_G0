@@ -12,6 +12,11 @@ public abstract class Base_LobbyGameMode:NetworkBehaviour
     public VerticalLayoutGroup VerticalLayoutGroup;
     [HideInInspector] public List<GameObject> Buttons;
     public int GameModeKey;
+
+    private void Start()
+    {
+        LobbyManager.LobbyManager_Instance.CurrentGameMode_Int.OnValueChanged+= OnGameModeSwitch;
+    }
     public virtual void GameMode_MemberJoined(Friend friend)
     {
 
@@ -25,6 +30,10 @@ public abstract class Base_LobbyGameMode:NetworkBehaviour
 
     }
 
+    public virtual void OnGameModeSwitch(int previousValue ,int currentValue)
+    {
+        
+    }
     public void OnDisable()
     {
         

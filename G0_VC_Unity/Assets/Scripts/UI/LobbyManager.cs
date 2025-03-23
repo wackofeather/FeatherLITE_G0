@@ -11,6 +11,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
+
+
 public class LobbyManager : GeneralManager
 {
     public List<Friend> memberList;
@@ -29,6 +31,7 @@ public class LobbyManager : GeneralManager
     public Base_LobbyGameMode CurrentGameMode;
 
     public NetworkVariable<int> CurrentGameMode_Int = new NetworkVariable<int>();
+
 
     public override void OnNetworkSpawn()
     {
@@ -162,6 +165,9 @@ public class LobbyManager : GeneralManager
         }
     }
 
+
+
+ 
 
 
 }

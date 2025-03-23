@@ -34,14 +34,17 @@ public class TeamClass : INetworkSerializable, IEquatable<TeamClass>
         }
 
         for (int i = 0; i < count; i++)
-        {
-            ulong friend = serializer.IsReader ? 0 : Friends[i];
-            serializer.SerializeValue(ref friend);
-            if (serializer.IsReader)
             {
-                Friends[i] = friend;
+                ulong friend = serializer.IsReader ? 0 : Friends[i];
+                serializer.SerializeValue(ref friend);
+                if (serializer.IsReader&&Friends.Count!=0)
+                {
+                    Debug.Log("MINIBIFI" + i);
+                    Debug.Log("MINIBIFI" + Friends.Count);
+                    Friends[i] = friend;
+                }
             }
-        }
+       
     }
 
     public bool Equals(TeamClass other)
@@ -54,7 +57,7 @@ public class TeamClass : INetworkSerializable, IEquatable<TeamClass>
         }
         return true;
     }
-    //ogogeke
+
     public override int GetHashCode()
     {
         int hash = 17;
@@ -69,9 +72,10 @@ public class TeamClass : INetworkSerializable, IEquatable<TeamClass>
 [Serializable]
 public class TeamList : INetworkSerializable, IEquatable<TeamList>
 {
-    public float test = 0;
+    public float test = 1;
     public List<TeamClass> ListClass = new List<TeamClass>();
-    public List<int> ListIndex = new List<int>();
+    //public List<int> ListIndex = new List<int>();
+
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         int count = ListClass.Count;
@@ -115,322 +119,328 @@ public class TeamList : INetworkSerializable, IEquatable<TeamList>
     }
 }
 
+//public class TeamList : INetworkSerializable, IEquatable<TeamList>
+//{
+//    public float test = 1;
+//    //public List<TeamClass> ListClass = new List<TeamClass>();
+//    public List<int> ListIndex = new List<int>();
+
+//    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+//    {
+//        int count = ListIndex.Count;
+//        serializer.SerializeValue(ref count);
+
+//        if (serializer.IsReader)
+//        {
+//            ListIndex = new List<int>(count);
+//        }
+
+//        for (int i = 0; i < count; i++)
+//        {
+//            int value = serializer.IsReader ? 0 : ListIndex[i];
+//            serializer.SerializeValue(ref value);
+//            if (serializer.IsReader)
+//            {
+//                ListIndex[i] = value;
+//            }
+//        }
+//    }
+
+//    public bool Equals(TeamList other)
+//    {
+//        if (other == null) return false;
+//        if (ListIndex.Count != other.ListIndex.Count) return false;
+//        for (int i = 0; i < ListIndex.Count; i++)
+//        {
+//            if (ListIndex[i] != other.ListIndex[i]) return false;
+//        }
+//        return true;
+//    }
+
+//    public override int GetHashCode()
+//    {
+//        int hash = 17;
+//        foreach (var index in ListIndex)
+//        {
+//            hash = hash * 31 + index.GetHashCode();
+//        }
+//        return hash;
+//    }
+//}
 
 
 
 public class TDM_LobbyGameMode : Base_LobbyGameMode
 {
-    
     public UnityEngine.UI.Slider slider;
     public GameObject spacerObject;
     public GameObject JoinTeamButton;
     public GameObject Trigger;
-    //public TeamList teamLists;
-    NetworkVariable<TeamList> teamLists = new NetworkVariable<TeamList>(null);
-
+    public NetworkVariable<TeamList> teamLists = new NetworkVariable<TeamList>(null);
+    public NetworkVariable<int> teamSize = new NetworkVariable<int>(0);
     [HideInInspector] public ulong GameID;
 
-    //private void Awake()
+    //public void OnEnable()
     //{
-    //    TeamContainer.OnValueChanged += OnTeamContainerChanged;
+        
     //}
 
-    //private void OnDestroy()
+    //public void Update()
     //{
-    //    TeamContainer.OnValueChanged -= OnTeamContainerChanged;
+    //    // Debug.Log(teamLists.Value);
     //}
 
-    //private void OnTeamContainerChanged(TeamList previous, TeamList current)
-    //{
-    //    Debug.Log("TeamContainer changed");
-    //    UpdateUIList();
-    //}
-
-    //public  void Start()
-    //{
-    //    Debug.Log("STARTING");  
-    //    if (LobbyManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 1)
-    //    {
-    //        if (LobbyManager.LobbyManager_Instance.IsHost)
-    //        {
-    //            TeamContainer.Value = TeamContainer.Value;
-    //            TeamSetting();
-    //        }
-    //        else
-    //        {
-    //            Debug.Log("Not Host" + TeamContainer.Value.ListClass.Count);
-    //            UpdateUIList();
-    //        }
-    //        GameID = SteamClient.SteamId;
-    //    }
-    //}
-
-    //private void Update()
-    //{
-    //    Debug.Log("UPDATING" + TeamContainer.Value.ListClass.Count);
-    //}
-    //private void CheckForEnable()
-    //{
-    //    if (LobbyManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 1)
-    //    {
-    //        if (LobbyManager.LobbyManager_Instance.IsHost)
-    //        {
-    //            TeamSetting();
-    //            //UpDaterCatchServerRpc();
-    //            CancelInvoke("CheckForEnable");
-
-    //        }
-    //        else
-    //        {
-    //            CancelInvoke("CheckForEnable");
-    //        }
-
-    //        GameID = SteamClient.SteamId;
-
-    //    }
-    //}
-    //}
-
-    public void OnEnable()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         if (LobbyManager.LobbyManager_Instance.IsHost)
         {
-            teamLists.Value = new TeamList();
-            TeamSetting();
-            //Debug.Log(teamLists.Value.ListClass.Count);
-            
-
+            //teamLists.Value = new TeamList();
+            //teamLists.Value.ListIndex.Add(1);
+            //TeamList newList = new TeamList();
+            //TeamList newList = new TeamList();
+            //newList.ListClass.Add(new TeamClass());
+            //teamLists.Value = newList;
+            //Debug.Log("WOLOLO" + teamLists.Value.ListClass.Count);
+            teamSize.Value += 1;
+            Debug.Log(teamSize.Value);
+            //TeamSetting();
+        }
+        else
+        {
+            Debug.Log("WOLOLO" + teamLists.Value.ListClass.Count);
+            //Debug.Log("Iamtriggered");
+            //Debug.Log(",miniingin" + teamLists.Value.ListClass);
+            //Debug.Log(",miniingin" + teamLists.Value.ListIndex.Count);
+            Debug.Log(teamSize.Value);
+            //UpdateUIList();
         }
 
         GameID = SteamClient.SteamId;
     }
 
-    public void Update()
+    private void Update()
     {
-       // Debug.Log(teamLists.Value);
+         Debug.Log(teamSize.Value);
     }
-    //public void Start()
+    //public override void OnGameModeSwitch(int previousValue, int currentValue)
     //{
-    //    InvokeRepeating("CheckForEnable", 0, 1);
+    //    base.OnGameModeSwitch (previousValue, currentValue);
+    //    if (currentValue == 1)
+    //    {
+    //        if (LobbyManager.LobbyManager_Instance.IsHost)
+    //        {
+    //            //teamLists.Value = new TeamList();
+    //            //teamLists.Value.ListIndex.Add(1);
+    //            //TeamList newList = new TeamList();
+    //            TeamList newList = new TeamList();
+    //            newList.ListClass.Add(new TeamClass());
+    //            teamLists.Value = newList;
+    //            Debug.Log("WOLOLO" + teamLists.Value.ListClass.Count);
+    //            //teamSize.Value += 1;
+    //            //TeamSetting();
+    //        }
+    //        else
+    //        {
+    //            Debug.Log("WOLOLO" + teamLists.Value.ListClass.Count);
+    //            //Debug.Log("Iamtriggered");
+    //            //Debug.Log(",miniingin" + teamLists.Value.ListClass);
+    //            //Debug.Log(",miniingin" + teamLists.Value.ListIndex.Count);
+    //            //Debug.Log(teamSize.Value);
+    //            //UpdateUIList();
+    //        }
+
+    //        GameID = SteamClient.SteamId;
+    //    }
+    //}
+    //public void TeamSetting()
+    //{
+    //    if (!LobbyManager.LobbyManager_Instance.IsHost) return;
+    //    Debug.Log("IAMCLALED");
+    //    List<Friend> FriendList = new List<Friend>(LobbyManager.LobbyManager_Instance.memberList);
+    //    TeamList newList = new TeamList();
+    //    //teamLists.Value.ListClass.Clear();
+    //    int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
+    //    //Debug.Log("SliderValue: " + slider.value);
+    //    //Debug.Log("TeamSize: " + teamSize);
+    //    for (int i = 0; i < slider.value; i++)
+    //    {
+    //        TeamClass teamClass = new TeamClass();
+    //        //for (int j = 0; j < teamSize && FriendList.Count > 0; j++)
+    //        //{
+    //        //    Debug.Log(FriendList[0]);
+    //        //    teamClass.AddFriend(FriendList[0].Id);
+    //        //    FriendList.RemoveAt(0);
+    //        //}
+    //        newList.ListClass.Add(teamClass);
+    //        teamLists.Value = newList;
+    //        Debug.Log("teamListCount" + teamLists.Value.ListClass.Count);
+    //    }
+    //    UpdateUIList();
     //}
 
-    public void TeamSetting()
-    {
-        if (!LobbyManager.LobbyManager_Instance.IsHost) return;
-        Debug.Log("IAMCLALED");
-        List<Friend> FriendList = new List<Friend>(LobbyManager.LobbyManager_Instance.memberList);
-        teamLists.Value.ListClass.Clear();
-        int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
-        Debug.Log("SliderValue: " + slider.value);
-        Debug.Log("TeamSize: " + teamSize);
-        for (int i = 0; i < slider.value; i++)
-        {
-            TeamClass teamClass = new TeamClass();
-            for (int j = 0; j < teamSize && FriendList.Count > 0; j++)
-            {
-                Debug.Log(FriendList[0]);
-                teamClass.AddFriend(FriendList[0].Id);
-                FriendList.RemoveAt(0);
-            }
-            teamLists.Value.ListClass.Add(teamClass);
-            Debug.Log("teamListCount" + teamLists.Value.ListClass.Count);
-        }
-        UpdateUIList();
-        //UpdateClient();
-
-    }
-
-    public override void GameMode_MemberJoined(Friend friend)
-    {
-        if (!LobbyManager.LobbyManager_Instance.IsHost) return;
-        base.GameMode_MemberJoined(friend);
-       
-
-        Debug.Log("NEW MEMBER JOINED");
-        int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
-        Debug.Log("This is the new teamSize" + teamSize);
-        List<Friend> localUserList = new List<Friend>();
-        localUserList.Add(friend);
-        foreach (TeamClass teamClass in teamLists.Value.ListClass)
-        {
-            if (teamClass.Friends.Count > teamSize)
-            {
-                for (int j = 0; j < (teamClass.Friends.Count - teamSize); j++)
-                {
-                    localUserList.Add(LobbyManager.LobbyManager_Instance.memberList.Find(x => x.Id == teamClass.Friends[0]));
-                    teamClass.Friends.RemoveAt(0);
-                }
-            }
-            else if (teamClass.Friends.Count < teamSize)
-            {
-                Debug.Log("Team is lacking members");
-                for (int j = 0; j < (teamSize - teamClass.Friends.Count) && localUserList.Count > 0; j++)
-                {
-                    teamClass.Friends.Add(localUserList[0].Id);
-                    Debug.Log(teamClass.Friends.Count);
-                    localUserList.RemoveAt(0);
-                }
-            }
-            else
-            {
-                TeamClass teamClasses = new TeamClass();
-                teamClasses.AddFriend(localUserList[0].Id);
-                teamLists.Value.ListClass.Add(teamClasses);
-                localUserList.RemoveAt(0);
-            }
-        } // Mark the NetworkVariable as dirty to ensure the change is propagated
-        UpdateUIList();
-        //UpdateClient();
-    }
-
-    public override void GameMode_MemberLeave(Friend friend)
-    {
-        if (!LobbyManager.LobbyManager_Instance.IsHost) return;
-        base.GameMode_MemberLeave(friend);
-       
-
-        Debug.Log("team member left");
-        List<Friend> localUserList = new List<Friend>();
-        int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
-        foreach (TeamClass teamClass in teamLists.Value.ListClass)
-        {
-            if (teamClass.Friends.Count > teamSize)
-            {
-                for (int j = 0; j < (teamClass.Friends.Count - teamSize); j++)
-                {
-                    localUserList.Add(LobbyManager.LobbyManager_Instance.memberList.Find(x => x.Id == teamClass.Friends[0]));
-                    teamClass.Friends.RemoveAt(0);
-                }
-            }
-            else if (teamClass.Friends.Count < teamSize)
-            {
-                Debug.Log("Team is lacking members");
-                for (int j = 0; j < (teamSize - teamClass.Friends.Count) && localUserList.Count > 0; j++)
-                {
-                    teamClass.Friends.Add(localUserList[0].Id);
-                    Debug.Log(teamClass.Friends.Count);
-                    localUserList.RemoveAt(0);
-                }
-            }
-            else
-            {
-                teamClass.Friends.Remove(friend.Id);
-            }
-        }// Mark the NetworkVariable as dirty to ensure the change is propagated
-        UpdateUIList();
-        //UpdateClient();
-    }
-
-    public override void UpdateUIList()
-    {
-        base.UpdateUIList();
-        ClearButtons();
-        Debug.Log("Update Triggered");
-
-        GameObject Button;
-        GameObject Button2;
-        foreach (TeamClass team in teamLists.Value.ListClass)
-        {
-            Debug.Log("THISISTEAMFRIENDS" + team.Friends.Count);
-            UnityEngine.Color randomColor = new UnityEngine.Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
-
-            if (team.Friends.Count != 0)
-            {
-
-                Button2 = Instantiate(JoinTeamButton, MenuVector);
-                Button2.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => OnClick(team));
-                Buttons.Add(Button2);
-                foreach (ulong friend in team.Friends)
-                {
-                    Debug.Log("IAMTRIGGERING" + friend);
-                    Button = Instantiate(MenuPrefabButton, MenuVector);
-                    ColorBlock colorBlock = Button.GetComponent<UnityEngine.UI.Button>().colors;
-                    colorBlock.normalColor = randomColor;
-                    Button.GetComponent<UnityEngine.UI.Button>().colors = colorBlock;
-                    Button.GetComponent<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
-                    Buttons.Add(Button);
-                    Debug.Log("ths is button count" + Buttons.Count);
-                }
-                VerticalLayoutGroup.CalculateLayoutInputVertical();
-            }
-        }
-    }
-
-    public void OnClick(TeamClass teamContained)
-    {
-        if (teamContained.Friends.Count == 0)
-        {
-            RemovePlayerFromOtherTeams(GameID);
-            AddPlayertoTeams(GameID, teamContained);
-            Debug.Log("OEKGOEKPEGEGK");
-            LobbyManager.LobbyManager_Instance.CurrentGameMode.UpdateUIList();
-            return;
-        }
-        else if (teamContained.Friends.Count > slider.value + 2)
-        {
-            return;
-        }
-
-        foreach (ulong member in teamContained.Friends)
-        {
-            Debug.Log("RUNNING");
-            Debug.Log("GEOKGE" + GameID);
-
-            if (member == GameID)
-            {
-                Debug.Log("IAM RETURNED");
-                return;
-            }
-        }
-
-        Debug.Log("OEKGOEKPEGEGK");
-        RemovePlayerFromOtherTeams(GameID);
-        AddPlayertoTeams(GameID, teamContained);
-
-        LobbyManager.LobbyManager_Instance.CurrentGameMode.UpdateUIList();
-    }
-
-    private void AddPlayertoTeams(ulong gameId, TeamClass teamContained)
-    {
-        teamContained.AddFriend(gameId);
-    }
-
-    private void RemovePlayerFromOtherTeams(ulong gameId)
-    {
-        foreach (TeamClass team in teamLists.Value.ListClass)
-        {
-            team.Friends.Remove(gameId);
-            Debug.Log("lhoeoe" + team.Friends.Count);
-        }
-    }
-
-
-    //[Rpc(SendTo.NotServer)]
-
-    //private void UpdateClientRpc(TeamList check)
+    //public override void GameMode_MemberJoined(Friend friend)
     //{
-    //    Debug.Log("TRIGGERED"+teamLists.ListClass.Count);
-    //    //Debug.Log("TRIGGERED" + check.ListClass.Count);
-    //    if (!IsHost)
+    //    if (!LobbyManager.LobbyManager_Instance.IsHost) return;
+
+    //    base.GameMode_MemberJoined(friend);
+    //    teamLists.Value.test += 1;
+    //    Debug.Log("NEW MEMBER JOINED");
+    //    int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
+    //    Debug.Log("This is the new teamSize" + teamSize);
+    //    List<Friend> localUserList = new List<Friend>();
+    //    localUserList.Add(friend);
+    //    foreach (TeamClass teamClass in teamLists.Value.ListClass)
     //    {
-    //        Debug.Log(teamLists.ListClass.Count);
-    //        Debug.Log("IAMCALLEDHAHAH");
-    //        Debug.Log(check.ListClass.Count);
-    //        teamLists = check;
-    //        UpdateUIList();
+    //        if (teamClass.Friends.Count > teamSize)
+    //        {
+    //            for (int j = 0; j < (teamClass.Friends.Count - teamSize); j++)
+    //            {
+    //                localUserList.Add(LobbyManager.LobbyManager_Instance.memberList.Find(x => x.Id == teamClass.Friends[0]));
+    //                teamClass.Friends.RemoveAt(0);
+    //            }
+    //        }
+    //        else if (teamClass.Friends.Count < teamSize)
+    //        {
+    //            Debug.Log("Team is lacking members");
+    //            for (int j = 0; j < (teamSize - teamClass.Friends.Count) && localUserList.Count > 0; j++)
+    //            {
+    //                teamClass.Friends.Add(localUserList[0].Id);
+    //                Debug.Log(teamClass.Friends.Count);
+    //                localUserList.RemoveAt(0);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            TeamClass newTeamClass = new TeamClass();
+    //            newTeamClass.AddFriend(localUserList[0].Id);
+    //            teamLists.Value.ListClass.Add(newTeamClass);
+    //            localUserList.RemoveAt(0);
+    //        }
+    //    }
+    //    UpdateUIList();
+    //}
+
+    //public override void GameMode_MemberLeave(Friend friend)
+    //{
+    //    if (!LobbyManager.LobbyManager_Instance.IsHost) return;
+    //    base.GameMode_MemberLeave(friend);
+
+    //    Debug.Log("team member left");
+    //    List<Friend> localUserList = new List<Friend>();
+    //    int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
+    //    foreach (TeamClass teamClass in teamLists.Value.ListClass)
+    //    {
+    //        if (teamClass.Friends.Count > teamSize)
+    //        {
+    //            for (int j = 0; j < (teamClass.Friends.Count - teamSize); j++)
+    //            {
+    //                localUserList.Add(LobbyManager.LobbyManager_Instance.memberList.Find(x => x.Id == teamClass.Friends[0]));
+    //                teamClass.Friends.RemoveAt(0);
+    //            }
+    //        }
+    //        else if (teamClass.Friends.Count < teamSize)
+    //        {
+    //            Debug.Log("Team is lacking members");
+    //            for (int j = 0; j < (teamSize - teamClass.Friends.Count) && localUserList.Count > 0; j++)
+    //            {
+    //                teamClass.Friends.Add(localUserList[0].Id);
+    //                Debug.Log(teamClass.Friends.Count);
+    //                localUserList.RemoveAt(0);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            teamClass.Friends.Remove(friend.Id);
+    //        }
+    //    }
+    //    UpdateUIList();
+    //}
+
+    //public override void UpdateUIList()
+    //{
+    //    base.UpdateUIList();
+    //    ClearButtons();
+    //    Debug.Log("Update Triggered");
+    //    Debug.Log(",miniingin" + teamLists.Value.ListClass);
+    //    Debug.Log(teamSize.Value);
+    //    Debug.Log(",miniingin" + teamLists.Value.ListIndex.Count);
+    //    GameObject Button;
+    //    GameObject Button2;
+    //    foreach (TeamClass team in teamLists.Value.ListClass)
+    //    {
+    //        Debug.Log("THISISTEAMFRIENDS" + team.Friends.Count);
+    //        UnityEngine.Color randomColor = new UnityEngine.Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
+
+    //        if (team.Friends.Count != 0)
+    //        {
+    //            Button2 = Instantiate(JoinTeamButton, MenuVector);
+    //            Button2.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => OnClick(team));
+    //            Buttons.Add(Button2);
+    //            foreach (ulong friend in team.Friends)
+    //            {
+    //                Debug.Log("IAMTRIGGERING" + friend);
+    //                Button = Instantiate(MenuPrefabButton, MenuVector);
+    //                ColorBlock colorBlock = Button.GetComponent<UnityEngine.UI.Button>().colors;
+    //                colorBlock.normalColor = randomColor;
+    //                Button.GetComponent<UnityEngine.UI.Button>().colors = colorBlock;
+    //                Button.GetComponent<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
+    //                Buttons.Add(Button);
+    //                Debug.Log("ths is button count" + Buttons.Count);
+    //            }
+    //            VerticalLayoutGroup.CalculateLayoutInputVertical();
+    //        }
+    //    }
+    //}
+
+    //public void OnClick(TeamClass teamContained)
+    //{
+    //    if (teamContained.Friends.Count == 0)
+    //    {
+    //        RemovePlayerFromOtherTeams(GameID);
+    //        AddPlayertoTeams(GameID, teamContained);
+    //        Debug.Log("OEKGOEKPEGEGK");
+    //        LobbyManager.LobbyManager_Instance.CurrentGameMode.UpdateUIList();
+    //        return;
+    //    }
+    //    else if (teamContained.Friends.Count > slider.value + 2)
+    //    {
+    //        return;
     //    }
 
+    //    foreach (ulong member in teamContained.Friends)
+    //    {
+    //        Debug.Log("RUNNING");
+    //        Debug.Log("GEOKGE" + GameID);
 
+    //        if (member == GameID)
+    //        {
+    //            Debug.Log("IAM RETURNED");
+    //            return;
+    //        }
+    //    }
 
+    //    Debug.Log("OEKGOEKPEGEGK");
+    //    RemovePlayerFromOtherTeams(GameID);
+    //    AddPlayertoTeams(GameID, teamContained);
+
+    //    LobbyManager.LobbyManager_Instance.CurrentGameMode.UpdateUIList();
     //}
 
-    //[Rpc(SendTo.Server)]
-    //public void UpDaterCatchServerRpc(int mini)
+    //private void AddPlayertoTeams(ulong gameId, TeamClass teamContained)
     //{
-    //    Debug.Log("TRIGGERED" + teamLists.ListClass.Count);
-    //    UpdateClientRpc(teamLists);
+    //    teamContained.AddFriend(gameId);
+    //}
 
-    }
+    //private void RemovePlayerFromOtherTeams(ulong gameId)
+    //{
+    //    foreach (TeamClass team in teamLists.Value.ListClass)
+    //    {
+    //        team.Friends.Remove(gameId);
+    //        Debug.Log("lhoeoe" + team.Friends.Count);
+    //    }
+    //}
+}
 
   
     //public void UpdateClient (int mini)

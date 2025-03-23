@@ -9,31 +9,31 @@ using TMPro;
 
 public class JoinGameManager : NetworkBehaviour
 {
-    [HideInInspector] public ulong GameID;
-    public TeamClass teamContained;
-    public List<TeamClass> teamClasses = new List<TeamClass>();
-    public NetworkVariable<TeamList> teamContainer;
-    public int sliderValued;
+    //[HideInInspector] public ulong GameID;
+    //public TeamClass teamContained;
+    //public List<TeamClass> teamClasses = new List<TeamClass>();
+    //public NetworkVariable<TeamList> teamContainer;
+    //public int sliderValued;
 
-    public void Start()
-    {
-        GameID = SteamClient.SteamId;
-    }
+    //public void Start()
+    //{
+    //    GameID = SteamClient.SteamId;
+    //}
 
-    public void OnDefine(TeamClass teamContain, NetworkVariable<TeamList> teamContainer, int sliderValue)
-    {
-        teamContained = teamContain;
-        this.teamContainer = teamContainer;
-        teamClasses = teamContainer.Value.ListClass;
-        sliderValued = sliderValue;
-    }
+    //public void OnDefine(TeamClass teamContain, NetworkVariable<TeamList> teamContainer, int sliderValue)
+    //{
+    //    teamContained = teamContain;
+    //    this.teamContainer = teamContainer;
+    //    teamClasses = teamContainer.Value.ListClass;
+    //    sliderValued = sliderValue;
+    //}
 
 
 
-    private void UpdateTeamContainer()
-    {
-        teamContainer.Value.ListClass = teamClasses;
-    }
+    //private void UpdateTeamContainer()
+    //{
+    //    teamContainer.Value.ListClass = teamClasses;
+    //}
 }
 
 

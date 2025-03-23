@@ -609,6 +609,7 @@ GameObject:
   m_Component:
   - component: {fileID: 357390936}
   - component: {fileID: 357390937}
+  - component: {fileID: 357390938}
   m_Layer: 5
   m_Name: TD Screen
   m_TagString: Untagged
@@ -651,6 +652,35 @@ MonoBehaviour:
   Container: {fileID: 582444639}
   controller: {fileID: 1916541043}
   Key: 1
+--- !u!114 &357390938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357390935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6e6c9054e1bc04bac09bbcc033791c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MenuPrefabButton: {fileID: 7685989939280807055, guid: 008b9169889ab4e4684fbda6fe570521, type: 3}
+  MenuVector: {fileID: 1223628557}
+  VerticalLayoutGroup: {fileID: 1223628558}
+  Buttons: []
+  GameModeKey: 0
+  slider: {fileID: 239538181}
+  spacerObject: {fileID: 0}
+  JoinTeamButton: {fileID: 555149971087533333, guid: 34aa42876deceb04caa532693a631c11, type: 3}
+  Trigger: {fileID: 0}
+  teamLists:
+    m_InternalValue:
+      test: 1
+      ListClass: []
+      ListIndex: 
+  teamSize:
+    m_InternalValue: 0
+  GameID: 0
 --- !u!1 &373166402
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,7 +690,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 373166403}
-  - component: {fileID: 373166404}
   m_Layer: 5
   m_Name: Container
   m_TagString: Untagged
@@ -690,23 +719,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &373166404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 373166402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2cd0dd5fef930d34aa95b6456a1c54d0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MenuPrefabButton: {fileID: 7685989939280807055, guid: 008b9169889ab4e4684fbda6fe570521, type: 3}
-  MenuVector: {fileID: 823649113}
-  VerticalLayoutGroup: {fileID: 823649117}
-  Buttons: []
-  GameModeKey: 0
 --- !u!1 &499991535
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,7 +999,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 582444640}
-  - component: {fileID: 582444641}
   m_Layer: 5
   m_Name: Container
   m_TagString: Untagged
@@ -1017,28 +1028,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &582444641
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 582444639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb6e6c9054e1bc04bac09bbcc033791c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MenuPrefabButton: {fileID: 7685989939280807055, guid: 008b9169889ab4e4684fbda6fe570521, type: 3}
-  MenuVector: {fileID: 1223628557}
-  VerticalLayoutGroup: {fileID: 1223628558}
-  Buttons: []
-  GameModeKey: 0
-  slider: {fileID: 239538181}
-  spacerObject: {fileID: 0}
-  JoinTeamButton: {fileID: 555149971087533333, guid: 34aa42876deceb04caa532693a631c11, type: 3}
-  Trigger: {fileID: 0}
-  GameID: 0
 --- !u!1 &597373519
 GameObject:
   m_ObjectHideFlags: 0
@@ -4242,6 +4231,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1935849946}
   - component: {fileID: 1935849947}
+  - component: {fileID: 1935849948}
   m_Layer: 5
   m_Name: FFA Screen
   m_TagString: Untagged
@@ -4284,6 +4274,23 @@ MonoBehaviour:
   Container: {fileID: 373166402}
   controller: {fileID: 1916541043}
   Key: 0
+--- !u!114 &1935849948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1935849945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cd0dd5fef930d34aa95b6456a1c54d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MenuPrefabButton: {fileID: 7685989939280807055, guid: 008b9169889ab4e4684fbda6fe570521, type: 3}
+  MenuVector: {fileID: 823649113}
+  VerticalLayoutGroup: {fileID: 823649117}
+  Buttons: []
+  GameModeKey: 0
 --- !u!1 &2045818694
 GameObject:
   m_ObjectHideFlags: 0

@@ -52,7 +52,7 @@ public class GunClass : WeaponClass
             return;
         }
 
-
+        Debug.LogWarning(player.inventory.isReloading);
         base.Weapon_Update();
 
         player.player_VP_ARM_anim_controller.SetBool("Scoping", inventory.isScoping);
@@ -88,7 +88,7 @@ public class GunClass : WeaponClass
 
         if (currentAmmo <= 0)
         {
-            Reload();
+            if (!player.inventory.isReloading) Reload();
             return;
         }
 /*        if (player.IsOwner) 
@@ -101,7 +101,7 @@ public class GunClass : WeaponClass
             if (player.isMelee) break;
 
             ShootLogic();
-
+            Debug.Log(currentAmmo);
             currentAmmo -= 1;
 
             if (player.playerNetwork != null) player.playerNetwork.DummyShootRPC();
@@ -163,8 +163,37 @@ public class GunClass : WeaponClass
 
         player.inventory.isReloading = true;
         
-        await Task.Delay(Mathf.FloorToInt(weaponData.reloadTime * 1000) + 1);
+        float reloadStartTime = Time.time;
+        //await Task.Delay(Mathf.FloorToInt(weaponData.reloadTime * 1000) + 1);
+
+        player.ChangeState(player.ReloadState);
+
+        while (Time.time - reloadStartTime < weaponData.reloadTime)
+        {
+            if (!player.inventory.isReloading) return;
+            await Task.Yield();
+        }
+
+        if (!player.inventory.isReloading) return;
+        player.ChangeState(player.RegularState);
+
         currentAmmo = weaponData.maxAmmo_Inventory;
         player.inventory.isReloading = false;
+    }
+
+    public override void ExitWeapon()
+    {
+        base.ExitWeapon();
+
+
+        if (player.networkInfo._isOwner)
+        {
+            if (player.inventory.isReloading)
+            {
+                player.inventory.isReloading = false;
+                player.ChangeState(player.RegularState);
+            }
+
+        }
     }
 }

@@ -14,6 +14,7 @@ using Unity.Netcode.Transports.UTP;
 using System.Net.NetworkInformation;
 using static PlayerNetwork;
 using Steamworks;
+using UnityEditorInternal;
 
 public class PlayerStateMachine : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class PlayerStateMachine : MonoBehaviour
     [System.NonSerialized] public MeleeState MeleeState;
     [System.NonSerialized] public WeaponSwitchState WeaponSwitchState;
     [System.NonSerialized] public DeathState DeathState;
+    [HideInInspector] public ReloadState ReloadState;
 
     public Dictionary<float, BasePlayerState> stateDictionary = new Dictionary<float, BasePlayerState>();
 
@@ -341,11 +343,13 @@ public class PlayerStateMachine : MonoBehaviour
         MeleeState = new MeleeState(this);
         WeaponSwitchState = new WeaponSwitchState(this);
         DeathState = new DeathState(this);
+        ReloadState = new ReloadState(this);
         stateDictionary.Add(RegularState.key, RegularState);
         stateDictionary.Add(GrapplingState.key, GrapplingState);
         stateDictionary.Add(MeleeState.key, MeleeState);
         stateDictionary.Add(WeaponSwitchState.key, WeaponSwitchState);
         stateDictionary.Add(DeathState.key, DeathState);
+        stateDictionary.Add(ReloadState.key, ReloadState);
         
         //RegularState.Start_Init();
         //GrapplingState.Start_Init();

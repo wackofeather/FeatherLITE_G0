@@ -459,6 +459,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3525046474232947425, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
+      propertyPath: m_Lightmapping
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 4664688811214350026, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0

@@ -10,6 +10,8 @@ public class Lobby_Player_Buttons_Helpers : MonoBehaviour
     public Button button;
     public TMP_Text tmpText;
     public TMP_Text tmpText2;
+    public ulong ButtonId;
+    public TeamClass teamClass;
     //public List<Color> textColor = new List<Color>(); // Corrected List declaration
     //// Start is called once before the first execution of Update after the MonoBehaviour is created
     //void Awake()

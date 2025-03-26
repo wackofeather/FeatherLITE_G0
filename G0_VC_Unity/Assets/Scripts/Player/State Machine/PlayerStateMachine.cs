@@ -14,7 +14,7 @@ using Unity.Netcode.Transports.UTP;
 using System.Net.NetworkInformation;
 using static PlayerNetwork;
 using Steamworks;
-using UnityEditorInternal;
+//using UnityEditorInternal;
 
 public class PlayerStateMachine : MonoBehaviour
 {

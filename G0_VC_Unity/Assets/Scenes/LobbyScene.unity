@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 171680206}
   - component: {fileID: 171680207}
+  - component: {fileID: 171680208}
   m_Layer: 5
   m_Name: ToggleGroupManager
   m_TagString: Untagged
@@ -170,6 +171,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 0
+--- !u!114 &171680208
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 171680205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4395558267073c49b995317f7d28a60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggle: {fileID: 545646016}
+  toggle2: {fileID: 499991537}
 --- !u!1 &196429765
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,7 +472,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 357390938}
         m_TargetAssemblyTypeName: TDM_LobbyGameMode, Assembly-CSharp
         m_MethodName: TeamSetting
         m_Mode: 1
@@ -520,6 +535,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toggleGroup: {fileID: 171680207}
   controller: {fileID: 1916541043}
+  slider: {fileID: 239538181}
 --- !u!1 &325243253
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,8 +693,9 @@ MonoBehaviour:
     m_InternalValue:
       test: 1
       ListClass: []
-  teamSize:
+  TeamSizeNetwork:
     m_InternalValue: 0
+  ActiveObjects: []
   GameID: 0
 --- !u!1 &373166402
 GameObject:
@@ -1337,7 +1354,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1900915363}
   m_Direction: 0
   m_Value: 1
-  m_Size: 0.99999976
+  m_Size: 0.9999998
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2048,7 +2065,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1650270676}
   m_HandleRect: {fileID: 1650270675}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2353,7 +2370,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 1
+  m_Spacing: 2
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -4056,7 +4073,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2048214761}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.00000023841858, y: 0}
+  m_AnchorMin: {x: 0.00000017881393, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}

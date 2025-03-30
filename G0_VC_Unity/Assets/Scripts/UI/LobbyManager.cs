@@ -37,7 +37,7 @@ public class LobbyManager : GeneralManager
     {
         base.OnNetworkSpawn();
         ReloadMemberList();
-        if (IsServer && IsHost)
+        if ( IsHost&& SteamLobbyManager.instance.reconnecting==false)
         {
 
             countDown.Value = 110;
@@ -84,7 +84,7 @@ public class LobbyManager : GeneralManager
         
         totalVotes = map1 + map2;
 
-        if (totalVotes == memberList.Count)
+        if (totalVotes == memberList.Count&&IsHost)
         {
             countDown.Value = 10;
         }

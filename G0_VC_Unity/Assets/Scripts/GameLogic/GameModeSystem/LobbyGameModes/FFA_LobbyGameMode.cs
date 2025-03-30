@@ -1,4 +1,5 @@
 using Steamworks;
+using Steamworks.Data;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.VisualScripting;
@@ -25,6 +26,14 @@ public class FFA_LobbyGameMode : Base_LobbyGameMode
     
     }
 
+    public override void OnGameModeSwitch(int previousValue, int currentValue)
+    {
+        base.OnGameModeSwitch(previousValue, currentValue);
+        if(currentValue ==0)
+        {
+            UpdateUIList();
+        }
+    }
     public override void GameMode_MemberJoined(Friend friend)
     {
         base.GameMode_MemberJoined(friend);

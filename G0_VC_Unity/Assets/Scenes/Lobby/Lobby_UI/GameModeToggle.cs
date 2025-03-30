@@ -14,6 +14,7 @@ public class GameModeToggle : NetworkBehaviour
 {
     public ToggleGroup toggleGroup;
     public GameMode_ScreenUI_Controller controller;
+    public Slider slider;
     private int currentGameMode;
 
     // This method is called when the network object is spawned
@@ -32,13 +33,16 @@ public class GameModeToggle : NetworkBehaviour
 
     private void Update()
     {
+        // Check if the player is the host  
         if (!IsOwner)
         {
             toggleGroup.gameObject.SetActive(false);
+            slider.gameObject.SetActive(false);
         }
         else
         {
             toggleGroup.gameObject.SetActive(true);
+            slider.gameObject.SetActive(true);
         }
     }
 

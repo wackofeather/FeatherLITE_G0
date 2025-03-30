@@ -40,6 +40,18 @@ public class Screen_UI_Controller : MonoBehaviour
         
     }
 
+
+
+
+
+
+
+
+
+
+
+
+        
     // Update is called once per frame
     void Update()
     {

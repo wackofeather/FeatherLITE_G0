@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using static Game_GeneralManager;
 using static PlayerNetwork;
 using System.Linq;
+using UnityEngine.UI;
 public class GeneralManager : NetworkBehaviour
 {
     public static GeneralManager instance { get; set; }
@@ -25,13 +26,14 @@ public class GeneralManager : NetworkBehaviour
 
     [HideInInspector] public bool wantConnection;
 
+    private Slider FOVslider;
+
     internal Coroutine HostMigrationCorT;
     internal Coroutine JoiningGameCorT;
 
 
     public NetworkVariable<ulong> CurrentHost = new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
     public NetworkVariable<ulong> BackupHost = new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
-
 
 
     public void Awake()
@@ -322,5 +324,11 @@ public class GeneralManager : NetworkBehaviour
         // wantConnection = false;
         SteamLobbyManager.instance.LeaveLobby();
         Debug.LogAssertion("hoooooha");
+    }
+
+    //Options logic
+    public void saveData()
+    {
+
     }
 }

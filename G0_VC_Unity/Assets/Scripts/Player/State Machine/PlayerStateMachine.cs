@@ -218,6 +218,8 @@ public class PlayerStateMachine : MonoBehaviour
 
     [Header("Shooting")]
     public LayerMask enemyMask;
+    public Vector2 appliedRecoil;
+    public Vector2 totalRecoil;
 
     public RaycastHit GrappleCheck()
     {

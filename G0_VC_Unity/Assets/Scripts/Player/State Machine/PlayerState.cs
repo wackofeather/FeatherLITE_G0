@@ -46,11 +46,16 @@ public class BasePlayerState
 
         float mouseY = player.look.action.ReadValue<Vector2>().y;//Input.GetAxis("Mouse Y") * player.mouseSens;
 
-
-
-        player.xRotation -= mouseY;
-        player.yRotation += mouseX;
-
+        Vector2 closerRecoil = Vector2.Lerp(player.appliedRecoil, player.totalRecoil, 20 * Time.deltaTime);
+        Vector2 recoil_ToAdd = closerRecoil - player.appliedRecoil;
+        player.xRotation -= mouseY + recoil_ToAdd.y;
+        player.yRotation += mouseX + recoil_ToAdd.x;
+        player.appliedRecoil = closerRecoil;
+        if (Vector2.Distance(player.appliedRecoil, player.totalRecoil) < 0.01f)
+        {
+            player.totalRecoil -= player.appliedRecoil;
+            player.appliedRecoil -= player.appliedRecoil;
+        }
         player.xRotation = Mathf.Clamp(player.xRotation, -90, 90);
 
 

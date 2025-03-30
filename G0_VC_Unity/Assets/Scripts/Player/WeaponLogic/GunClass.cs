@@ -13,8 +13,8 @@ public class GunClass : WeaponClass
     public GunData gunData;
     [HideInInspector] float maxAmmo_Mag;
     [SerializeField] GameObject bullet;
-    
-
+    public Vector2 recoilAmount;
+    public float shootBackSpeed;
     public override void Weapon_Init()
     {
         base.Weapon_Init();
@@ -141,6 +141,15 @@ public class GunClass : WeaponClass
     }
     public virtual async Task<bool> ShootLogic()
     {
+        //player.rb.AddForce(player.PlayerCamera.forward * -shootBackForce, ForceMode.Impulse);
+        if (!(Vector3.Dot((player.PlayerCamera.forward * -shootBackSpeed).normalized, player.rb.linearVelocity.normalized) > -0.1f && player.rb.linearVelocity.magnitude > shootBackSpeed))
+        {
+            player.rb.AddForce(player.PlayerCamera.forward * -shootBackSpeed, ForceMode.VelocityChange);
+           /* Vector3 shootBackForce = Vector3.ClampMagnitude(((player.PlayerCamera.forward * -shootBackSpeed) - player.rb.linearVelocity) * 0.1f, shootBackSpeed);
+            player.rb.AddForce(shootBackForce, ForceMode.VelocityChange);*/
+        }
+        player.totalRecoil += recoilAmount;
+
         RaycastHit hit = new RaycastHit();
         //if (Physics.Raycast(inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position, ))
         if (Physics.Raycast(player.PlayerCamera.transform.position, player.PlayerCamera.TransformDirection(Vector3.forward), out hit, 500f))

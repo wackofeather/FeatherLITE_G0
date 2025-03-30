@@ -11,6 +11,7 @@ public class RailgunClass : GunClass
     public int bounceNumber;
     public float maxHitDistance;
     public LayerMask endHitMask;
+
     //public LayerMask enemymask;
     BeamPath path;
     public float beamSpeed;
@@ -110,6 +111,7 @@ public class RailgunClass : GunClass
 
 
         player.inventory.isShooting = true;
+        
         ShootLogic();
         currentAmmo = 0;
 
@@ -120,11 +122,20 @@ public class RailgunClass : GunClass
         player.inventory.isShooting = false;
     }
 
+
     public async override Task<bool> ShootLogic()
     {
-        BeamPath shootPathContainer = path;
-        
+        if (!(Vector3.Dot((player.PlayerCamera.forward * -shootBackSpeed).normalized, player.rb.linearVelocity.normalized) > -0.1f && player.rb.linearVelocity.magnitude > shootBackSpeed))
+        {
+            player.rb.AddForce(player.PlayerCamera.forward * -shootBackSpeed, ForceMode.VelocityChange);
+            //Vector3 shootBackForce = Vector3.ClampMagnitude(((player.PlayerCamera.forward * -shootBackSpeed) - player.rb.linearVelocity) * 0.2f, shootBackSpeed * 1.7f);
+            //player.rb.AddForce(shootBackForce, ForceMode.VelocityChange);
+        }
+        player.totalRecoil += recoilAmount;
 
+        BeamPath shootPathContainer = path;
+
+        
         Debug.Log("ladeeda" + player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.GetPosition(1));
         player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color = new Color(player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.r, player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.g, player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().shootPath.material.color.b, 1);
         for (int i = 0; i < shootPathContainer.points.Count; i++)

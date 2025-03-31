@@ -125,6 +125,7 @@ public class RailgunClass : GunClass
 
     public async override Task<bool> ShootLogic()
     {
+        if (!player.networkInfo._isOwner) return true;
         if (!(Vector3.Dot((player.PlayerCamera.forward * -shootBackSpeed).normalized, player.rb.linearVelocity.normalized) > -0.1f && player.rb.linearVelocity.magnitude > shootBackSpeed))
         {
             player.rb.AddForce(player.PlayerCamera.forward * -shootBackSpeed, ForceMode.VelocityChange);

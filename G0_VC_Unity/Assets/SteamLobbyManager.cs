@@ -92,14 +92,13 @@ public class SteamLobbyManager : MonoBehaviour
         //SteamFriends.OnGameLobbyJoinRequested += OnGameLobbyJoinRequest;
         //SteamMatchmaking.OnLobbyInvite += OnLobbyInvite;
 
+        //To get playerPrefs stuff
 
-
-
-       // NetworkManager.Singleton.SceneManager.OnLoadComplete += OnGameSceneLoaded;
+        // NetworkManager.Singleton.SceneManager.OnLoadComplete += OnGameSceneLoaded;
 
         SceneManager.LoadScene(MenuScene);
 
-
+       
 
         JoiningLobby = false;
     }
@@ -593,6 +592,8 @@ public class SteamLobbyManager : MonoBehaviour
     {
         Debug.Log("ahh im dying");
     }
+
+
 
 
 }

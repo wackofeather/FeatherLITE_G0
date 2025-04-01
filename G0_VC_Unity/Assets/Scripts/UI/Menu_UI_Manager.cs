@@ -10,18 +10,18 @@ public class Menu_UI_Manager : UI_Manager
 {
     [SerializeField] public Button CreateGameButton;
     [SerializeField] public Button JoinGameButton;
+    [SerializeField] public Button SettingsButton;
     [HideInInspector] public int MainKey;
+
 
     public Lobby[] serverArray;
     public List<Lobby> LobbyList = new List<Lobby>();
 
-
-    //ss
     public static Menu_UI_Manager Menu_instance { get; set; }
 
     //instead of adding listeners, just reference function through inspector
 
-    //declare a list of Screen_UIs, but then in runtime turn the listttttttt into a dictionary
+    //declare a list of Screen_UIs, but then in runtime turn the list into a dictionary
 
     //use dictionary to pass in differnet key values to switch to, try and make this a parameter in a function instead of hardcoding numbers
 
@@ -38,7 +38,6 @@ public class Menu_UI_Manager : UI_Manager
         ConstructMenuSingleton();
         AsyncGetServerList();
     }
-
 
 
 

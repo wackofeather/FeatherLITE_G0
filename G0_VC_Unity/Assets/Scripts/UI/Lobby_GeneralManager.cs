@@ -70,7 +70,9 @@ public class Lobby_GeneralManager : GeneralManager
     [Rpc(SendTo.Server)]
     public void ServerSendMyVote_RPC(ulong voter, string mapName)
     {
+        Debug.Log("ServerRpcCalled"+MapVotes.ContainsKey(voter));
         
+        return;
         if (MapVotes.ContainsKey(voter))
         {
             MapVotes[voter] = mapName;

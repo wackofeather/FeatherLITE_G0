@@ -2164,6 +2164,7 @@ MonoBehaviour:
     m_InternalValue: 0
   mapData: {fileID: 0}
   sortingGroup: {fileID: 0}
+  button: {fileID: 0}
   TextMeshPro: {fileID: 1026672293}
 --- !u!1 &1158429892
 GameObject:
@@ -2963,6 +2964,7 @@ MonoBehaviour:
     m_InternalValue: 0
   mapData: {fileID: 11400000, guid: 4b960125d089ac643ae41840987449a6, type: 2}
   sortingGroup: {fileID: 1442031630}
+  button: {fileID: 1442031628}
 --- !u!114 &1442031628
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3904,6 +3906,7 @@ MonoBehaviour:
     m_InternalValue: 0
   mapData: {fileID: 11400000, guid: 743adf2c9051a084dbe21a7796b74fa4, type: 2}
   sortingGroup: {fileID: 1899909400}
+  button: {fileID: 0}
 --- !u!114 &1899909397
 MonoBehaviour:
   m_ObjectHideFlags: 0

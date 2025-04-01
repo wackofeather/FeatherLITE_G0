@@ -26,7 +26,7 @@ public class Screen_UI_Controller : MonoBehaviour
             }
         }
     }
-    public async void SwitchScreens(int newScreen)
+    public async virtual void SwitchScreens(int newScreen)
     {
 
         await ScreenDict[currentScreen].DisableScreen();

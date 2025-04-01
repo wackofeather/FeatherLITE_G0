@@ -21,7 +21,7 @@ public class GeneralManager : NetworkBehaviour
     public float testFloat;
 
     [HideInInspector] public ulong currentLobbyOwner;
-    
+
     [HideInInspector] public float NetworkID;
 
     [HideInInspector] public bool wantConnection;
@@ -49,7 +49,7 @@ public class GeneralManager : NetworkBehaviour
 
     private void Start()
     {
-        
+
         _Start();
     }
 
@@ -81,10 +81,10 @@ public class GeneralManager : NetworkBehaviour
             HostMigrationCorT = StartCoroutine(HostMigrationCoroutine());
         }
     }
-/*    public virtual void OnConnectedToSession(bool _reconnecting)
-    {
+    /*    public virtual void OnConnectedToSession(bool _reconnecting)
+        {
 
-    }*/
+        }*/
     public virtual void PrepareHM()
     {
 
@@ -289,11 +289,11 @@ public class GeneralManager : NetworkBehaviour
         //Debug.LogWarning(Player_LookUp.Count);
 
     }
-    
+
     void Update()
     {
         _Update();
-        
+
     }
 
     public virtual void _Update()
@@ -316,7 +316,9 @@ public class GeneralManager : NetworkBehaviour
         {
             instance = this;
         }
-    }
+    } 
+
+}
 
 /*    public void OnDestroy()
     {
@@ -333,4 +335,4 @@ public class GeneralManager : NetworkBehaviour
     {
 
     }
-}
+}*/

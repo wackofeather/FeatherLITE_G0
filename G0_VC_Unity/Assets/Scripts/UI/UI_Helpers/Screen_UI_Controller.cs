@@ -26,12 +26,13 @@ public class Screen_UI_Controller : MonoBehaviour
             }
         }
     }
-    public virtual void SwitchScreens(int newScreen)
+    public async void SwitchScreens(int newScreen)
     {
-        Debug.Log(newScreen);
-        ScreenDict[currentScreen].DisableScreen();
-        ScreenDict[newScreen].EnableScreen();
+
+        await ScreenDict[currentScreen].DisableScreen();
+        await ScreenDict[newScreen].EnableScreen();
         currentScreen = newScreen;
+        Debug.Log("Now_working");
     }
     void Start()
     {

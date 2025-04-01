@@ -70,7 +70,7 @@ public class MeleeState : BasePlayerState
         timer = timerVal;
 
         player.isGrappling = false;
-        player.isScoping = false;
+        player.inventory.isScoping = false;
 
         //Vector3 vectorweight = new Vector3(player.inputVector.x * player.meleeWeight_Input + player.PlayerCamera.transform.InverseTransformDirection(player.rb.velocity).x * player.meleeWeight_Velocity, 0, 0);
         //Debug.Log(vectorweight);
@@ -92,7 +92,7 @@ public class MeleeState : BasePlayerState
 
         foreach (Collider playerCol in player.BumpCollider.GetComponent<BumpColliderChecker>().player_hits)
         {
-            playerCol.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(100);
+            playerCol.gameObject.GetComponent<PlayerStateMachine>().LocalDamage(100);
         }
 
         

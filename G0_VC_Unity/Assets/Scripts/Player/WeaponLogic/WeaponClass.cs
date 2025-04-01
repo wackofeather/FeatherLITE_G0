@@ -20,6 +20,12 @@ public class WeaponClass : ScriptableObject , IWeaponable
     [HideInInspector] public PlayerStateMachine player;
     [HideInInspector] public Player_Inventory inventory;
     protected float shootingTimer;
+    protected float currentAmmo;
+
+    public virtual void Weapon_Init()
+    {
+        
+    }
     public virtual void Weapon_Update() 
     {
 
@@ -29,7 +35,7 @@ public class WeaponClass : ScriptableObject , IWeaponable
         if (shootingTimer > 0) shootingTimer -= Time.deltaTime;
 
 
-        if (!player.isMelee) inventory.ChangeCurrentWeapon((int)inventory.SwitchWeapon.action.ReadValue<float>());
+        
     }
 
     public virtual void EnterWeapon()
@@ -41,6 +47,8 @@ public class WeaponClass : ScriptableObject , IWeaponable
 
         if (!player.networkInfo._isOwner) return;
 
+
+        shootingTimer = weaponData.enterStateTime;
 
         inventory.isShooting = false;
         inventory.isScoping = false;
@@ -54,7 +62,7 @@ public class WeaponClass : ScriptableObject , IWeaponable
         //inventory.player_WeaponMesh.GetComponent<MeshFilter>().sharedMesh = weaponData.weaponMesh.GetComponentInChildren<MeshFilter>().sharedMesh;
         //inventory.player_WeaponMesh.GetComponent<MeshRenderer>().sharedMaterial = weaponData.weaponMesh.GetComponentInChildren<MeshRenderer>().sharedMaterial;
 
-        shootingTimer = weaponData.enterStateTime;
+        
 
         
         
@@ -71,6 +79,8 @@ public class WeaponClass : ScriptableObject , IWeaponable
 
         player.player_VP_ARM_anim_controller.ResetTrigger("SwitchWeapon");
         inventory.VP_GetCurrentWeaponAnimator().ResetTrigger("SwitchWeapon");
+
+        //player.inventory.isShooting = false;
     }
     
 }

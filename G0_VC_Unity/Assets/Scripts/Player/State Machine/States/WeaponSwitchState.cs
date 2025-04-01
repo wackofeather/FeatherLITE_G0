@@ -32,17 +32,30 @@ public class WeaponSwitchState : BasePlayerState
     {
         base.Update();
 
-        if (!player.IsLookingAtInteractable(player.lookAtObject)) player.ChangeState(player.RegularState);
-        if (!player.interact.action.IsPressed()) player.ChangeState(player.RegularState);
-        if (!player.isInteracting) player.ChangeState(player.RegularState);
+
 
         timer -= Time.deltaTime;
+        Game_UI_Manager.game_instance.SetCountdownText(timer);
 
-        if (timer < 0)
+
+
+        if (!player.IsLookingAtInteractable(player.lookAtObject)) player.ChangeState(player.RegularState);
+        if (!player.interact.action.IsPressed())
+        {
+            player.ChangeState(player.RegularState);
+        } 
+        if (!player.isInteracting) player.ChangeState(player.RegularState);
+
+   
+        
+
+        if (timer <= 0)
         {
             player.inventory.GiveWeapon(player.weapon_pickingUp);
             player.ChangeState(player.RegularState);
+            return;
         }
+        
     }
 
 
@@ -65,5 +78,6 @@ public class WeaponSwitchState : BasePlayerState
         player.isInteracting = false;
         player.InteractCoolDownTimer = player.pickupCooldownTime;
         player.hasPickedUpInteractButton = false;
+        Game_UI_Manager.game_instance.SetCountdownText(0);
     }
 }

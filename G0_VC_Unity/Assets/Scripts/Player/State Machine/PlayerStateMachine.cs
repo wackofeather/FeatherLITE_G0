@@ -14,6 +14,7 @@ using Unity.Netcode.Transports.UTP;
 using System.Net.NetworkInformation;
 using static PlayerNetwork;
 using Steamworks;
+//using UnityEditorInternal;
 
 public class PlayerStateMachine : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class PlayerStateMachine : MonoBehaviour
     [System.NonSerialized] public MeleeState MeleeState;
     [System.NonSerialized] public WeaponSwitchState WeaponSwitchState;
     [System.NonSerialized] public DeathState DeathState;
+    [HideInInspector] public ReloadState ReloadState;
 
     public Dictionary<float, BasePlayerState> stateDictionary = new Dictionary<float, BasePlayerState>();
 
@@ -166,7 +168,6 @@ public class PlayerStateMachine : MonoBehaviour
     public Animator player_VP_ARM_anim_controller;
     public Animator player_EXT_ARM_anim_controller;
     public bool isGrappling;
-    public bool isScoping;
     public bool isMelee;
     [HideInInspector] public float updown_Blendconstant;
 
@@ -214,7 +215,11 @@ public class PlayerStateMachine : MonoBehaviour
     public NetworkInfo networkInfo;
 
     float deleteTimer = 5;
-    
+
+    [Header("Shooting")]
+    public LayerMask enemyMask;
+    public Vector2 appliedRecoil;
+    public Vector2 totalRecoil;
 
     public RaycastHit GrappleCheck()
     {
@@ -340,11 +345,13 @@ public class PlayerStateMachine : MonoBehaviour
         MeleeState = new MeleeState(this);
         WeaponSwitchState = new WeaponSwitchState(this);
         DeathState = new DeathState(this);
+        ReloadState = new ReloadState(this);
         stateDictionary.Add(RegularState.key, RegularState);
         stateDictionary.Add(GrapplingState.key, GrapplingState);
         stateDictionary.Add(MeleeState.key, MeleeState);
         stateDictionary.Add(WeaponSwitchState.key, WeaponSwitchState);
         stateDictionary.Add(DeathState.key, DeathState);
+        stateDictionary.Add(ReloadState.key, ReloadState);
         
         //RegularState.Start_Init();
         //GrapplingState.Start_Init();
@@ -369,7 +376,7 @@ public class PlayerStateMachine : MonoBehaviour
         EXTERIOR_lr.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
 
         isGrappling = false;
-        isScoping = false;
+        inventory.isScoping = false;
         isMelee = false;
 
         Cursor.visible = false;
@@ -491,13 +498,19 @@ public class PlayerStateMachine : MonoBehaviour
     public void InteractCheck()
     {
         if (((InteractCoolDownTimer > 0) && hasPickedUpInteractButton == false) || isInteracting) return;
-        if (interact.action.IsPressed())
+        if (Physics.Raycast(PlayerCamera.position, PlayerCamera.forward, out RaycastHit hitInfo, 10000, interactableMask))     
         {
-            if (Physics.Raycast(PlayerCamera.position, PlayerCamera.forward, out RaycastHit hitInfo, 10000, interactableMask))
+            if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj) && (hitInfo.distance < interactDistance))   
             {
-                if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj) && (hitInfo.distance < interactDistance))
+                
+                if (interact.action.IsPressed())
                 {
                     interactObj.Interact(this);
+                }
+                else
+                {
+                    //Game_UI_Manager.instance.UpdateWeaponPickUI(interactObj.);
+                    interactObj.LookInteract();
                 }
             }
         }
@@ -619,5 +632,15 @@ public class PlayerStateMachine : MonoBehaviour
     public void KillPlayerRPC()
     {
         if (CurrentPlayerState != DeathState) Game_GeneralManager.game_instance.Kill(this);
+    }
+
+
+    public void LocalDamage(int _damage)
+    {
+        if (health - _damage <= 0)
+        {
+            Game_GeneralManager.game_instance.LocalKill(this);
+        }
+        playerNetwork.DamageRPC(_damage);
     }
 }

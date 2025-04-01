@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using Steamworks;
 using Steamworks.Data;
 using TMPro;
@@ -107,9 +106,7 @@ public class Data_Display:MonoBehaviour
     }
     public void LobbyJoiner()
     {
-        
-        Debug.Log(LobbyInput.text);
-        //SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(LobbyId));
+        SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(LobbyInput.text));
     }
     //void Update()
     //{

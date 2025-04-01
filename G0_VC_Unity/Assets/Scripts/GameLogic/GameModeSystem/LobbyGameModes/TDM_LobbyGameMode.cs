@@ -186,7 +186,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     public GameObject Trigger;
     public NetworkVariable<TeamList> teamLists = new NetworkVariable<TeamList>(null);
     public NetworkVariable<float> TeamSizeNetwork = new NetworkVariable<float>();
-    public List<GameObject> ActiveObjects;
+    
     [HideInInspector] public ulong GameID;
 
     //public void OnEnable()
@@ -244,7 +244,12 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     private void Update()
     {
 
-        UpdateUIList();
+        if(Lobby_GeneralManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 1)
+        {
+
+            UpdateUIList();
+
+        }
     }
     //public override void OnGameModeSwitch(int previousValue, int currentValue)
     //{
@@ -398,9 +403,9 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
         foreach (GameObject obj in ActiveObjects)
         {
             ObjectPoolingScript.ObjectPoolingScript_Instance.pooledObjects.Add(obj);
-            obj.GetComponent<Lobby_Player_Buttons_Helpers>().ButtonId = 0;
-            obj.GetComponent<Lobby_Player_Buttons_Helpers>().teamClass = null;
-            obj.GetComponent<Lobby_Player_Buttons_Helpers>().tmpText2.text = "";
+            obj.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = 0;
+            obj.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().teamClass = null;
+            obj.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().tmpText2.text = "";
             obj.transform.SetParent(ObjectPoolingScript.ObjectPoolingScript_Instance.MenuVector);
         }
         ActiveObjects.Clear();
@@ -417,76 +422,80 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
             Debug.Log("THISISTEAMFRIENDS" + team.Friends.Count);
             //UnityEngine.Color randomColor = new UnityEngine.Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
 
-            if (team.Friends.Count != 0)
-            {
-               
-                    if (ActiveObjects.Find(x => x.GetComponent<Lobby_Player_Buttons_Helpers>().teamClass == team))
+
+                //Button2.GetComponentInChildren<UnityEngine.UI.Button>().onClick.AddListener(() => OnClick(team));
+                foreach (ulong friend in team.Friends)
+                {
+                if (ActiveObjects.Find(x => x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId == friend))
+                {
+                    Debug.Log("muahaha" + ActiveObjects.Count);
+                }
+                else
+                {
+                    Debug.Log("muahaha" + ActiveObjects.Count);
+                    Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject();
+                    ActiveObjects.Add(Button);
+                    ////ColorBlock colorBlock = Button.GetComponentInChildren<UnityEngine.UI.Button>().colors;
+                    ////colorBlock.normalColor = randomColor;
+                    ////Button.GetComponentInChildren<UnityEngine.UI.Button>().colors = colorBlock;
+                    //Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
+                    Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = friend;
+                    Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
+                    Button.transform.SetParent(MenuVector.transform, true);
+                }
+                }
+                //ikgkgogkr
+
+                    if (ActiveObjects.Find(x => x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().teamClass == team))
                     {
-                        Debug.Log("OH NO"); 
+                        Debug.Log("OH NO");
                     }
                     else
                     {
-                    Debug.Log("hello");
+                        Debug.Log("hello");
                         Button2 = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject();
                         ActiveObjects.Add(Button2);
-                        Button2.GetComponent<Lobby_Player_Buttons_Helpers>().teamClass = team;
-                        Button2.transform.SetParent(MenuVector);
-                }
-                }
-                //Button2.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(() => OnClick(team));
-                foreach (ulong friend in team.Friends)
-                {
-                            if (ActiveObjects.Find(x => x.GetComponent<Lobby_Player_Buttons_Helpers>().ButtonId==friend))
-                            {
-                        Debug.Log("muahaha" + ActiveObjects.Count);
-                            }
-                            else
-                            {
-                        Debug.Log("muahaha" + ActiveObjects.Count);
-                        Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject();
-                            ActiveObjects.Add(Button);
-                            Button.GetComponent<Lobby_Player_Buttons_Helpers>().ButtonId = friend;
-                            Button.GetComponent<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
-                            Button.transform.SetParent(MenuVector);
-                }
-                        
-                    
-                        //if(ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Count > 0)
-                        //{
-                        //    if (!ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Find(x => x.GetComponent<Lobby_Player_Buttons_Helpers>().ButtonId == friend))
-                        //    {
-                        //        Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject(MenuVector, friend);
-                        //        Button.GetComponent<Lobby_Player_Buttons_Helpers>().ButtonId = friend;
-                        //        Button.GetComponent<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
-                        //        Buttons.Add(Button);
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject(MenuVector, friend);
-                        //    Button.GetComponent<Lobby_Player_Buttons_Helpers>().ButtonId = friend;
-                        //    Button.GetComponent<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
-                        //    Buttons.Add(Button);
-                        //}
-                        //Debug.Log("IAMTRIGGERING" + friend);
-                        //Button = Instantiate(MenuPrefabButton, MenuVector);
-                        ////ColorBlock colorBlock = Button.GetComponent<UnityEngine.UI.Button>().colors;
-                        ////colorBlock.normalColor = randomColor;
-                        ////Button.GetComponent<UnityEngine.UI.Button>().colors = colorBlock;
-                        //Button.GetComponent<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
-                        //Buttons.Add(Button);
-                        //Debug.Log("ths is button count" + Buttons.Count);
+                        Button2.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().teamClass = team;
+                        Button2.transform.SetParent(MenuVector.transform, true);
                     }
+
+
+                //if(ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Count > 0)
+                //{
+                //    if (!ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Find(x => x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId == friend))
+                //    {
+                //        Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject(MenuVector, friend);
+                //        Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = friend;
+                //        Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
+                //        Buttons.Add(Button);
+                //    }
+                //}
+                //else
+                //{
+                //    Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject(MenuVector, friend);
+                //    Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = friend;
+                //    Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
+                //    Buttons.Add(Button);
+                //}
+                //Debug.Log("IAMTRIGGERING" + friend);
+                //Button = Instantiate(MenuPrefabButton, MenuVector);
+                ////ColorBlock colorBlock = Button.GetComponentInChildren<UnityEngine.UI.Button>().colors;
+                ////colorBlock.normalColor = randomColor;
+                ////Button.GetComponentInChildren<UnityEngine.UI.Button>().colors = colorBlock;
+                //Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
+                //Buttons.Add(Button);
+                //Debug.Log("ths is button count" + Buttons.Count);
+            }
                 VerticalLayoutGroup.CalculateLayoutInputVertical();
             }
-        }
+}
     //private void ResetRectTransform(RectTransform rectTransform)
     //{
     //    rectTransform.localScale = Vector3.one;
     //    rectTransform.sizeDelta = new Vector2(300, 30); // Set to your desired size
     //    rectTransform.anchoredPosition3D = Vector3.zero;
     //}
-}
+
 
     //public void OnClick(TeamClass teamContained)
     //{

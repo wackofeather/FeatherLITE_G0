@@ -88,7 +88,9 @@ public class Lobby_GeneralManager : GeneralManager
 
     public string GetVotedMap()
     {
-        return MapVotes.Values.GroupBy(value => value).OrderByDescending(group => group.Count()).FirstOrDefault()?.Key;
+        string MapVoted = MapVotes.Values.GroupBy(value => value).OrderByDescending(group => group.Count()).FirstOrDefault()?.Key;
+        if (MapVoted == null) return MapVoted;
+        else return "Voting";
     }
 
     public void GoToGame()

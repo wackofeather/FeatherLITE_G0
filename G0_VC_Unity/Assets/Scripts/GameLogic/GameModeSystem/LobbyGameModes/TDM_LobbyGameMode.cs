@@ -11,6 +11,7 @@ using System.ComponentModel;
 using TMPro;
 using Steamworks.Data;
 using UnityEngine.InputSystem;
+using System.Threading.Tasks;
 
 
 [Serializable]
@@ -184,7 +185,8 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     public GameObject spacerObject;
     public GameObject JoinTeamButton;
     public GameObject Trigger;
-    public NetworkVariable<TeamList> teamLists = new NetworkVariable<TeamList>(null);
+    public NetworkVariable<TeamList> network_teamList = new NetworkVariable<TeamList>(null);
+    TeamList local_teamList;
     public NetworkVariable<float> TeamSizeNetwork = new NetworkVariable<float>();
     
     [HideInInspector] public ulong GameID;
@@ -212,12 +214,8 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
             {
                 TeamList list = new TeamList();
                 list.ListClass.Add(new TeamClass());
-                teamLists.Value = list;
+                network_teamList.Value = list;
 
-            }
-            else
-            {
-                teamLists.OnValueChanged += teamListsValueChanged;
             }
             
             TeamSetting();
@@ -240,19 +238,23 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
         }
 
     }
-
-    public void teamListsValueChanged(TeamList previous, TeamList current)
-    {
-        //ObjectPoolingScript.ObjectPoolingScript_Instance.Repool();
-    }
     private void Update()
     {
+        Debug.Log("lettermane " + TeamVerified);
 
-        if(Lobby_GeneralManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 1)
+        local_teamList = network_teamList.Value;
+
+        if (Lobby_GeneralManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 1)
         {
 
             UpdateUIList();
 
+            if (TeamVerified)
+            {
+                
+                
+            }
+            
         }
     }
     //public override void OnGameModeSwitch(int previousValue, int currentValue)
@@ -289,7 +291,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     {
         if (!Lobby_GeneralManager.LobbyManager_Instance.IsHost) return;
         ObjectPoolingScript.ObjectPoolingScript_Instance.Repool();
-        teamLists.Value.ListClass.Clear();
+        network_teamList.Value.ListClass.Clear();
         Debug.Log("IAMCLALED");
         TeamList list = new TeamList();
         List<Friend> FriendList = new List<Friend>(Lobby_GeneralManager.LobbyManager_Instance.memberList);
@@ -307,25 +309,26 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
                 FriendList.RemoveAt(0);
             }
             list.ListClass.Add(teamClass);
-            teamLists.Value = list;
-            Debug.Log("teamListCount" + teamLists.Value.ListClass.Count);
+            network_teamList.Value = list;
+            Debug.Log("teamListCount" + network_teamList.Value.ListClass.Count);
         }
-        teamLists.Value = list;
+        network_teamList.Value = list;
         
     }
 
     public override void GameMode_MemberJoined(Friend friend)
     {
         base.GameMode_MemberJoined(friend);
+        if (!IsHost) return;
         ObjectPoolingScript.ObjectPoolingScript_Instance.Repool();
-        teamLists.Value.test += 1;
+        network_teamList.Value.test += 1;
         Debug.Log("NEW MEMBER JOINED");
         int teamSize = Mathf.CeilToInt(Lobby_GeneralManager.LobbyManager_Instance.memberList.Count / slider.value);
         Debug.Log("This is the new teamSize" + teamSize);
         List<Friend> localUserList = new List<Friend>();
         localUserList.Add(friend);
         Debug.Log("NONONM");
-        foreach (TeamClass teamClass in teamLists.Value.ListClass)
+        foreach (TeamClass teamClass in network_teamList.Value.ListClass)
         {
             if (teamClass.Friends.Count > teamSize)
             {
@@ -351,7 +354,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
                 Debug.Log("IAM TRIGGERED");
                 TeamClass newTeamClass = new TeamClass();
                 newTeamClass.AddFriend(localUserList[0].Id);
-                teamLists.Value.ListClass.Add(newTeamClass);
+                network_teamList.Value.ListClass.Add(newTeamClass);
                 localUserList.RemoveAt(0);
             }
 
@@ -361,11 +364,12 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     public override void GameMode_MemberLeave(Friend friend)
     {
         base.GameMode_MemberLeave(friend);
+        if (!IsHost) return;
         ObjectPoolingScript.ObjectPoolingScript_Instance.Repool();
         Debug.Log("team member left");
         List<Friend> localUserList = new List<Friend>();
         int teamSize = Mathf.CeilToInt(Lobby_GeneralManager.LobbyManager_Instance.memberList.Count / slider.value);
-        foreach (TeamClass teamClass in teamLists.Value.ListClass)
+        foreach (TeamClass teamClass in network_teamList.Value.ListClass)
         {
             if(teamClass.Friends.Contains(friend.Id))
             {
@@ -404,11 +408,11 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     {
         base.UpdateUIList();
         Debug.Log("Update Triggered");
-        Debug.Log(",miniingin" + teamLists.Value.ListClass.Count);
+        Debug.Log(",miniingin" + local_teamList.ListClass.Count);
 
-        for (int i = 0; i < teamLists.Value.ListClass.Count; i++)
+        for (int i = 0; i < local_teamList.ListClass.Count; i++)
         {
-            TeamClass team = teamLists.Value.ListClass[i];
+            TeamClass team = local_teamList.ListClass[i];
             Debug.Log("THISISTEAMFRIENDS" + team.Friends.Count);
             //UnityEngine.Color randomColor = new UnityEngine.Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
 
@@ -427,6 +431,13 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
                 }
                 if (currentFriendThumbnail == false)
                 {
+                    List<GameObject> existingMyThumbnails = ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.FindAll(x => x.GetComponent<Lobby_Player_Buttons_Helpers>().ButtonId == friend);
+
+                    foreach (GameObject undesirable_button in existingMyThumbnails)
+                    {
+                        ObjectPoolingScript.ObjectPoolingScript_Instance.ReturnToPool(undesirable_button);
+                    }
+
                     Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooled_PlayerThumbnailObject(i);
                     ////ColorBlock colorBlock = Button.GetComponentInChildren<UnityEngine.UI.Button>().colors;
                     ////colorBlock.normalColor = randomColor;
@@ -478,7 +489,86 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
 
         VerticalLayoutGroup.CalculateLayoutInputVertical();
     }
+
+
+
+
+    //Team Switching
+    //Team Switching
+    public int myTeam = -2;
+    public bool TeamVerified = true;
+    [Rpc(SendTo.Server)]
+    public void RequestTeam_ServerRPC(int requested_playerTeam, int current_playerTeam, ulong steamId, ulong networkID)
+    {
+        int finalizedTeam = 0;
+
+        if (network_teamList.Value.ListClass[requested_playerTeam].Friends.Find(x => x == steamId) != 0)
+        {
+            //playerisontheRightTeam
+            finalizedTeam = requested_playerTeam;
+        }
+        else
+        {
+            if (network_teamList.Value.ListClass[requested_playerTeam].Friends.Count < Mathf.CeilToInt(Lobby_GeneralManager.LobbyManager_Instance.memberList.Count / slider.value))
+            {
+                //has space
+
+                network_teamList.Value.ListClass[current_playerTeam].Friends.Remove(steamId);
+
+                network_teamList.Value.ListClass[requested_playerTeam].Friends.Add(steamId);
+                
+            }
+            else 
+            {
+                finalizedTeam = current_playerTeam; 
+            }
+            
+    //shuffle teams, try
+    //else, keep player on same team
+        }
+
+
+        ValidateTeamList_ClientRPC(finalizedTeam, network_teamList.Value, RpcTarget.Single(networkID, RpcTargetUse.Temp));
+    }
+
+    [Rpc(SendTo.SpecifiedInParams)]
+    public void ValidateTeamList_ClientRPC(int forced_playerTeam, TeamList forced_teamList, RpcParams param)
+    {
+        network_teamList.Value = forced_teamList;
+        myTeam = forced_playerTeam;
+        TeamVerified = true;
+    }
+
+
+
+    public async void SwitchPlayerTeam(int teamId)
+    {
+        if (myTeam == -2)
+        {
+            for (int i = 0; i < network_teamList.Value.ListClass.Count; i++)
+            {
+                TeamClass team = network_teamList.Value.ListClass[i];
+                if (team.Friends.Contains(SteamClient.SteamId)) myTeam = i;
+            }
+        }
+        
+        //switch teams locally
+        
+        TeamVerified = false;
+
+        while (TeamVerified == false)
+        {
+            Debug.Log("waiting for fucking" + myTeam);
+            RequestTeam_ServerRPC(teamId, myTeam, SteamClient.SteamId, NetworkManager.LocalClientId);
+            await Task.Yield();
+        }
+
+        if (myTeam != teamId) { } //switch unsuccessful
+    }
 }
+
+
+
     //private void ResetRectTransform(RectTransform rectTransform)
     //{
     //    rectTransform.localScale = Vector3.one;

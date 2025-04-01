@@ -64,12 +64,13 @@ public class Lobby_GeneralManager : GeneralManager
             }
         }
 
-        if (myVote != null) ServerSendMyVote_RPC(SteamClient.SteamId, myVote.mapData.MapName);
+        if (myVote != null) { ServerSendMyVote_RPC(SteamClient.SteamId, myVote.mapData.MapName); }
     }
 
     [Rpc(SendTo.Server)]
     public void ServerSendMyVote_RPC(ulong voter, string mapName)
     {
+        
         if (MapVotes.ContainsKey(voter))
         {
             MapVotes[voter] = mapName;
@@ -77,7 +78,8 @@ public class Lobby_GeneralManager : GeneralManager
         else
         {
             MapVotes.Add(voter, mapName);
-            if (MapVotes.Count == SteamLobbyManager.currentLobby.MemberCount && countDown.Value > 9) countDown.Value = 9;
+            
+            if (MapVotes.Count == SteamLobbyManager.currentLobby.MemberCount && countDown.Value > 9.1) { countDown.Value = 9; Debug.Log("god fucking damn it"); }
         }
 
         foreach (MapButton mapButton in MapButtonList)

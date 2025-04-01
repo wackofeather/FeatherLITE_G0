@@ -28,6 +28,15 @@ public class Lobby_Player_Buttons_Helpers : MonoBehaviour
         tmpText.text = friend.Name;
         ButtonId = friend.Id;
     }
+
+
+
+
+    public void OnTeamChangeRequest()
+    {
+        Debug.Log("fucking hell");
+        ((TDM_LobbyGameMode)Lobby_GeneralManager.LobbyManager_Instance.CurrentGameMode).SwitchPlayerTeam(Team_Index);
+    }
     public void ConstructTeamButton()
     {
         //Color randomColor = new Color(Random.value, Random.value, Random.value);

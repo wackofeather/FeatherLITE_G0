@@ -9,9 +9,8 @@ public class Lobby_Player_Buttons_Helpers : MonoBehaviour
 {
     public Button button;
     public TMP_Text tmpText;
-    public TMP_Text tmpText2;
     public ulong ButtonId;
-    public TeamClass teamClass;
+    public int Team_Index;
     //public List<Color> textColor = new List<Color>(); // Corrected List declaration
     //// Start is called once before the first execution of Update after the MonoBehaviour is created
     //void Awake()
@@ -24,21 +23,17 @@ public class Lobby_Player_Buttons_Helpers : MonoBehaviour
     //    textColor.Add(new Color(0.01f, 0.01f, 0.01f)); // Corrected color values
     //    textColor.Add(new Color(0.08f, 0.08f, 0.08f)); // Corrected color values
     //}
-    public void ConstructButton(Friend friend)
+    public void ConstructFriendButton(Friend friend)
     {
         tmpText.text = friend.Name;
+        ButtonId = friend.Id;
     }
-    public void ConstructTeamButton(ulong clasp)
+    public void ConstructTeamButton()
     {
         //Color randomColor = new Color(Random.value, Random.value, Random.value);
         //ColorBlock colorBlock = button.colors;
         //colorBlock.normalColor = randomColor;
         //button.colors = colorBlock;
-        tmpText2.text += Lobby_GeneralManager.LobbyManager_Instance.memberList.Find(x => x.Id == clasp).Name;
-    }
-    public void ConstructButton2(int TeamNumber)
-    {
-        tmpText2.gameObject.SetActive(true);
-        tmpText2.text = TeamNumber.ToString();
+        /*tmpText.text = "Switch to Team " + Team_Index + 1;*/
     }
 }

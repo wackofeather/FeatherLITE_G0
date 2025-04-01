@@ -15,49 +15,59 @@ public class ObjectPoolingScript : MonoBehaviour
     public int amountToPool;
     //public Slider TeamNumberSlider;
     public static ObjectPoolingScript ObjectPoolingScript_Instance { get; set; }
-    public List<TeamAssets> TeamAssetsList = new List<TeamAssets>();
+    //public TeamAssetLookup TeamAssetLookup;
+    public List<TeamAssets> TeamAssetLookup;
     public Dictionary<GameObject,int> TeamJoinButtons = new Dictionary<GameObject,int>();
     public Dictionary<GameObject,int> PlayerThumbnails = new Dictionary<GameObject,int>();
 
-    public List<GameObject> ActiveObjects;
+    [HideInInspector] public List<GameObject> ActiveObjects;
     void Awake()
     {
         ConstructObjecyPoolingScriptSingleton();
         pooledObjects = new List<GameObject>();
-        GameObject tmp;
+        
         //for (int i = 0; i < amountToPool; i++)
         //{
         //    tmp = Instantiate(MenuPrefabButton, MenuVector);
         //    pooledObjects.Add(tmp);
         //}
-        foreach(TeamAssets teamAssets in TeamAssetsList)
+        foreach(TeamAssets teamAssets in TeamAssetLookup)
         {
-            for(int i = 0; i < 10; i++)
+            for(int i = 0; i < amountToPool; i++)
             {
                 GameObject obj = Instantiate(teamAssets.teamPlayerThumbnail, MenuVector);   
                 PlayerThumbnails.Add(obj,teamAssets.teamId);
+                ReturnToPool(obj);
             }
         }
-        foreach (TeamAssets teamAssets in TeamAssetsList)
+        foreach (TeamAssets teamAssets in TeamAssetLookup)
         {
+            if (teamAssets.teamId != -1)
+            {
+                GameObject obj = Instantiate(teamAssets.teamSwitchButton, MenuVector);
+                TeamJoinButtons.Add(obj, teamAssets.teamId);
+                ReturnToPool(obj);
+            }
             
-            GameObject obj = Instantiate(teamAssets.teamSwitchButton, MenuVector);
-            TeamJoinButtons.Add(obj, teamAssets.teamId);
         }
     }
 
     public GameObject GetPooled_TeamSwitchObject(int teamId)
     {
-        
-        
-        if(TeamJoinButtons.FirstOrDefault(pair => pair.Value == teamId&&pair.Key.activeSelf ==false).Key!=null)
+
+        GameObject tryGet = TeamJoinButtons.FirstOrDefault(pair => pair.Value == teamId && pair.Key.activeSelf == false).Key;
+        if (tryGet != null)
         {
-            return TeamJoinButtons.FirstOrDefault(pair => pair.Value == teamId).Key;
+            ActiveObjects.Add(tryGet);
+            tryGet.SetActive(true);
+            return tryGet;
         }
         else
         {
             GameObject temp;
-            temp = Instantiate(TeamAssetsList.FirstOrDefault(obj => obj.teamId == teamId).teamSwitchButton);
+            temp = Instantiate(TeamAssetLookup.FirstOrDefault(obj => obj.teamId == teamId).teamSwitchButton);
+            ActiveObjects.Add(temp);
+            TeamJoinButtons.Add(temp, teamId);
             return temp;
         }
         //temp = pooledObjects[0];
@@ -108,14 +118,19 @@ public class ObjectPoolingScript : MonoBehaviour
     }
     public GameObject GetPooled_PlayerThumbnailObject(int teamId)
     {
-        if (PlayerThumbnails.FirstOrDefault(pair => pair.Value == teamId && pair.Key.activeSelf == false).Key != null)
+        GameObject tryGet = PlayerThumbnails.FirstOrDefault(pair => pair.Value == teamId && pair.Key.activeSelf == false).Key;
+        if (tryGet != null)
         {
-            return PlayerThumbnails.FirstOrDefault(pair => pair.Value == teamId).Key;
+            ActiveObjects.Add(tryGet);
+            tryGet.SetActive(true);
+            return tryGet;
         }
         else
         {
             GameObject temp;
-            temp = Instantiate(TeamAssetsList.FirstOrDefault(obj => obj.teamId == teamId).teamPlayerThumbnail);
+            temp = Instantiate(TeamAssetLookup.FirstOrDefault(obj => obj.teamId == teamId).teamPlayerThumbnail);
+            ActiveObjects.Add(temp);
+            PlayerThumbnails.Add(temp, teamId);
             return temp;
         }
 
@@ -160,9 +175,35 @@ public class ObjectPoolingScript : MonoBehaviour
         // }
 
     }
+    public void Repool()
+    {
+        foreach (GameObject obj in ActiveObjects)
+        {
+            obj.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = 0;
+            //obj.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().tmpText.text = "";
+            obj.transform.SetParent(ObjectPoolingScript.ObjectPoolingScript_Instance.MenuVector, false);
+            obj.transform.localScale = new Vector3(1, 1, 1);
+            obj.transform.localPosition = new Vector3(0, 0, 0);
+            obj.SetActive(false);
+        }
+        ActiveObjects.Clear();
+    }
 
-  
-        // Update is called once per frame
+    public void ReturnToPool(GameObject obj)
+    {
+        obj.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = 0;
+        //obj.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().tmpText.text = "";
+        obj.transform.SetParent(ObjectPoolingScript.ObjectPoolingScript_Instance.MenuVector, false);
+        
+        obj.transform.localScale = new Vector3(1, 1, 1);
+        obj.transform.localPosition = new Vector3(0, 0, 0);
+
+        obj.SetActive(false);
+
+        ActiveObjects.Remove(obj);
+    }
+
+    // Update is called once per frame
 
 
     public void ConstructObjecyPoolingScriptSingleton()

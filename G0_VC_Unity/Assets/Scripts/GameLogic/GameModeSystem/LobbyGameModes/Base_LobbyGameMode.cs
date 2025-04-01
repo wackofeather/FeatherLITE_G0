@@ -15,7 +15,7 @@ public abstract class Base_LobbyGameMode:NetworkBehaviour
 
     private void Start()
     {
-        LobbyManager.LobbyManager_Instance.CurrentGameMode_Int.OnValueChanged+= OnGameModeSwitch;
+        Lobby_GeneralManager.LobbyManager_Instance.CurrentGameMode_Int.OnValueChanged+= OnGameModeSwitch;
     }
     public virtual void GameMode_MemberJoined(Friend friend)
     {
@@ -51,7 +51,7 @@ public abstract class Base_LobbyGameMode:NetworkBehaviour
 
     public virtual void UpdateUIList()
     {
-        Debug.Log("UpdatedUILIST"+LobbyManager.LobbyManager_Instance.memberList.Count);
+        Debug.Log("UpdatedUILIST"+Lobby_GeneralManager.LobbyManager_Instance.memberList.Count);
     }
 
 

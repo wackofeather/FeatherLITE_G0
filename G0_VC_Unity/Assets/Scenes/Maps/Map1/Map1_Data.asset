@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Map1_Data
   m_EditorClassIdentifier: 
   MapName: Map1
-  MapSceneName: 
+  MapSceneName: Map1_Scene

@@ -13,18 +13,14 @@ using UnityEngine.UIElements;
 
 
 
-public class LobbyManager : GeneralManager
+public class Lobby_GeneralManager : GeneralManager
 {
     public List<Friend> memberList;
 
     public string preGameScene;
     public NetworkVariable<float> countDown = new NetworkVariable<float>();
 
-    public int map1 = 0;
-    public int map2 = 0;
-
-    public int totalVotes;
-    public static LobbyManager LobbyManager_Instance { get; set; }
+    public static Lobby_GeneralManager LobbyManager_Instance { get; set; }
 
     public List<MapButton> MapButtonList = new List<MapButton>();
 
@@ -32,16 +28,19 @@ public class LobbyManager : GeneralManager
 
     public NetworkVariable<int> CurrentGameMode_Int = new NetworkVariable<int>();
 
+    public MapButton myVote;
+
+    public Dictionary<ulong, string> MapVotes;
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         ReloadMemberList();
-        if ( IsHost&& SteamLobbyManager.instance.reconnecting==false)
+        if (IsHost && SteamLobbyManager.instance.reconnecting==false)
         {
 
             countDown.Value = 110;
-            totalVotes = 0;
+
         }
     }
 
@@ -53,7 +52,7 @@ public class LobbyManager : GeneralManager
             countDown.Value -= Time.deltaTime;
             if (countDown.Value <= 0)
             {
-                SteamLobbyManager.currentLobby.SetData("Map", GetVotedMap().MapName);
+                SteamLobbyManager.currentLobby.SetData("Map", GetVotedMap());
                 GoToGame();
             }
         }
@@ -64,40 +63,37 @@ public class LobbyManager : GeneralManager
                 GoToGame();
             }
         }
+
+        if (myVote != null) ServerSendMyVote_RPC(SteamClient.SteamId, myVote.mapData.MapName);
     }
 
-    public MapData GetVotedMap()
+    [Rpc(SendTo.Server)]
+    public void ServerSendMyVote_RPC(ulong voter, string mapName)
     {
-        int winningMap = 0;
-        if (map2 > map1)
+        if (MapVotes.ContainsKey(voter))
         {
-            winningMap = 1;
-        }else 
-        {
-            winningMap = 0;
+            MapVotes[voter] = mapName;
         }
-        return MapButtonList[winningMap].mapData;
+        else
+        {
+            MapVotes.Add(voter, mapName);
+            if (MapVotes.Count == SteamLobbyManager.currentLobby.MemberCount && countDown.Value > 9) countDown.Value = 9;
+        }
+
+        foreach (MapButton mapButton in MapButtonList)
+        {
+            mapButton.voteCount.Value = MapVotes.Values.Count(v => v == mapButton.mapData.MapName);
+        }
     }
 
-    public void TotalMapVotes()
+    public string GetVotedMap()
     {
-        
-        totalVotes = map1 + map2;
-
-        if (totalVotes == memberList.Count&&IsHost)
-        {
-            countDown.Value = 10;
-        }
+        return MapVotes.Values.GroupBy(value => value).OrderByDescending(group => group.Count()).FirstOrDefault()?.Key;
     }
 
     public void GoToGame()
     {
         NetworkManager.SceneManager.LoadScene(preGameScene, LoadSceneMode.Single);
-    }
-
-    public void VoteFor()
-    {
-
     }
 
     public void ReloadMemberList()
@@ -151,19 +147,7 @@ public class LobbyManager : GeneralManager
         }
     }
 
-    public void UpdateVoteServer(int map1Change, int map2Change)
-    {
-        if(IsHost)
-        {
-            Debug.Log("ServerRpc called");
-            map1 += map1Change;
-            map2 += map2Change;
-            Debug.Log("map1" + map1);
-            Debug.Log("map2" + map2);
-            Debug.Log("totalVotes" + totalVotes);
-            TotalMapVotes();
-        }
-    }
+
 
 
 

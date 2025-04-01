@@ -55,9 +55,9 @@ public class ObjectPoolingScript : MonoBehaviour
         //     pooledObjects.RemoveAt(0);
 
         // }
-        //     if (ActiveObjects.Count > LobbyManager.LobbyManager_Instance.memberList.Count)
+        //     if (ActiveObjects.Count > Lobby_GeneralManager.LobbyManager_Instance.memberList.Count)
         // {
-        //     foreach(Friend friends in LobbyManager.LobbyManager_Instance.memberList)
+        //     foreach(Friend friends in Lobby_GeneralManager.LobbyManager_Instance.memberList)
         //     {
         //         foreach(GameObject obj in ActiveObjects)
         //         {

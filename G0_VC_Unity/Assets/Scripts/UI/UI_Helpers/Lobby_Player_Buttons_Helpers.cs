@@ -34,7 +34,7 @@ public class Lobby_Player_Buttons_Helpers : MonoBehaviour
         //ColorBlock colorBlock = button.colors;
         //colorBlock.normalColor = randomColor;
         //button.colors = colorBlock;
-        tmpText2.text += LobbyManager.LobbyManager_Instance.memberList.Find(x => x.Id == clasp).Name;
+        tmpText2.text += Lobby_GeneralManager.LobbyManager_Instance.memberList.Find(x => x.Id == clasp).Name;
     }
     public void ConstructButton2(int TeamNumber)
     {

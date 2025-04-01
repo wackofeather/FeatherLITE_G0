@@ -8,11 +8,13 @@ using UnityEngine.UI;
 
 public class MapButton : NetworkBehaviour
 {
-    public NetworkVariable<int> voteCount = new NetworkVariable<int>();
+    public NetworkVariable<int> voteCount = new NetworkVariable<int>(0);
     public MapData mapData;
     public SortingGroup sortingGroup;
+    public Toggle button;
 
 
+    
     public void OnHoverEnter()
     {
         gameObject.transform.localScale *= 1.1f;
@@ -24,82 +26,17 @@ public class MapButton : NetworkBehaviour
         gameObject.transform.localScale /= 1.1f;
         sortingGroup.sortingOrder = 0;
     }
-
-    public override void OnNetworkSpawn()
+    public void OnToggle()
     {
-        base.OnNetworkSpawn();
-        if (IsHost)
-        {
-            voteCount.Value = 0;
-        }
+        Lobby_GeneralManager.LobbyManager_Instance.myVote = this;
     }
 
-    public void OnVoteChanged(Toggle toggle)
+    private void Start()
     {
-        if (!IsHost)
-        {
-            UpdateVoteClientClientRpc(toggle.isOn);
-        }
-        else
-        {
-            if (toggle.isOn)
-            {
-                LobbyManager.LobbyManager_Instance.map1 += 1;
-                LobbyManager.LobbyManager_Instance.TotalMapVotes();
-            }
-            else
-            {
-                LobbyManager.LobbyManager_Instance.map1 -= 1;
-                LobbyManager.LobbyManager_Instance.TotalMapVotes();
-            }
-        }
+        if (button.isOn) Lobby_GeneralManager.LobbyManager_Instance.myVote = this;
     }
-    public void OnVoteChanged2(Toggle toggle)
-    {
-        if (!IsHost)
-        {
-            UpdateVote2ClientClientRpc(toggle.isOn);
-        }
-        else
-        {
-            if (toggle.isOn)
-            {
-                LobbyManager.LobbyManager_Instance.map2 += 1;
-                LobbyManager.LobbyManager_Instance.TotalMapVotes();
-            }
-            else
-            {
-                LobbyManager.LobbyManager_Instance.map2 -= 1;
-                LobbyManager.LobbyManager_Instance.TotalMapVotes();
-            }
-        }
-    }
-    [Rpc(SendTo.Everyone)]
-    private void UpdateVoteClientClientRpc(bool isOn)
-    {
-        Debug.Log("ClientRpc called");
-        if (isOn)
-        {
-            LobbyManager.LobbyManager_Instance.UpdateVoteServer(1, 0);
-        }
-        else
-        {
-            LobbyManager.LobbyManager_Instance.UpdateVoteServer(-1, 0);
-        }
-    }
-    [Rpc(SendTo.Everyone)]
-    private void UpdateVote2ClientClientRpc(bool isOn)
-    {
-        Debug.Log("ClientRpc called");
-        if (isOn)
-        {
-            LobbyManager.LobbyManager_Instance.UpdateVoteServer(0, 1);
-        }
-        else
-        {
-            LobbyManager.LobbyManager_Instance.UpdateVoteServer(0, -1);
-        }
-    }
+
+
 }
 //public class MapButton : NetworkBehaviour
 //{
@@ -124,7 +61,7 @@ public class MapButton : NetworkBehaviour
 //    //    base.OnNetworkSpawn();
 //    //    if (IsHost)
 //    //    {
-//    //        LobbyManager.LobbyManager_Instance.voteCount.Value = 0;
+//    //        Lobby_GeneralManager.LobbyManager_Instance.voteCount.Value = 0;
 //    //    }
 //    //}
 //    //public void OnVoteChanged(Toggle toggle)
@@ -142,13 +79,13 @@ public class MapButton : NetworkBehaviour
 //    //        Debug.Log("hello" + IsHost.ToString());
 //    //        if (toggle.isOn)
 //    //        {
-//    //            LobbyManager.LobbyManager_Instance.countUp[0] += 1;
-//    //            LobbyManager.LobbyManager_Instance.totalVotes += 1;
+//    //            Lobby_GeneralManager.LobbyManager_Instance.countUp[0] += 1;
+//    //            Lobby_GeneralManager.LobbyManager_Instance.totalVotes += 1;
 //    //        }
 //    //        else
 //    //        {
-//    //            LobbyManager.LobbyManager_Instance.voteCount.Value -= 1;
-//    //            LobbyManager.LobbyManager_Instance.totalVotes -= 1;
+//    //            Lobby_GeneralManager.LobbyManager_Instance.voteCount.Value -= 1;
+//    //            Lobby_GeneralManager.LobbyManager_Instance.totalVotes -= 1;
 //    //        }
 //    //    }
 //    //}
@@ -156,30 +93,30 @@ public class MapButton : NetworkBehaviour
 //    {
 //        if (toggle.isOn)
 //        {
-//            LobbyManager.LobbyManager_Instance.map1 += 1;
-//            LobbyManager.LobbyManager_Instance.totalVotes += 1;
-//            Debug.Log("hey2" + LobbyManager.LobbyManager_Instance.map1);
+//            Lobby_GeneralManager.LobbyManager_Instance.map1 += 1;
+//            Lobby_GeneralManager.LobbyManager_Instance.totalVotes += 1;
+//            Debug.Log("hey2" + Lobby_GeneralManager.LobbyManager_Instance.map1);
 //        }
 //        else
 //        {
-//            LobbyManager.LobbyManager_Instance.map1 -= 1;
-//            LobbyManager.LobbyManager_Instance.totalVotes -= 1;
-//            Debug.Log("hey2" + LobbyManager.LobbyManager_Instance.map1);
+//            Lobby_GeneralManager.LobbyManager_Instance.map1 -= 1;
+//            Lobby_GeneralManager.LobbyManager_Instance.totalVotes -= 1;
+//            Debug.Log("hey2" + Lobby_GeneralManager.LobbyManager_Instance.map1);
 //        }
 //    }
 //    public void onVoteChange2(Toggle toggle)
 //    {
 //        if (toggle.isOn)
 //        {
-//            LobbyManager.LobbyManager_Instance.map2 += 1;
-//            LobbyManager.LobbyManager_Instance.totalVotes += 1;
-//            Debug.Log("hey" + LobbyManager.LobbyManager_Instance.map2);
+//            Lobby_GeneralManager.LobbyManager_Instance.map2 += 1;
+//            Lobby_GeneralManager.LobbyManager_Instance.totalVotes += 1;
+//            Debug.Log("hey" + Lobby_GeneralManager.LobbyManager_Instance.map2);
 //        }
 //        else
 //        {
-//            LobbyManager.LobbyManager_Instance.map2 -= 1;
-//            LobbyManager.LobbyManager_Instance.totalVotes -= 1;
-//            Debug.Log("hey" + LobbyManager.LobbyManager_Instance.map2);
+//            Lobby_GeneralManager.LobbyManager_Instance.map2 -= 1;
+//            Lobby_GeneralManager.LobbyManager_Instance.totalVotes -= 1;
+//            Debug.Log("hey" + Lobby_GeneralManager.LobbyManager_Instance.map2);
 //        }
 //    }
 //}
@@ -190,13 +127,13 @@ public class MapButton : NetworkBehaviour
 ////        if (isOn)
 ////        {
 
-////            LobbyManager.LobbyManager_Instance.voteCount.Value += 1;
-////            LobbyManager.LobbyManager_Instance.totalVotes.Value += 1;
+////            Lobby_GeneralManager.LobbyManager_Instance.voteCount.Value += 1;
+////            Lobby_GeneralManager.LobbyManager_Instance.totalVotes.Value += 1;
 ////        }
 ////        else
 ////        {
-////            LobbyManager.LobbyManager_Instance.voteCount.Value -= 1;
-////            LobbyManager.LobbyManager_Instance.totalVotes.Value -= 1;
+////            Lobby_GeneralManager.LobbyManager_Instance.voteCount.Value -= 1;
+////            Lobby_GeneralManager.LobbyManager_Instance.totalVotes.Value -= 1;
 ////        }
 ////    }
 ////}

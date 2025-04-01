@@ -10,7 +10,7 @@ public class ToggleScriptOnManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(LobbyManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 0&&LobbyManager.LobbyManager_Instance.CurrentGameMode_Int!=null)
+        if(Lobby_GeneralManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 0&&Lobby_GeneralManager.LobbyManager_Instance.CurrentGameMode_Int!=null)
         {
             toggle.isOn = true;
             toggle2.isOn = false;

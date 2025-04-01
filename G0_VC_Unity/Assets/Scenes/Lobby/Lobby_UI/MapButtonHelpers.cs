@@ -9,14 +9,14 @@ using UnityEngine.UI;
 public class MapButtonHelpers : MapButton
 {
     public TMP_Text TextMeshPro;
-    //public LobbyManager LobbyManager;
+    //public Lobby_GeneralManager Lobby_GeneralManager;
     //public Toggle toggle1;
     //public Toggle toggle2;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public void TextController()
     {
-        //Debug.Log(LobbyManager.LobbyManager_Instance.countDown.Value);
-        int countDownTime = Mathf.FloorToInt(LobbyManager.LobbyManager_Instance.countDown.Value);
+        //Debug.Log(Lobby_GeneralManager.LobbyManager_Instance.countDown.Value);
+        int countDownTime = Mathf.FloorToInt(Lobby_GeneralManager.LobbyManager_Instance.countDown.Value);
 
         TextMeshPro.text = countDownTime.ToString();
     }

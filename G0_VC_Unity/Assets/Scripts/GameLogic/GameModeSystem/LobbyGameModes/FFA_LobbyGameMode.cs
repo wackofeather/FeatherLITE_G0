@@ -16,7 +16,7 @@ public class FFA_LobbyGameMode : Base_LobbyGameMode
        base.UpdateUIList();
         ClearButtons();
         GameObject Button;
-        foreach (Friend members in LobbyManager.LobbyManager_Instance.memberList)
+        foreach (Friend members in Lobby_GeneralManager.LobbyManager_Instance.memberList)
         {
             Button = Instantiate(MenuPrefabButton, MenuVector.transform);
             Button.GetComponent<Lobby_Player_Buttons_Helpers>().ConstructButton(members);

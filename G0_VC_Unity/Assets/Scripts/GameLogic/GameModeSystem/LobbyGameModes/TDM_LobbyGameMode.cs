@@ -251,7 +251,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     //    base.OnGameModeSwitch (previousValue, currentValue);
     //    if (currentValue == 1)
     //    {
-    //        if (LobbyManager.LobbyManager_Instance.IsHost)
+    //        if (Lobby_GeneralManager.LobbyManager_Instance.IsHost)
     //        {
     //            //teamLists.Value = new TeamList();
     //            //teamLists.Value.ListIndex.Add(1);
@@ -278,14 +278,14 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     //}
     public void TeamSetting()
     {
-        if (!LobbyManager.LobbyManager_Instance.IsHost) return;
+        if (!Lobby_GeneralManager.LobbyManager_Instance.IsHost) return;
         RemovedAll();
         teamLists.Value.ListClass.Clear();
         Debug.Log("IAMCLALED");
         TeamList list = new TeamList();
-        List<Friend> FriendList = new List<Friend>(LobbyManager.LobbyManager_Instance.memberList);
+        List<Friend> FriendList = new List<Friend>(Lobby_GeneralManager.LobbyManager_Instance.memberList);
         //teamLists.Value.ListClass.Clear();
-        int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
+        int teamSize = Mathf.CeilToInt(Lobby_GeneralManager.LobbyManager_Instance.memberList.Count / slider.value);
         Debug.Log("SliderValue: " + slider.value);
         Debug.Log("TeamSize: " + teamSize);
         for (int i = 0; i < slider.value; i++)
@@ -307,13 +307,13 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
 
     public override void GameMode_MemberJoined(Friend friend)
     {
-        if (!LobbyManager.LobbyManager_Instance.IsHost) RemovedAll();
+        if (!Lobby_GeneralManager.LobbyManager_Instance.IsHost) RemovedAll();
 
         base.GameMode_MemberJoined(friend);
         RemovedAll();
         teamLists.Value.test += 1;
         Debug.Log("NEW MEMBER JOINED");
-        int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
+        int teamSize = Mathf.CeilToInt(Lobby_GeneralManager.LobbyManager_Instance.memberList.Count / slider.value);
         Debug.Log("This is the new teamSize" + teamSize);
         List<Friend> localUserList = new List<Friend>();
         localUserList.Add(friend);
@@ -324,7 +324,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
             {
                 for (int j = 0; j < (teamClass.Friends.Count - teamSize); j++)
                 {
-                    localUserList.Add(LobbyManager.LobbyManager_Instance.memberList.Find(x => x.Id == teamClass.Friends[0]));
+                    localUserList.Add(Lobby_GeneralManager.LobbyManager_Instance.memberList.Find(x => x.Id == teamClass.Friends[0]));
                     teamClass.Friends.RemoveAt(0);
                 }
             }
@@ -353,12 +353,12 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
 
     public override void GameMode_MemberLeave(Friend friend)
     {
-        if (!LobbyManager.LobbyManager_Instance.IsHost) RemovedAll();
+        if (!Lobby_GeneralManager.LobbyManager_Instance.IsHost) RemovedAll();
         base.GameMode_MemberLeave(friend);
         RemovedAll();
         Debug.Log("team member left");
         List<Friend> localUserList = new List<Friend>();
-        int teamSize = Mathf.CeilToInt(LobbyManager.LobbyManager_Instance.memberList.Count / slider.value);
+        int teamSize = Mathf.CeilToInt(Lobby_GeneralManager.LobbyManager_Instance.memberList.Count / slider.value);
         foreach (TeamClass teamClass in teamLists.Value.ListClass)
         {
             if(teamClass.Friends.Contains(friend.Id))
@@ -369,7 +369,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
             {
                 for (int j = 0; j < (teamClass.Friends.Count - teamSize); j++)
                 {
-                    localUserList.Add(LobbyManager.LobbyManager_Instance.memberList.Find(x => x.Id == teamClass.Friends[0]));
+                    localUserList.Add(Lobby_GeneralManager.LobbyManager_Instance.memberList.Find(x => x.Id == teamClass.Friends[0]));
                     teamClass.Friends.RemoveAt(0);
                     Debug.Log("WALALA" + teamClass.Friends[0]);
                 }
@@ -495,7 +495,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     //        RemovePlayerFromOtherTeams(GameID);
     //        AddPlayertoTeams(GameID, teamContained);
     //        Debug.Log("OEKGOEKPEGEGK");
-    //        LobbyManager.LobbyManager_Instance.CurrentGameMode.UpdateUIList();
+    //        Lobby_GeneralManager.LobbyManager_Instance.CurrentGameMode.UpdateUIList();
     //        return;
     //    }
     //    else if (teamContained.Friends.Count > slider.value + 2)
@@ -519,7 +519,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     //    RemovePlayerFromOtherTeams(GameID);
     //    AddPlayertoTeams(GameID, teamContained);
 
-    //    LobbyManager.LobbyManager_Instance.CurrentGameMode.UpdateUIList();
+    //    Lobby_GeneralManager.LobbyManager_Instance.CurrentGameMode.UpdateUIList();
     //}
 
     //private void AddPlayertoTeams(ulong gameId, TeamClass teamContained)

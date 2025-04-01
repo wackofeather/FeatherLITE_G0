@@ -10,16 +10,14 @@ public class PlayerSettingsScript : MonoBehaviour
     public ColorBlock saveButtonColor;
     private int vSyncint;
     private int dropDownInt;
-    private int frameRateInt;
     public TMP_Dropdown resolutionDropdown;
     public TMP_Dropdown graphicsDropdown;
-    public TMP_Dropdown frameRateDropdown;
-    public TMP_Dropdown vsyncDropdown;
     public Slider SensitivitySlider;
+    public Slider frameLimitSlider;
     public Slider audioSlider;
     public Button resetButton;
     public Button saveButton;
-
+    public Toggle vSyncToggle;
    
     
 
@@ -27,30 +25,50 @@ public class PlayerSettingsScript : MonoBehaviour
     void Start()
     {
         //loads playerprefs data
-        vsyncDropdown.value = PlayerPrefs.GetInt("VSync");
+        vSyncint = PlayerPrefs.GetInt("VSync");
         resolutionDropdown.value = PlayerPrefs.GetInt("Resolution", 0);
         graphicsDropdown.value = PlayerPrefs.GetInt("Graphics", 0);
         SensitivitySlider.value = PlayerPrefs.GetFloat("Sens", 0f);
-        frameRateDropdown.value = PlayerPrefs.GetInt("Frames", 0);
+        frameLimitSlider.value = PlayerPrefs.GetFloat("Frames", 0f);
         audioSlider.value = PlayerPrefs.GetFloat("Audio", 0f);
-
+        //sets the toggle button
+        if (vSyncint == 1)
+        {
+            vSyncToggle.isOn = false;
+        }
+        else
+        {
+            vSyncToggle.isOn = true;
+        }
         resetColor = saveButton.colors;
         resetColor.normalColor = new UnityEngine.Color(1, 0, 1, 0);
         saveButton.colors = resetColor;
     }
 
+    public void VsyncToggle()
+    {
+        if (vSyncToggle.isOn == true)
+        {
+            vSyncint = 0;
+        }
+        if (vSyncToggle.isOn == false)
+        {
+            vSyncint = 1;
+        }
+    }
 
 
     //saves playerprefs data with a button
     public void saveData()
     {
         PlayerPrefs.SetFloat("Sens", SensitivitySlider.value);
-        PlayerPrefs.SetInt("Frames", frameRateDropdown.value);
+        PlayerPrefs.SetFloat("Frames", frameLimitSlider.value);
         PlayerPrefs.SetInt("Resolution", resolutionDropdown.value);
         PlayerPrefs.SetInt("Graphics", graphicsDropdown.value);
         PlayerPrefs.SetFloat("Audio", audioSlider.value);
-        PlayerPrefs.SetInt("VSync",vsyncDropdown.value);
+        PlayerPrefs.SetInt("VSync",vSyncint);
         PlayerPrefs.Save();
+
     }
 
 
@@ -59,15 +77,16 @@ public class PlayerSettingsScript : MonoBehaviour
     public void deleteData()
     {
         PlayerPrefs.DeleteAll();
-        frameRateDropdown.value = 0;
+        frameLimitSlider.value = 0f;
         SensitivitySlider.value = 0f;
         audioSlider.value = 0f;
         resolutionDropdown.value = 0;
         graphicsDropdown.value = 0;
-        vsyncDropdown.value = 0;
+        vSyncToggle.isOn = true;
     }
 
   
+    
     
     
     public void saveButtonColorChange()
@@ -85,10 +104,6 @@ public class PlayerSettingsScript : MonoBehaviour
     //dropdown for resolution 
     public void dropdownvalueResolution(int index)
     {
-        if (Screen.height <= 0)
-        {
-            
-        }
         switch (index)
         {
 
@@ -117,49 +132,6 @@ public class PlayerSettingsScript : MonoBehaviour
     }
 
 
-    public void frameRateLimit(int index)
-    {
-        frameRateInt = frameRateDropdown.value;
-        switch (frameRateInt)
-        {
-            case 0: break;
-            case 1: break;
-            case 2: break;
-            case 3: break;
-            case 4: break;
-            case 5: break;
-            case 6: break;
-            case 7: break;
-            case 8: break;
-            case 9: break;
-            case 10: break;
-            case 11: break;
-            case 12: break;
-        }
-        saveButtonColor = saveButton.colors;
-        saveButtonColor.normalColor = new UnityEngine.Color(1, 0, 1, 1);
-        saveButton.colors = saveButtonColor;
-    }
-
-
-
-
-    public void VSyncDropdown()
-    {
-        vSyncint = vsyncDropdown.value;
-        switch (vSyncint)
-        {
-            case 0:
-                frameRateDropdown.gameObject.SetActive(true); break;
-
-            case 1:
-                frameRateDropdown.gameObject.SetActive(false); break;
-        }
-        saveButtonColor = saveButton.colors;
-        saveButtonColor.normalColor = new UnityEngine.Color(1, 0, 1, 1);
-        saveButton.colors = saveButtonColor;
-    }
-
 
 
 
@@ -171,6 +143,21 @@ public class PlayerSettingsScript : MonoBehaviour
         saveButton.colors = saveButtonColor;
     }
 
+    //Framelimit bar funtion
+    public void frameRateLimitSlider()
+    {
+        saveButtonColor = saveButton.colors;
+        saveButtonColor.normalColor = new UnityEngine.Color(1, 0, 1, 1);
+        saveButton.colors = saveButtonColor;
+    }
+
+    //Vsync button function
+    public void VsyncValueChange()
+    {
+        saveButtonColor = saveButton.colors;
+        saveButtonColor.normalColor = new UnityEngine.Color(1, 0, 1, 1);
+        saveButton.colors = saveButtonColor;
+    }
 
     public void audioSliderValue()
     {

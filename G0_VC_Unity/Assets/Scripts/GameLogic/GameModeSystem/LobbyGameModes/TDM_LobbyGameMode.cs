@@ -189,6 +189,9 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     
     [HideInInspector] public ulong GameID;
 
+
+
+
     //public void OnEnable()
     //{
         
@@ -202,6 +205,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     public override void OnGameModeSwitch(int previousValue, int currentValue)
     {
         base.OnGameModeSwitch(previousValue, currentValue);
+        Debug.Log("natoma");
         if (currentValue == 1)
         {
             if (IsHost)
@@ -239,7 +243,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
 
     public void teamListsValueChanged(TeamList previous, TeamList current)
     {
-        RemovedAll();
+        //ObjectPoolingScript.ObjectPoolingScript_Instance.Repool();
     }
     private void Update()
     {
@@ -284,7 +288,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     public void TeamSetting()
     {
         if (!Lobby_GeneralManager.LobbyManager_Instance.IsHost) return;
-        RemovedAll();
+        ObjectPoolingScript.ObjectPoolingScript_Instance.Repool();
         teamLists.Value.ListClass.Clear();
         Debug.Log("IAMCLALED");
         TeamList list = new TeamList();
@@ -312,10 +316,8 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
 
     public override void GameMode_MemberJoined(Friend friend)
     {
-        if (!Lobby_GeneralManager.LobbyManager_Instance.IsHost) RemovedAll();
-
         base.GameMode_MemberJoined(friend);
-        RemovedAll();
+        ObjectPoolingScript.ObjectPoolingScript_Instance.Repool();
         teamLists.Value.test += 1;
         Debug.Log("NEW MEMBER JOINED");
         int teamSize = Mathf.CeilToInt(Lobby_GeneralManager.LobbyManager_Instance.memberList.Count / slider.value);
@@ -358,9 +360,8 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
 
     public override void GameMode_MemberLeave(Friend friend)
     {
-        if (!Lobby_GeneralManager.LobbyManager_Instance.IsHost) RemovedAll();
         base.GameMode_MemberLeave(friend);
-        RemovedAll();
+        ObjectPoolingScript.ObjectPoolingScript_Instance.Repool();
         Debug.Log("team member left");
         List<Friend> localUserList = new List<Friend>();
         int teamSize = Mathf.CeilToInt(Lobby_GeneralManager.LobbyManager_Instance.memberList.Count / slider.value);
@@ -398,66 +399,54 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
         }
  
     }
-    public void RemovedAll()
-    {
-        foreach (GameObject obj in ActiveObjects)
-        {
-            ObjectPoolingScript.ObjectPoolingScript_Instance.pooledObjects.Add(obj);
-            obj.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = 0;
-            obj.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().teamClass = null;
-            obj.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().tmpText2.text = "";
-            obj.transform.SetParent(ObjectPoolingScript.ObjectPoolingScript_Instance.MenuVector);
-        }
-        ActiveObjects.Clear();
-    }
+    
     public override void UpdateUIList()
     {
         base.UpdateUIList();
         Debug.Log("Update Triggered");
         Debug.Log(",miniingin" + teamLists.Value.ListClass.Count);
-        GameObject Button;
-        GameObject Button2;
-        foreach (TeamClass team in teamLists.Value.ListClass)
+
+        for (int i = 0; i < teamLists.Value.ListClass.Count; i++)
         {
+            TeamClass team = teamLists.Value.ListClass[i];
             Debug.Log("THISISTEAMFRIENDS" + team.Friends.Count);
             //UnityEngine.Color randomColor = new UnityEngine.Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
 
 
                 //Button2.GetComponentInChildren<UnityEngine.UI.Button>().onClick.AddListener(() => OnClick(team));
-                foreach (ulong friend in team.Friends)
+            foreach (ulong friend in team.Friends)
+            {
+                GameObject Button;
+                bool currentFriendThumbnail = false;
+                List<GameObject> existingLikeFriends = ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.FindAll(x => x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId == friend);
+                for (int j = 0; j < existingLikeFriends.Count; j++)
                 {
-                if (ActiveObjects.Find(x => x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId == friend))
-                {
-                    Debug.Log("muahaha" + ActiveObjects.Count);
+                    GameObject thumbnail = existingLikeFriends[j];
+                    if (thumbnail.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().Team_Index == j) { currentFriendThumbnail = true; continue; }
+                    ObjectPoolingScript.ObjectPoolingScript_Instance.ReturnToPool(thumbnail);
                 }
-                else
+                if (currentFriendThumbnail == false)
                 {
-                    Debug.Log("muahaha" + ActiveObjects.Count);
-                    Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject();
-                    ActiveObjects.Add(Button);
+                    Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooled_PlayerThumbnailObject(i);
                     ////ColorBlock colorBlock = Button.GetComponentInChildren<UnityEngine.UI.Button>().colors;
                     ////colorBlock.normalColor = randomColor;
                     ////Button.GetComponentInChildren<UnityEngine.UI.Button>().colors = colorBlock;
                     //Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
-                    Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = friend;
-                    Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
-                    Button.transform.SetParent(MenuVector.transform, true);
+                    
+                    Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructFriendButton(Lobby_GeneralManager.LobbyManager_Instance.memberList.Find(x => x.Id == friend));
+                    Button.transform.SetParent(MenuVector.transform);
                 }
-                }
+            }
                 //ikgkgogkr
 
-                    if (ActiveObjects.Find(x => x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().teamClass == team))
-                    {
-                        Debug.Log("OH NO");
-                    }
-                    else
-                    {
-                        Debug.Log("hello");
-                        Button2 = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject();
-                        ActiveObjects.Add(Button2);
-                        Button2.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().teamClass = team;
-                        Button2.transform.SetParent(MenuVector.transform, true);
-                    }
+            if (!ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Find(x => x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().Team_Index == i && x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId == 0))
+            {
+                GameObject SwitchButton;
+                Debug.Log("hello");
+                SwitchButton = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooled_TeamSwitchObject(i);
+                SwitchButton.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton();
+                SwitchButton.transform.SetParent(MenuVector.transform);
+            }
 
 
                 //if(ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Count > 0)
@@ -485,9 +474,10 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
                 //Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
                 //Buttons.Add(Button);
                 //Debug.Log("ths is button count" + Buttons.Count);
-            }
-                VerticalLayoutGroup.CalculateLayoutInputVertical();
-            }
+        }
+
+        VerticalLayoutGroup.CalculateLayoutInputVertical();
+    }
 }
     //private void ResetRectTransform(RectTransform rectTransform)
     //{

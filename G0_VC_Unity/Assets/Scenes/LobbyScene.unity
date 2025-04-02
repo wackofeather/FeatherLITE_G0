@@ -5101,6 +5101,8 @@ MonoBehaviour:
   pooledObjects: []
   MenuVector: {fileID: 816080876}
   amountToPool: 20
+  TeamNumberSlider: {fileID: 239538181}
+  TeamAssetsList: []
 --- !u!4 &2046761978
 Transform:
   m_ObjectHideFlags: 0

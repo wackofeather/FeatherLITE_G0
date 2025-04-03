@@ -4,6 +4,9 @@ using TMPro;
 using Steamworks.Data;
 using System.Drawing;
 using UnityEditor;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 public class PlayerSettingsScript : MonoBehaviour
 {
     public ColorBlock resetColor;
@@ -23,6 +26,8 @@ public class PlayerSettingsScript : MonoBehaviour
     public TMP_Text frameRateText;
     public TMP_Text sensitivityvalueText;
     public TMP_Text audioValueText;
+    Resolution[] Allresolutions;
+    List<Resolution> SelectedResolution = new List<Resolution>();
 
 
 
@@ -30,8 +35,9 @@ public class PlayerSettingsScript : MonoBehaviour
     void Start()
     {
         //loads playerprefs data
-        vsyncDropdown.value = PlayerPrefs.GetInt("VSync", 0);
+        
         resolutionDropdown.value = PlayerPrefs.GetInt("Resolution", 0);
+        vsyncDropdown.value = PlayerPrefs.GetInt("VSync", 0);
         graphicsDropdown.value = PlayerPrefs.GetInt("Graphics", 0);
         SensitivitySlider.value = PlayerPrefs.GetFloat("Sens", 50f);
         frameRateDropdown.value = PlayerPrefs.GetInt("Frames", 11);
@@ -40,6 +46,21 @@ public class PlayerSettingsScript : MonoBehaviour
         resetColor = saveButton.colors;
         resetColor.normalColor = new UnityEngine.Color(1, 0, 1, 0);
         saveButton.colors = resetColor;
+
+        Allresolutions = Screen.resolutions;
+        List<string> resolutionStringList = new List<string>();
+        string newRes;
+        foreach (Resolution res in Allresolutions)
+        {
+            newRes = res.width.ToString() + "x" + res.height.ToString();
+            if (!resolutionStringList.Contains(newRes))
+            {
+                resolutionStringList.Add(newRes);
+                SelectedResolution.Add(res);
+            }
+            
+        }
+        resolutionDropdown.AddOptions(resolutionStringList);
     }
 
 
@@ -55,8 +76,8 @@ public class PlayerSettingsScript : MonoBehaviour
         PlayerPrefs.SetInt("Graphics", graphicsDropdown.value);
         PlayerPrefs.SetFloat("Audio", audioSlider.value);
         PlayerPrefs.SetInt("VSync",vsyncDropdown.value);
+        Debug.Log(Screen.resolutions);
         PlayerPrefs.Save();
-
     }
 
 
@@ -100,6 +121,8 @@ public class PlayerSettingsScript : MonoBehaviour
             case 1: break;
             case 2: break;
             case 3: break;
+
+
         }
         saveButtonColor = saveButton.colors;
         saveButtonColor.normalColor = new UnityEngine.Color(1, 0, 1, 1);

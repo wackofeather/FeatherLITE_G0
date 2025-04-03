@@ -11,6 +11,7 @@ public class GunData : ScriptableObject
     [SerializeField] float BPS;
     public float maxTravelPerFrame;
     public GameObject bulletFX;
+    public GameObject bloodSplatter;
 
    /* public class GunLogic : WeaponLogic
     {

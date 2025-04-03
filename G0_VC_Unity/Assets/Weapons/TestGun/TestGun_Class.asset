@@ -18,4 +18,4 @@ MonoBehaviour:
   inventory: {fileID: 0}
   gunData: {fileID: 11400000, guid: 7a9171828a76b3647ae8293baffe1adf, type: 2}
   bullet: {fileID: 5063894466379890091, guid: d9dea424039fdf14796606317a8f1088, type: 3}
-  bulletSpeed: 0.01
+  bulletSpeed: 1

@@ -65,6 +65,8 @@ public class RailgunClass : GunClass
     }
     public async override Task<bool> ShootLogic()
     {
+        player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().muzzleFlash.Play();
+
         BeamPath shootPathContainer = path;
         
 
@@ -104,6 +106,8 @@ public class RailgunClass : GunClass
 
     public async override Task<bool> DummyShoot()
     {
+        player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().muzzleFlash.Play();
+
         player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().predictivePath.positionCount = path.points.Count;
 
         for (int i = 0; i < path.points.Count; i++)

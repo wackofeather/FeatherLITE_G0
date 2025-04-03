@@ -156,7 +156,15 @@ public class GunClass : WeaponClass
 
             player.inventory.VP_GetProxy().GetComponent<GunProxy>().muzzleFlash.Play();
 
-            if (hit.collider.gameObject.layer == (1 << LayerMask.NameToLayer("ENEMY"))) { hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(1); Debug.LogAssertion("hit!"); }
+            if (hit.collider.gameObject.layer == (1 << LayerMask.NameToLayer("ENEMY"))) 
+            {
+                Debug.Log("Leatherbys");
+                hit.collider.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(1); Debug.LogAssertion("hit!");
+                HS_Poolable bloodSpatter = HS_PoolableManager.instance.GetInstanceOf(gunData.bloodSplatter.GetComponent<HS_Poolable>());
+                bloodSpatter.transform.position = hit.point;
+                bloodSpatter.transform.rotation = Quaternion.Euler(hit.normal);
+                bloodSpatter.gameObject.SetActive(true);
+            }
         }
 
         return true;

@@ -61,7 +61,7 @@ public class RailgunClass : GunClass
 
                 if (chargeProgress >= 1) { currentAmmo = 1; shootingTimer = 1f; chargeProgress = -0.2f; }
 
-                Debug.LogAssertion(chargeProgress + "  " + weaponData.fireInput.action.IsPressed());
+                //sDebug.LogAssertion(chargeProgress + "  " + weaponData.fireInput.action.IsPressed());
             }
 
             

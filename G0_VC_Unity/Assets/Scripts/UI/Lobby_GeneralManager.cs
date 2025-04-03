@@ -41,10 +41,11 @@ public class Lobby_GeneralManager : GeneralManager
 
             countDown.Value = 110;
 
+            MapVotes = new Dictionary<ulong, string>(0);
         }
     }
 
-    private void Update()
+    public override void _Update()
     {
         if (IsServer)
         {
@@ -64,15 +65,15 @@ public class Lobby_GeneralManager : GeneralManager
             }
         }
 
-        if (myVote != null) { ServerSendMyVote_RPC(SteamClient.SteamId, myVote.mapData.MapName); }
+        if (myVote != null) { ServerSendMyVote_ServerRPC(SteamClient.SteamId, myVote.mapData.MapName); }
     }
 
     [Rpc(SendTo.Server)]
-    public void ServerSendMyVote_RPC(ulong voter, string mapName)
+    public void ServerSendMyVote_ServerRPC(ulong voter, string mapName)
     {
         Debug.Log("ServerRpcCalled"+MapVotes.ContainsKey(voter));
         
-        return;
+        
         if (MapVotes.ContainsKey(voter))
         {
             MapVotes[voter] = mapName;
@@ -94,7 +95,7 @@ public class Lobby_GeneralManager : GeneralManager
     {
         string MapVoted = MapVotes.Values.GroupBy(value => value).OrderByDescending(group => group.Count()).FirstOrDefault()?.Key;
         if (MapVoted == null) return MapVoted;
-        else return "Voting";
+        else return "Map1";
     }
 
     public void GoToGame()

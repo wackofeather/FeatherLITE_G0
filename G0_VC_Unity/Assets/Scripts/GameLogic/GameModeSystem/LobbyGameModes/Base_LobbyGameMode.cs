@@ -54,7 +54,7 @@ public abstract class Base_LobbyGameMode:NetworkBehaviour
 
     public virtual void UpdateUIList()
     {
-        Debug.Log("UpdatedUILIST"+Lobby_GeneralManager.LobbyManager_Instance.memberList.Count);
+       
     }
 
 

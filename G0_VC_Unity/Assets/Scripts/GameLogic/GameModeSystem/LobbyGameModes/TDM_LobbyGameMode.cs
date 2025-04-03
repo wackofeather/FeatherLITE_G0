@@ -12,6 +12,7 @@ using TMPro;
 using Steamworks.Data;
 using UnityEngine.InputSystem;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 
 [Serializable]
@@ -192,11 +193,20 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     [HideInInspector] public ulong GameID;
 
 
+    public override void GameMode_Initialize_ForGame()
+    {
+        base.GameMode_Initialize_ForGame();
+        TeamList list = new TeamList();
+        list.ListClass.Add(new TeamClass());
+        network_teamList.Value = list;
+
+        local_teamList = list;
+    }
 
 
     //public void OnEnable()
     //{
-        
+
     //}
 
     //public void Update()
@@ -240,10 +250,10 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     }
     private void Update()
     {
-        Debug.Log("lettermane " + TeamVerified);
 
         local_teamList = network_teamList.Value;
 
+        Debug.Log(myTeam);
         if (Lobby_GeneralManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 1)
         {
 
@@ -251,7 +261,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
 
             if (TeamVerified)
             {
-                
+
                 
             }
             
@@ -320,7 +330,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     {
         base.GameMode_MemberJoined(friend);
         if (!IsHost) return;
-        ObjectPoolingScript.ObjectPoolingScript_Instance.Repool();
+        
         network_teamList.Value.test += 1;
         Debug.Log("NEW MEMBER JOINED");
         int teamSize = Mathf.CeilToInt(Lobby_GeneralManager.LobbyManager_Instance.memberList.Count / slider.value);
@@ -365,7 +375,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     {
         base.GameMode_MemberLeave(friend);
         if (!IsHost) return;
-        ObjectPoolingScript.ObjectPoolingScript_Instance.Repool();
+        
         Debug.Log("team member left");
         List<Friend> localUserList = new List<Friend>();
         int teamSize = Mathf.CeilToInt(Lobby_GeneralManager.LobbyManager_Instance.memberList.Count / slider.value);
@@ -407,17 +417,15 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
     public override void UpdateUIList()
     {
         base.UpdateUIList();
-        Debug.Log("Update Triggered");
-        Debug.Log(",miniingin" + local_teamList.ListClass.Count);
 
+        int OrderIndex = 0;
         for (int i = 0; i < local_teamList.ListClass.Count; i++)
         {
             TeamClass team = local_teamList.ListClass[i];
-            Debug.Log("THISISTEAMFRIENDS" + team.Friends.Count);
             //UnityEngine.Color randomColor = new UnityEngine.Color(UnityEngine.Random.value, UnityEngine.Random.value, UnityEngine.Random.value);
 
-
-                //Button2.GetComponentInChildren<UnityEngine.UI.Button>().onClick.AddListener(() => OnClick(team));
+            //targetObject.transform.SetSiblingIndex(0);
+            //Button2.GetComponentInChildren<UnityEngine.UI.Button>().onClick.AddListener(() => OnClick(team));
             foreach (ulong friend in team.Friends)
             {
                 GameObject Button;
@@ -426,65 +434,70 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
                 for (int j = 0; j < existingLikeFriends.Count; j++)
                 {
                     GameObject thumbnail = existingLikeFriends[j];
-                    if (thumbnail.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().Team_Index == j) { currentFriendThumbnail = true; continue; }
+                    if (thumbnail.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().Team_Index == i) { currentFriendThumbnail = true; thumbnail.transform.SetSiblingIndex(OrderIndex); OrderIndex++;  continue; }
                     ObjectPoolingScript.ObjectPoolingScript_Instance.ReturnToPool(thumbnail);
+
+                    
                 }
                 if (currentFriendThumbnail == false)
                 {
-                    List<GameObject> existingMyThumbnails = ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.FindAll(x => x.GetComponent<Lobby_Player_Buttons_Helpers>().ButtonId == friend);
-
-                    foreach (GameObject undesirable_button in existingMyThumbnails)
-                    {
-                        ObjectPoolingScript.ObjectPoolingScript_Instance.ReturnToPool(undesirable_button);
-                    }
+                    Debug.Log("construct button brah");
 
                     Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooled_PlayerThumbnailObject(i);
+
+                    Button.transform.SetSiblingIndex(OrderIndex); 
+                    OrderIndex++;
                     ////ColorBlock colorBlock = Button.GetComponentInChildren<UnityEngine.UI.Button>().colors;
                     ////colorBlock.normalColor = randomColor;
                     ////Button.GetComponentInChildren<UnityEngine.UI.Button>().colors = colorBlock;
                     //Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
-                    
+
                     Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructFriendButton(Lobby_GeneralManager.LobbyManager_Instance.memberList.Find(x => x.Id == friend));
                     Button.transform.SetParent(MenuVector.transform);
                 }
             }
-                //ikgkgogkr
-
-            if (!ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Find(x => x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().Team_Index == i && x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId == 0))
+            //ikgkgogkr
+            GameObject trygetSwitchButton = ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Find(x => x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().Team_Index == i && x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId == 0);
+            if (trygetSwitchButton == null)
             {
                 GameObject SwitchButton;
-                Debug.Log("hello");
                 SwitchButton = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooled_TeamSwitchObject(i);
                 SwitchButton.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton();
                 SwitchButton.transform.SetParent(MenuVector.transform);
+                SwitchButton.transform.SetSiblingIndex(OrderIndex);
+                
             }
+            else
+            {
+                trygetSwitchButton.transform.SetSiblingIndex(OrderIndex);
+            }
+            OrderIndex++;
 
-
-                //if(ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Count > 0)
-                //{
-                //    if (!ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Find(x => x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId == friend))
-                //    {
-                //        Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject(MenuVector, friend);
-                //        Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = friend;
-                //        Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
-                //        Buttons.Add(Button);
-                //    }
-                //}
-                //else
-                //{
-                //    Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject(MenuVector, friend);
-                //    Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = friend;
-                //    Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
-                //    Buttons.Add(Button);
-                //}
-                //Debug.Log("IAMTRIGGERING" + friend);
-                //Button = Instantiate(MenuPrefabButton, MenuVector);
-                ////ColorBlock colorBlock = Button.GetComponentInChildren<UnityEngine.UI.Button>().colors;
-                ////colorBlock.normalColor = randomColor;
-                ////Button.GetComponentInChildren<UnityEngine.UI.Button>().colors = colorBlock;
-                //Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
-                //Buttons.Add(Button);
-                //Debug.Log("ths is button count" + Buttons.Count);
+            //if(ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Count > 0)
+            //{
+            //    if (!ObjectPoolingScript.ObjectPoolingScript_Instance.ActiveObjects.Find(x => x.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId == friend))
+            //    {
+            //        Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject(MenuVector, friend);
+            //        Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = friend;
+            //        Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
+            //        Buttons.Add(Button);
+            //    }
+            //}
+            //else
+            //{
+            //    Button = ObjectPoolingScript.ObjectPoolingScript_Instance.GetPooledObject(MenuVector, friend);
+            //    Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ButtonId = friend;
+            //    Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
+            //    Buttons.Add(Button);
+            //}
+            //Debug.Log("IAMTRIGGERING" + friend);
+            //Button = Instantiate(MenuPrefabButton, MenuVector);
+            ////ColorBlock colorBlock = Button.GetComponentInChildren<UnityEngine.UI.Button>().colors;
+            ////colorBlock.normalColor = randomColor;
+            ////Button.GetComponentInChildren<UnityEngine.UI.Button>().colors = colorBlock;
+            //Button.GetComponentInChildren<Lobby_Player_Buttons_Helpers>().ConstructTeamButton(friend);
+            //Buttons.Add(Button);
+            //Debug.Log("ths is button count" + Buttons.Count);
         }
 
         VerticalLayoutGroup.CalculateLayoutInputVertical();
@@ -516,7 +529,8 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
                 network_teamList.Value.ListClass[current_playerTeam].Friends.Remove(steamId);
 
                 network_teamList.Value.ListClass[requested_playerTeam].Friends.Add(steamId);
-                
+
+                finalizedTeam = requested_playerTeam;
             }
             else 
             {
@@ -543,27 +557,47 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
 
     public async void SwitchPlayerTeam(int teamId)
     {
-        if (myTeam == -2)
+        Debug.Log("switching please");
+       
+        for (int i = 0; i < network_teamList.Value.ListClass.Count; i++)
         {
-            for (int i = 0; i < network_teamList.Value.ListClass.Count; i++)
-            {
-                TeamClass team = network_teamList.Value.ListClass[i];
-                if (team.Friends.Contains(SteamClient.SteamId)) myTeam = i;
-            }
+            TeamClass team = network_teamList.Value.ListClass[i];
+            if (team.Friends.Contains(SteamClient.SteamId)) myTeam = i;
         }
         
-        //switch teams locally
-        
+
+        if (myTeam == teamId) return;
+/*        else
+        {
+            if (network_teamList.Value.ListClass[teamId].Friends.Count < Mathf.CeilToInt(Lobby_GeneralManager.LobbyManager_Instance.memberList.Count / slider.value))
+            {
+                //has space
+
+                network_teamList.Value.ListClass[myTeam].Friends.Remove(SteamClient.SteamId);
+
+                network_teamList.Value.ListClass[teamId].Friends.Add(SteamClient.SteamId);
+            }
+            else
+            {
+                return;
+            }
+
+            //shuffle teams, try
+            //else, keep player on same team
+        }*/
+
         TeamVerified = false;
 
         while (TeamVerified == false)
         {
-            Debug.Log("waiting for fucking" + myTeam);
+            Debug.Log("waiting for fucking" + myTeam + network_teamList.Value.ListClass[myTeam].Friends.Contains(SteamClient.SteamId));
             RequestTeam_ServerRPC(teamId, myTeam, SteamClient.SteamId, NetworkManager.LocalClientId);
             await Task.Yield();
         }
 
         if (myTeam != teamId) { } //switch unsuccessful
+        Debug.Log("fartteehee");
+        UpdateUIList();
     }
 }
 

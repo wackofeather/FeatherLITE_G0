@@ -1502,6 +1502,8 @@ MonoBehaviour:
   enemyMask:
     serializedVersion: 2
     m_Bits: 256
+  appliedRecoil: {x: 0, y: 0}
+  totalRecoil: {x: 0, y: 0}
 --- !u!114 &2542861758873681554
 MonoBehaviour:
   m_ObjectHideFlags: 0

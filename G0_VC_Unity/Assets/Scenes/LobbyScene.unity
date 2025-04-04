@@ -801,13 +801,15 @@ MonoBehaviour:
   spacerObject: {fileID: 0}
   JoinTeamButton: {fileID: 555149971087533333, guid: 34aa42876deceb04caa532693a631c11, type: 3}
   Trigger: {fileID: 0}
-  teamLists:
+  network_teamList:
     m_InternalValue:
       test: 1
       ListClass: []
   TeamSizeNetwork:
     m_InternalValue: 0
   GameID: 0
+  myTeam: -2
+  TeamVerified: 1
 --- !u!1 &370938478
 GameObject:
   m_ObjectHideFlags: 0
@@ -3560,11 +3562,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1442031627}
         m_TargetAssemblyTypeName: MapButton, Assembly-CSharp
-        m_MethodName: OnVoteChanged
-        m_Mode: 2
+        m_MethodName: OnToggle
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 1442031628}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Toggle, UnityEngine.UI
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

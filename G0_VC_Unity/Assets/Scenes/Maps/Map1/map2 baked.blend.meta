@@ -28,7 +28,12 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: flooring
-    second: {fileID: 2100000, guid: 592a70aae84ca4f49aca935ab3e795eb, type: 2}
+    second: {fileID: 2100000, guid: 1c6fa4ac37ce60e49acec8aaa53c1301, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: flooring.002
+    second: {fileID: 2100000, guid: 1c6fa4ac37ce60e49acec8aaa53c1301, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -52,6 +57,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: greeble1.002
+    second: {fileID: 2100000, guid: 9e4def82aad45f442bde319a73d1ccdd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: greeble2
     second: {fileID: 2100000, guid: 54be13e413d3b064a9af2b73b172fdf7, type: 2}
   - first:
@@ -72,8 +82,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: main panel.002
+    second: {fileID: 2100000, guid: ffd2e99cd359632469651de1e95f80df, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: metal sheet
     second: {fileID: 2100000, guid: 4668186e67c026749a73796e341734ab, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal sheet.002
+    second: {fileID: 2100000, guid: b9eb9166c9880224a9e73a49f8945b52, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -92,8 +112,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: roofing.002
+    second: {fileID: 2100000, guid: 95732c09948b82845aebe4fea42bdfbf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: secondary panel
     second: {fileID: 2100000, guid: 26d5c84985e70f64ca2387e6ed01a658, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: secondary panel.002
+    second: {fileID: 2100000, guid: be42e8d6b3dafb445b9a8e1e8704776d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

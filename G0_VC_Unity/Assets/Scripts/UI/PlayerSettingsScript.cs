@@ -7,6 +7,7 @@ using UnityEditor;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 public class PlayerSettingsScript : MonoBehaviour
 {
     public ColorBlock resetColor;
@@ -27,15 +28,13 @@ public class PlayerSettingsScript : MonoBehaviour
     public TMP_Text sensitivityvalueText;
     public TMP_Text audioValueText;
     Resolution[] Allresolutions;
-    List<Resolution> SelectedResolution = new List<Resolution>();
-
+    
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         //loads playerprefs data
-        
         resolutionDropdown.value = PlayerPrefs.GetInt("Resolution", 0);
         vsyncDropdown.value = PlayerPrefs.GetInt("VSync", 0);
         graphicsDropdown.value = PlayerPrefs.GetInt("Graphics", 0);
@@ -46,21 +45,29 @@ public class PlayerSettingsScript : MonoBehaviour
         resetColor = saveButton.colors;
         resetColor.normalColor = new UnityEngine.Color(1, 0, 1, 0);
         saveButton.colors = resetColor;
+        int x = Screen.currentResolution.width;
+        int y = Screen.currentResolution.height;
+        Screen.SetResolution(x, y, true);        
+
+
 
         Allresolutions = Screen.resolutions;
-        List<string> resolutionStringList = new List<string>();
         string newRes;
-        foreach (Resolution res in Allresolutions)
+        HashSet<string> selectedResolutionHashset = new HashSet<string>();
+        foreach (Resolution res in Allresolutions)  
         {
-            newRes = res.width.ToString() + "x" + res.height.ToString();
-            if (!resolutionStringList.Contains(newRes))
-            {
-                resolutionStringList.Add(newRes);
-                SelectedResolution.Add(res);
-            }
-            
+
+            newRes = res.width.ToString() + " x " + res.height.ToString();
+             
+                if (res.width / res.height == 16 / 9 && !selectedResolutionHashset.Contains(newRes) && res.refreshRateRatio.value == Screen.currentResolution.refreshRateRatio.value)
+                {
+                    selectedResolutionHashset.Add(newRes);
+                }
         }
-        resolutionDropdown.AddOptions(resolutionStringList);
+        
+        List<string> selectedResolutionList = new List<string>(selectedResolutionHashset);
+        resolutionDropdown.AddOptions(selectedResolutionList);
+
     }
 
 
@@ -76,7 +83,6 @@ public class PlayerSettingsScript : MonoBehaviour
         PlayerPrefs.SetInt("Graphics", graphicsDropdown.value);
         PlayerPrefs.SetFloat("Audio", audioSlider.value);
         PlayerPrefs.SetInt("VSync",vsyncDropdown.value);
-        Debug.Log(Screen.resolutions);
         PlayerPrefs.Save();
     }
 

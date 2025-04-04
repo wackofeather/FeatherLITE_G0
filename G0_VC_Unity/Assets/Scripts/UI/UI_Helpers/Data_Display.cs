@@ -30,11 +30,11 @@ public class Data_Display:MonoBehaviour
     //GUI Image, text Script, lobby entry ui: image text button function says initializing image text 
     //Screen_UI Lobby List Manager 
 
-    //public void clicky2()
-    //{
-    //    //SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(x));
-    //    Debug.Log("hehe");
-    //}
+    public void LobbyOnClick()
+    {
+        //SteamLobbyManager.instance.JoinLobbyAsync(Convert.ToUInt64(x));
+        UpdateLobbyListUI();
+    }
     //void Calculation()
     //{
     //    lobbyList2.Add(1);

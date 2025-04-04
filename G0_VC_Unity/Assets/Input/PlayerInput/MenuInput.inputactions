@@ -1,0 +1,46 @@
+{
+    "name": "MenuInput",
+    "maps": [
+        {
+            "name": "MenuNavigate",
+            "id": "cdb4f3d6-adfc-45c8-aab6-acd2b92f6efd",
+            "actions": [
+                {
+                    "name": "MoveUpDownMenuButtons",
+                    "type": "Button",
+                    "id": "04bbea1d-47cb-4c6d-9e66-077aa87837f5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "4c54b98b-2490-4426-9051-61a745bcc46d",
+                    "path": "<Gamepad>/dpad/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveUpDownMenuButtons",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Gamepad Control Scheme",
+            "bindingGroup": "Gamepad Control Scheme",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
+}

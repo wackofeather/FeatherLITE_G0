@@ -4,6 +4,7 @@ using TMPro;
 using Steamworks.Data;
 using System.Drawing;
 using UnityEditor;
+using UnityEngine.EventSystems;
 public class PlayerSettingsScript : MonoBehaviour
 {
     public ColorBlock resetColor;
@@ -45,6 +46,11 @@ public class PlayerSettingsScript : MonoBehaviour
         saveButton.colors = resetColor;
     }
 
+    private void OnEnable()
+    {
+        EventSystem.current.SetSelectedGameObject(frameLimitSlider.gameObject);
+
+    }
     public void VsyncToggle()
     {
         if (vSyncToggle.isOn == true)

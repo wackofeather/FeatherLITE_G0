@@ -11,6 +11,7 @@ public class Menu_UI_Manager : UI_Manager
     [SerializeField] public Button CreateGameButton;
     [SerializeField] public Button JoinGameButton;
     [SerializeField] public Button SettingsButton;
+    
     [HideInInspector] public int MainKey;
 
 
@@ -57,6 +58,8 @@ public class Menu_UI_Manager : UI_Manager
         //SceneManager.LoadScene("LobbyScene");
        
     }
+
+ 
     //public void onClicky2()
     //{
     //    Debug.Log("mimi"); 

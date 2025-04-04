@@ -6,6 +6,7 @@ using Steamworks.Data;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.DebugUI;
 
@@ -17,6 +18,7 @@ public class Data_Display:MonoBehaviour
     public VerticalLayoutGroup VerticalLayoutGroup;
     public TMP_InputField LobbyInput;
     public UnityEngine.UI.Button joinLobby;
+    public GameObject JoinGameInputButton;
     Dictionary<ulong,GameObject>lobbyList = new Dictionary<ulong,GameObject>();
     //List<int>lobbyList2 = new List<int>();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -37,6 +39,12 @@ public class Data_Display:MonoBehaviour
     //{
     //    lobbyList2.Add(1);
     //}
+
+    private void OnEnable()
+    {
+            EventSystem.current.SetSelectedGameObject(JoinGameInputButton);
+        
+    }
     private void Start()
     {
 
@@ -44,6 +52,14 @@ public class Data_Display:MonoBehaviour
         
         InvokeRepeating("UpdateLobbyListUI", 0, 10);
     }
+
+    //public void checkIfInputFieldMove()
+    //{
+    //    if (LobbyInput.)
+    //    {
+            
+    //    }
+    //}
     void UpdateLobbyListUI()
     {
         //foreach(GameObject lobbyButton in lobbyList.Values)

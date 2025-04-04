@@ -27,6 +27,7 @@ public class PlayerSettingsScript : MonoBehaviour
     public TMP_Text frameRateText;
     public TMP_Text sensitivityvalueText;
     public TMP_Text audioValueText;
+    HashSet<string> selectedResolutionHashset = new HashSet<string>();
     Resolution[] Allresolutions;
     
 
@@ -35,12 +36,17 @@ public class PlayerSettingsScript : MonoBehaviour
     void Start()
     {
         //loads playerprefs data
-        resolutionDropdown.value = PlayerPrefs.GetInt("Resolution", 0);
+        
         vsyncDropdown.value = PlayerPrefs.GetInt("VSync", 0);
+        VSyncDropdown();
         graphicsDropdown.value = PlayerPrefs.GetInt("Graphics", 0);
+        dropdownvalueGraphics();
         SensitivitySlider.value = PlayerPrefs.GetFloat("Sens", 50f);
+        sensitivityBarValueChange();
         frameRateDropdown.value = PlayerPrefs.GetInt("Frames", 11);
+        framerateDropdown();
         audioSlider.value = PlayerPrefs.GetFloat("Audio", 100f);
+        audioSliderValue();
         //sets save button color
         resetColor = saveButton.colors;
         resetColor.normalColor = new UnityEngine.Color(1, 0, 1, 0);
@@ -53,13 +59,13 @@ public class PlayerSettingsScript : MonoBehaviour
 
         Allresolutions = Screen.resolutions;
         string newRes;
-        HashSet<string> selectedResolutionHashset = new HashSet<string>();
+        
         foreach (Resolution res in Allresolutions)  
         {
 
             newRes = res.width.ToString() + " x " + res.height.ToString();
              
-                if (res.width / res.height == 16 / 9 && !selectedResolutionHashset.Contains(newRes) && res.refreshRateRatio.value == Screen.currentResolution.refreshRateRatio.value)
+                if ( res.width >= 1280 && res.height >= 720)
                 {
                     selectedResolutionHashset.Add(newRes);
                 }
@@ -67,6 +73,9 @@ public class PlayerSettingsScript : MonoBehaviour
         
         List<string> selectedResolutionList = new List<string>(selectedResolutionHashset);
         resolutionDropdown.AddOptions(selectedResolutionList);
+
+        resolutionDropdown.value = PlayerPrefs.GetInt("Resolution", selectedResolutionHashset.Count - 1);
+        dropdownvalueResolution();
 
     }
 
@@ -95,7 +104,7 @@ public class PlayerSettingsScript : MonoBehaviour
         frameRateDropdown.value = 11;
         SensitivitySlider.value = 50f;
         audioSlider.value = 100f;
-        resolutionDropdown.value = 0;
+        resolutionDropdown.value = selectedResolutionHashset.Count - 1;
         graphicsDropdown.value = 0;
         vsyncDropdown.value = 0;
     }
@@ -117,7 +126,7 @@ public class PlayerSettingsScript : MonoBehaviour
     //all the funtions called for each menu option
 
     //dropdown for resolution 
-    public void dropdownvalueResolution(int index)
+    public void dropdownvalueResolution()
     {
         resolutiondropDownInt = resolutionDropdown.value;
         switch (resolutiondropDownInt)
@@ -135,7 +144,7 @@ public class PlayerSettingsScript : MonoBehaviour
         saveButton.colors = saveButtonColor;
     }
 
-    public void dropdownvalueGraphics(int index)
+    public void dropdownvalueGraphics()
     {
         graphicsdropDownInt = graphicsDropdown.value;
         switch (graphicsdropDownInt)

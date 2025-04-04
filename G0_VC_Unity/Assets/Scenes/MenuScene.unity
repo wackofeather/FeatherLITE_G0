@@ -1268,7 +1268,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 720
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -6183,7 +6183,6 @@ GameObject:
   - component: {fileID: 1231999058}
   - component: {fileID: 1231999057}
   - component: {fileID: 1231999056}
-  - component: {fileID: 1231999055}
   m_Layer: 5
   m_Name: SaveButton
   m_TagString: Untagged
@@ -6211,45 +6210,6 @@ RectTransform:
   m_AnchoredPosition: {x: 660, y: -580}
   m_SizeDelta: {x: 200, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1231999055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1231999053}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8bc6684e2d12cd43a0631ae6c14699d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resetColor:
-    m_NormalColor: {r: 0, g: 0, b: 0, a: 0}
-    m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_PressedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_SelectedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0
-  saveButtonColor:
-    m_NormalColor: {r: 0, g: 0, b: 0, a: 0}
-    m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_PressedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_SelectedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0
-  resolutionDropdown: {fileID: 1959899908}
-  graphicsDropdown: {fileID: 807300240}
-  vsyncDropdown: {fileID: 1907621884}
-  frameRateDropdown: {fileID: 925108962}
-  SensitivitySlider: {fileID: 274841589}
-  audioSlider: {fileID: 1902785698}
-  resetButton: {fileID: 1478800682}
-  saveButton: {fileID: 1231999056}
-  frameRateText: {fileID: 408772575}
-  sensitivityvalueText: {fileID: 716273246}
-  audioValueText: {fileID: 1885554686}
 --- !u!114 &1231999056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7518,7 +7478,6 @@ GameObject:
   - component: {fileID: 1478800684}
   - component: {fileID: 1478800683}
   - component: {fileID: 1478800682}
-  - component: {fileID: 1478800681}
   m_Layer: 5
   m_Name: ResetButton
   m_TagString: Untagged
@@ -7546,45 +7505,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -580}
   m_SizeDelta: {x: 200, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1478800681
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1478800679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8bc6684e2d12cd43a0631ae6c14699d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resetColor:
-    m_NormalColor: {r: 0, g: 0, b: 0, a: 0}
-    m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_PressedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_SelectedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0
-  saveButtonColor:
-    m_NormalColor: {r: 0, g: 0, b: 0, a: 0}
-    m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_PressedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_SelectedColor: {r: 0, g: 0, b: 0, a: 0}
-    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0
-  resolutionDropdown: {fileID: 1959899908}
-  graphicsDropdown: {fileID: 807300240}
-  vsyncDropdown: {fileID: 1907621884}
-  frameRateDropdown: {fileID: 925108962}
-  SensitivitySlider: {fileID: 274841589}
-  audioSlider: {fileID: 1902785698}
-  resetButton: {fileID: 1478800682}
-  saveButton: {fileID: 1231999056}
-  frameRateText: {fileID: 408772575}
-  sensitivityvalueText: {fileID: 716273246}
-  audioValueText: {fileID: 1885554686}
 --- !u!114 &1478800682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7629,7 +7549,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1478800681}
+      - m_Target: {fileID: 515672329}
         m_TargetAssemblyTypeName: PlayerSettingsScript, Assembly-CSharp
         m_MethodName: deleteData
         m_Mode: 1

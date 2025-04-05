@@ -318,16 +318,21 @@ public class SteamLobbyManager : MonoBehaviour
 
                 SceneManager.sceneLoaded += OnRegularSceneLoaded; //when Scene Loaded call this. 
 
-                //SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
-                SceneManager.LoadScene("LobbyScene");
-                //SceneManager.LoadScene(gameSetupScene); 
-
-                while (true)
+                if (currentLobby.GetData("Map") == "Lobby") SceneManager.LoadScene("LobbyScene");
+                else
                 {
-                    if (gameSceneLoaded == true) { break; }
-                    Debug.Log("beep");
-                    yield return null;
+                    SceneManager.LoadScene(gameSetupScene);
                 }
+                    //SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
+                    //SceneManager.LoadScene("LobbyScene");
+                    //SceneManager.LoadScene(gameSetupScene); 
+
+                    while (true)
+                    {
+                        if (gameSceneLoaded == true) { break; }
+                        Debug.Log("beep");
+                        yield return null;
+                    }
 
                 SceneManager.sceneLoaded -= OnRegularSceneLoaded;
             }
@@ -398,7 +403,11 @@ public class SteamLobbyManager : MonoBehaviour
                 SceneManager.sceneLoaded += OnRegularSceneLoaded;
 
                 //SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
-                SceneManager.LoadScene("LobbyScene");
+                if (currentLobby.GetData("Map") == "Lobby") SceneManager.LoadScene("LobbyScene");
+                else
+                {
+                    SceneManager.LoadScene(gameSetupScene);
+                }
 
 
                 while (true)

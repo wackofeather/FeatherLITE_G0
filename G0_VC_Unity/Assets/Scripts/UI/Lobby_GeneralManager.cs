@@ -47,22 +47,23 @@ public class Lobby_GeneralManager : GeneralManager
 
     public override void _Update()
     {
-        if (IsServer)
+        if (!IsServer)
         {
             //CurrentGameMode_Int.Value = CurrentGameMode.GameModeKey;
+            if (SteamLobbyManager.currentLobby.GetData("Map") != "Lobby")
+            {
+                GoToGame();
+            }
+        }
+        else
+        {
             countDown.Value -= Time.deltaTime;
             if (countDown.Value <= 0)
             {
                 SteamLobbyManager.currentLobby.SetData("Map", GetVotedMap());
                 GoToGame();
             }
-        }
-        else
-        {
-            if (SteamLobbyManager.currentLobby.GetData("Map") != "Lobby")
-            {
-                GoToGame();
-            }
+            
         }
 
         if (myVote != null) { ServerSendMyVote_ServerRPC(SteamClient.SteamId, myVote.mapData.MapName); }

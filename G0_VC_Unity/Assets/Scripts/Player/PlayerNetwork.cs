@@ -35,7 +35,7 @@ public class PlayerNetwork : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-
+        Debug.Log("krakalakin");
         if (IsOwner) _SteamID.Value = SteamClient.SteamId;
 
         StartCoroutine(NetworkSpawnCoroutine());
@@ -63,7 +63,7 @@ public class PlayerNetwork : NetworkBehaviour
                     data.playerObject = _playerObj;
                     Game_GeneralManager.instance.Player_LookUp[_SteamID.Value] = data;*/
         SendNetworkInfo();
-
+        Debug.Log("gaymering" + IsOwner);
         if (IsOwner) Game_GeneralManager.game_instance.runtime_playerObj = _playerObj;
         inventory = playerStateMachine.gameObject.GetComponentInChildren<Player_Inventory>();
         Exterior = playerStateMachine.Exterior.gameObject;

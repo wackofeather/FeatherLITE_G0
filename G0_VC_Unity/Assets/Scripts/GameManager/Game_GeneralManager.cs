@@ -67,7 +67,7 @@ public class Game_GeneralManager : GeneralManager
 
     public PlayerNetworkState myPlayerState;
 
-    [HideInInspector] public GameObject runtime_playerObj;
+    public GameObject runtime_playerObj;
 
     
 
@@ -91,6 +91,12 @@ public class Game_GeneralManager : GeneralManager
     {
         base._Start();
 
+        string GameMode = SteamLobbyManager.currentLobby.GetData("GameMode");
+        if (GameMode == "FFA")
+        {
+            gameMode = new FFA_gameMode();
+        }
+
         LoadGameScene();
     }
 
@@ -98,6 +104,7 @@ public class Game_GeneralManager : GeneralManager
     {
         await SceneManager.LoadSceneAsync(mapLookup.GetMapLookUp()[SteamLobbyManager.currentLobby.GetData("Map")], LoadSceneMode.Additive);
 
+        while (!NetworkManager.Singleton.IsConnectedClient) { await Task.Yield(); }
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(mapLookup.GetMapLookUp()[SteamLobbyManager.currentLobby.GetData("Map")]));
         currentMap = GameObject.FindFirstObjectByType<Runtime_MapData>();
 
@@ -109,11 +116,7 @@ public class Game_GeneralManager : GeneralManager
             Env_Container.GetComponent<NetworkObject>().DestroyWithScene = false;
             Env_Container.GetComponent<NetworkObject>().DontDestroyWithOwner = true;
         }
-        string GameMode = SteamLobbyManager.currentLobby.GetData("GameMode");
-        if (GameMode == "FFA")
-        {
-            gameMode = new FFA_gameMode();
-        }
+        
 
         OnConnectedToSession(false);
     }
@@ -123,7 +126,7 @@ public class Game_GeneralManager : GeneralManager
         base._OnNetworkSpawn();
 
        
-
+        
         //DontDestroyOnLoad(this.gameObject);
 
     }

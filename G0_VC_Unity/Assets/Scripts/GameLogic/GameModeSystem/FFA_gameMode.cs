@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -13,13 +14,20 @@ public class FFA_gameMode : BaseGameMode
         playerNetworkObject.playerStateMachine.gameObject.layer = LayerMask.NameToLayer("ENEMY");
     }
 
-    public override void OwnerSideRespawnPlayer(NetworkObjectReference playerNetworkObject, int SpawnTicker, RpcParams _param)
+    public async override void OwnerSideRespawnPlayer(NetworkObjectReference playerNetworkObject, int SpawnTicker, RpcParams _param)
     {
         base.OwnerSideRespawnPlayer(playerNetworkObject, SpawnTicker, _param);
 
         playerNetworkObject.TryGet(out NetworkObject playerObj);
+        await Task.Yield();
         Debug.Log("networkobject is" + Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count]);
-        playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.gameObject.transform.position = Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position;//.rb.MovePosition(SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position);
+        playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.gameObject.transform.position = Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position;
+        while (playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.rb.position != Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position)
+        {
+            playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.rb.position = Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position;
+            await Task.Yield();
+        }
+        //.rb.MovePosition(SpawnPlaces[internalSpawnTicker % SpawnPlaces.Count].position);
         playerObj.gameObject.GetComponent<PlayerNetwork>().SetHealthRPC(100, Game_GeneralManager.game_instance.RpcTarget.Owner);
         Debug.LogWarning(Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position + "missed the train");
     }

@@ -16,6 +16,8 @@ public class GunClass : WeaponClass
     [SerializeField] float bulletSpeed;
     
 
+    public Vector2 recoilAmount;
+    public float shootBackSpeed;
     public override void Weapon_Init()
     {
         base.Weapon_Init();
@@ -30,8 +32,9 @@ public class GunClass : WeaponClass
 
     public override void Weapon_Update()
     {
+        base.Weapon_Update();
         //Debug.Log(player.inventory.isScoping);
-        //if (!player.networkInfo._isOwner) Debug.LogWarning("Blah");
+
         player.player_EXT_ARM_anim_controller.SetBool("Scoping", inventory.isScoping);
 
         player.player_EXT_ARM_anim_controller.SetBool("Firing", inventory.isShooting);
@@ -53,9 +56,7 @@ public class GunClass : WeaponClass
             return;
         }
 
-
-        base.Weapon_Update();
-
+        
         player.player_VP_ARM_anim_controller.SetBool("Scoping", inventory.isScoping);
 
         player.player_VP_ARM_anim_controller.SetBool("Firing", inventory.isShooting);
@@ -68,10 +69,13 @@ public class GunClass : WeaponClass
 
         inventory.VP_GetCurrentWeaponAnimator().SetBool("Reloading", inventory.isReloading);
 
+        if (shootingTimer > 0) return;
+
         if (player.inventory.isReloading) { return; }
 
 
         if (weaponData.fireInput.action.IsPressed() && !player.isMelee && !inventory.isShooting) shootCoroutine();
+        
 
 
         if (player.inventory.isReloading) { return; }
@@ -87,22 +91,26 @@ public class GunClass : WeaponClass
     public virtual async void shootCoroutine()
     {
 
+        if (shootingTimer > 0) return;
         if (currentAmmo <= 0)
         {
-            Reload();
+            if (!player.inventory.isReloading) Reload();
             return;
         }
-/*        if (player.IsOwner) 
-    {*/
+        /*        if (player.IsOwner) 
+            {*/
+
+        Debug.Log("sheet  " + key + "   " + player.inventory.GetCurrentWeapon());
         inventory.isShooting = true;
         while (true)
         {
             if (currentAmmo <= 0) break;
             if (!weaponData.fireInput.action.IsPressed()) break;
             if (player.isMelee) break;
+            if (!player.inventory.isShooting) break;
 
             ShootLogic();
-
+            Debug.Log(currentAmmo);
             currentAmmo -= 1;
 
             if (player.playerNetwork != null) player.playerNetwork.DummyShootRPC();
@@ -139,11 +147,20 @@ public class GunClass : WeaponClass
     }
     public virtual async Task<bool> ShootLogic()
     {
+        //player.rb.AddForce(player.PlayerCamera.forward * -shootBackForce, ForceMode.Impulse);
+        if (!(Vector3.Dot((player.PlayerCamera.forward * -shootBackSpeed).normalized, player.rb.linearVelocity.normalized) > -0.1f && player.rb.linearVelocity.magnitude > shootBackSpeed))
+        {
+            player.rb.AddForce(player.PlayerCamera.forward * -shootBackSpeed, ForceMode.VelocityChange);
+           /* Vector3 shootBackForce = Vector3.ClampMagnitude(((player.PlayerCamera.forward * -shootBackSpeed) - player.rb.linearVelocity) * 0.1f, shootBackSpeed);
+            player.rb.AddForce(shootBackForce, ForceMode.VelocityChange);*/
+        }
+        player.totalRecoil += recoilAmount;
+
         RaycastHit hit = new RaycastHit();
         //if (Physics.Raycast(inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position, ))
         if (Physics.Raycast(player.PlayerCamera.transform.position, player.PlayerCamera.TransformDirection(Vector3.forward), out hit, 500f))
         {
-            HS_Poolable toShoot = HS_PoolableManager.instance.GetInstanceOf(gunData.bulletFX.GetComponent<HS_Poolable>());
+           /* HS_Poolable toShoot = HS_PoolableManager.instance.GetInstanceOf(gunData.bulletFX.GetComponent<HS_Poolable>());
             toShoot.transform.position = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.position;
             Debug.Log("Pre-Pre-Pre-Chipotle");
             toShoot.transform.rotation = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.rotation;
@@ -165,6 +182,9 @@ public class GunClass : WeaponClass
                 bloodSpatter.transform.rotation = Quaternion.Euler(hit.normal);
                 bloodSpatter.gameObject.SetActive(true);
             }
+            toShoot.gameObject.SetActive(true);*/
+
+            if (hit.collider.gameObject.layer == Mathf.RoundToInt(Mathf.Log(player.enemyMask.value, 2))) { hit.collider.gameObject.GetComponent<PlayerStateMachine>().LocalDamage(1); Debug.LogAssertion("hit!"); }
         }
 
         return true;
@@ -183,8 +203,39 @@ public class GunClass : WeaponClass
 
         player.inventory.isReloading = true;
         
-        await Task.Delay(Mathf.FloorToInt(weaponData.reloadTime * 1000) + 1);
+        float reloadStartTime = Time.time;
+        //await Task.Delay(Mathf.FloorToInt(weaponData.reloadTime * 1000) + 1);
+
+        player.ChangeState(player.ReloadState);
+
+        while (Time.time - reloadStartTime < weaponData.reloadTime)
+        {
+            if (Time.time - reloadStartTime > weaponData.reloadTime * 0.93f) currentAmmo = weaponData.maxAmmo_Inventory;
+            if (!player.inventory.isReloading) return;
+            await Task.Yield();
+        }
+
+        if (!player.inventory.isReloading) return;
+        player.ChangeState(player.RegularState);
+
         currentAmmo = weaponData.maxAmmo_Inventory;
+
         player.inventory.isReloading = false;
+    }
+
+    public override void ExitWeapon()
+    {
+        base.ExitWeapon();
+
+
+        if (player.networkInfo._isOwner)
+        {
+            if (player.inventory.isReloading)
+            {
+                player.inventory.isReloading = false;
+                player.ChangeState(player.RegularState);
+            }
+
+        }
     }
 }

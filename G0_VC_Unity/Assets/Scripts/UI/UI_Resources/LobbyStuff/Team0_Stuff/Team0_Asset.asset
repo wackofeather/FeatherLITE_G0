@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b973a77fa4c46844dad9165ecd6ba537, type: 3}
+  m_Name: Team0_Asset
+  m_EditorClassIdentifier: 
+  teamSwitchButton: {fileID: 7685989939280807055, guid: 8d0e951a1b067b74ba01485f6b371e33, type: 3}
+  teamPlayerThumbnail: {fileID: 7685989939280807055, guid: 90a0a19c07fb33b4bb29e50a1f539d4a, type: 3}
+  teamId: 0

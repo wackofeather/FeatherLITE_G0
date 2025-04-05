@@ -67,7 +67,7 @@ public class Game_GeneralManager : GeneralManager
 
     public PlayerNetworkState myPlayerState;
 
-    [HideInInspector] public GameObject runtime_playerObj;
+    public GameObject runtime_playerObj;
 
     
 
@@ -91,6 +91,12 @@ public class Game_GeneralManager : GeneralManager
     {
         base._Start();
 
+        string GameMode = SteamLobbyManager.currentLobby.GetData("GameMode");
+        if (GameMode == "FFA")
+        {
+            gameMode = new FFA_gameMode();
+        }
+
         LoadGameScene();
     }
 
@@ -98,15 +104,11 @@ public class Game_GeneralManager : GeneralManager
     {
         await SceneManager.LoadSceneAsync(mapLookup.GetMapLookUp()[SteamLobbyManager.currentLobby.GetData("Map")], LoadSceneMode.Additive);
 
+        while (!NetworkManager.Singleton.IsConnectedClient) { await Task.Yield(); }
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(mapLookup.GetMapLookUp()[SteamLobbyManager.currentLobby.GetData("Map")]));
         currentMap = GameObject.FindFirstObjectByType<Runtime_MapData>();
 
         Env_Container = currentMap.gameObject;
-    }
-
-    public override void _OnNetworkSpawn()
-    {
-        base._OnNetworkSpawn();
 
         if (IsHost)
         {
@@ -114,23 +116,27 @@ public class Game_GeneralManager : GeneralManager
             Env_Container.GetComponent<NetworkObject>().DestroyWithScene = false;
             Env_Container.GetComponent<NetworkObject>().DontDestroyWithOwner = true;
         }
-        string GameMode = SteamLobbyManager.currentLobby.GetData("GameMode");
-        if (GameMode == "FFA")
-        {
-            gameMode = new FFA_gameMode();
-        }
+        
 
+        OnConnectedToSession(false);
+    }
+
+    public override void _OnNetworkSpawn()
+    {
+        base._OnNetworkSpawn();
+
+       
+        
         //DontDestroyOnLoad(this.gameObject);
 
     }
 
     public override void OnLobbyDataChange(Lobby newLobbyData)
     {
-        Debug.LogAssertion("jeez louise  " + newLobbyData.Owner.Id + "   " + currentLobbyOwner);
+        //Debug.LogAssertion("jeez louise  " + newLobbyData.Owner.Id + "   " + currentLobbyOwner);
         //if (!wantConnection) return;
         if (currentLobbyOwner != newLobbyData.Owner.Id)
         {
-            Debug.LogAssertion("loooooooooooooooooooooook");
             if (HostMigrationCorT != null) StopCoroutine(HostMigrationCorT);
             if (JoiningGameCorT != null) StopCoroutine(JoiningGameCorT);
 
@@ -304,9 +310,8 @@ public class Game_GeneralManager : GeneralManager
         }
     }
 
-    public override void OnConnectedToSession(bool _reconnecting)
+    public void OnConnectedToSession(bool _reconnecting)
     {
-        base.OnConnectedToSession(_reconnecting);
         SpawnPlayerRPC(Steamworks.SteamClient.SteamId, NetworkManager.Singleton.LocalClientId, _reconnecting);
     }
 
@@ -360,12 +365,14 @@ public class Game_GeneralManager : GeneralManager
     [Rpc(SendTo.Server, RequireOwnership = false)]
     public virtual void Server_SpawnPlayerForGameRPC(NetworkObjectReference playerNetworkObject, ulong NetworkID)
     {
+        Debug.Log("tgif");
         gameMode.ServerSideRespawnplayer(playerNetworkObject, NetworkID);
     }
 
     [Rpc(SendTo.SpecifiedInParams, RequireOwnership = false)]
     public virtual void Owner_SpawnPlayerForGameRPC(NetworkObjectReference playerNetworkObject,  int SpawnTicker, RpcParams _param)
     {
+        
         gameMode.OwnerSideRespawnPlayer(playerNetworkObject, SpawnTicker, _param);
 
     }
@@ -528,11 +535,19 @@ public class Game_GeneralManager : GeneralManager
     {
         StartCoroutine(KillCoroutine(player));
     }
-
-    IEnumerator KillCoroutine(PlayerStateMachine player)
+    public void LocalKill(PlayerStateMachine player)
     {
         player.ChangeState(player.DeathState);
         player.rb.MovePosition(new Vector3(0, 0, -10000));
+    }
+    void KillInit(PlayerStateMachine player)
+    {
+        player.ChangeState(player.DeathState);
+        player.rb.MovePosition(new Vector3(0, 0, -10000));
+    }
+    IEnumerator KillCoroutine(PlayerStateMachine player)
+    {
+        KillInit(player);
         float timer = 3;
         while (timer > 0) 
         { 

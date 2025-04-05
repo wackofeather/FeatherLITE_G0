@@ -1137,8 +1137,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2904342871602623982}
   - {fileID: 5087725685347788842}
+  - {fileID: 2904342871602623982}
   - {fileID: 3205671146708248980}
   - {fileID: 7549162662110132104}
   - {fileID: 9170000013213899450}
@@ -1499,6 +1499,11 @@ MonoBehaviour:
   DamageCollider: {fileID: 8231590536858020204}
   ExtHealthBarLocation: {fileID: 1479086602378071219}
   extHealthBar: {fileID: 0}
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 256
+  appliedRecoil: {x: 0, y: 0}
+  totalRecoil: {x: 0, y: 0}
 --- !u!114 &2542861758873681554
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -92,14 +92,13 @@ public class SteamLobbyManager : MonoBehaviour
         //SteamFriends.OnGameLobbyJoinRequested += OnGameLobbyJoinRequest;
         //SteamMatchmaking.OnLobbyInvite += OnLobbyInvite;
 
+        //To get playerPrefs stuff
 
-
-
-       // NetworkManager.Singleton.SceneManager.OnLoadComplete += OnGameSceneLoaded;
+        // NetworkManager.Singleton.SceneManager.OnLoadComplete += OnGameSceneLoaded;
 
         SceneManager.LoadScene(MenuScene);
 
-
+       
 
         JoiningLobby = false;
     }
@@ -113,7 +112,7 @@ public class SteamLobbyManager : MonoBehaviour
     private void OnRegularSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
         //if (scene.name == GameScene) gameSceneLoaded = true;
-        if (mapLookup.GetMapLookUp().Values.Contains(scene.name)) gameSceneLoaded = true;
+        if (mapLookup.GetMapLookUp().Values.Contains(scene.name)| scene.name == "LobbyScene") gameSceneLoaded = true;
     }
 
     /*    void OnLobbyInvite(Friend friend, Lobby lobby)
@@ -233,7 +232,7 @@ public class SteamLobbyManager : MonoBehaviour
             }
             currentLobby = createLobbyOutput.Value;
             currentLobby.SetData("GameMode", "FFA");
-            currentLobby.SetData("Map", "Test");
+            currentLobby.SetData("Map", "Lobby");
             
 
             StartCoroutine(SteamLobbyManager.instance.JoiningGameCoroutine(currentLobby.Owner.Id, true, false));
@@ -317,18 +316,23 @@ public class SteamLobbyManager : MonoBehaviour
             {
                 gameSceneLoaded = false;
 
-                SceneManager.sceneLoaded += OnRegularSceneLoaded;
+                SceneManager.sceneLoaded += OnRegularSceneLoaded; //when Scene Loaded call this. 
 
-                //SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
-                SceneManager.LoadScene(gameSetupScene);
-
-
-                while (true)
+                if (currentLobby.GetData("Map") == "Lobby") SceneManager.LoadScene("LobbyScene");
+                else
                 {
-                    if (gameSceneLoaded == true) { break; }
-                    Debug.Log("beep");
-                    yield return null;
+                    SceneManager.LoadScene(gameSetupScene);
                 }
+                    //SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
+                    //SceneManager.LoadScene("LobbyScene");
+                    //SceneManager.LoadScene(gameSetupScene); 
+
+                    while (true)
+                    {
+                        if (gameSceneLoaded == true) { break; }
+                        Debug.Log("beep");
+                        yield return null;
+                    }
 
                 SceneManager.sceneLoaded -= OnRegularSceneLoaded;
             }
@@ -399,7 +403,11 @@ public class SteamLobbyManager : MonoBehaviour
                 SceneManager.sceneLoaded += OnRegularSceneLoaded;
 
                 //SceneManager.LoadScene(mapLookup.GetMapLookUp()[currentLobby.GetData("Map")], LoadSceneMode.Single);
-                SceneManager.LoadScene(gameSetupScene);
+                if (currentLobby.GetData("Map") == "Lobby") SceneManager.LoadScene("LobbyScene");
+                else
+                {
+                    SceneManager.LoadScene(gameSetupScene);
+                }
 
 
                 while (true)
@@ -439,7 +447,7 @@ public class SteamLobbyManager : MonoBehaviour
                         }*/
 
             //Game_GeneralManager.instance.SpawnPlayerRPC(Steamworks.SteamClient.SteamId);
-            Debug.LogWarning("kiki " + currentLobby.GetData("GameMode"));
+            //Debug.LogWarning("kiki " + currentLobby.GetData("GameMode"));
         }
 
 
@@ -452,7 +460,7 @@ public class SteamLobbyManager : MonoBehaviour
             yield return null;
         }
         Debug.LogWarning(GeneralManager.instance);
-        GeneralManager.instance.OnConnectedToSession(_reconnecting);
+        //GeneralManager.instance.OnConnectedToSession(_reconnecting);
 
         //Game_GeneralManager.instance.SpawnPlayerRPC(NetworkManager.Singleton.LocalClientId);
 
@@ -548,7 +556,7 @@ public class SteamLobbyManager : MonoBehaviour
             return false;
         }
     }*/
-
+    
     public void LeaveLobby()
     {
         try
@@ -593,6 +601,8 @@ public class SteamLobbyManager : MonoBehaviour
     {
         Debug.Log("ahh im dying");
     }
+
+
 
 
 }

@@ -18,7 +18,7 @@ public abstract class BaseGameMode
 
     }
 
-    public virtual void OwnerSideRespawnPlayer(NetworkObjectReference playerNetworkObject, int SpawnTicker, RpcParams _param)
+    public async virtual void OwnerSideRespawnPlayer(NetworkObjectReference playerNetworkObject, int SpawnTicker, RpcParams _param)
     {
 
     }

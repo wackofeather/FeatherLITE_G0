@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 586636029}
   - component: {fileID: 586636031}
+  - component: {fileID: 586636032}
   m_Layer: 0
   m_Name: SteamLobbyManager
   m_TagString: Untagged
@@ -172,6 +173,44 @@ MonoBehaviour:
   PreLoadScene: Game_PreLoadScene
   MenuScene: MenuScene
   JoiningLobby: 0
+--- !u!114 &586636032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 586636027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8bc6684e2d12cd43a0631ae6c14699d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resetColor:
+    m_NormalColor: {r: 0, g: 0, b: 0, a: 0}
+    m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0}
+    m_PressedColor: {r: 0, g: 0, b: 0, a: 0}
+    m_SelectedColor: {r: 0, g: 0, b: 0, a: 0}
+    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  saveButtonColor:
+    m_NormalColor: {r: 0, g: 0, b: 0, a: 0}
+    m_HighlightedColor: {r: 0, g: 0, b: 0, a: 0}
+    m_PressedColor: {r: 0, g: 0, b: 0, a: 0}
+    m_SelectedColor: {r: 0, g: 0, b: 0, a: 0}
+    m_DisabledColor: {r: 0, g: 0, b: 0, a: 0}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0
+  resolutionDropdown: {fileID: 0}
+  graphicsDropdown: {fileID: 0}
+  frameRateDropdown: {fileID: 0}
+  vsyncDropdown: {fileID: 0}
+  upscalingDropdown: {fileID: 0}
+  upscalingOptionsDropdown: {fileID: 0}
+  SensitivitySlider: {fileID: 0}
+  audioSlider: {fileID: 0}
+  resetButton: {fileID: 0}
+  saveButton: {fileID: 0}
 --- !u!1 &825287896
 GameObject:
   m_ObjectHideFlags: 0

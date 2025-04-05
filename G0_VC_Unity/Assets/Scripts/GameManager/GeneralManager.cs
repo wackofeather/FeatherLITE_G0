@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using static Game_GeneralManager;
 using static PlayerNetwork;
 using System.Linq;
+using UnityEngine.UI;
 public class GeneralManager : NetworkBehaviour
 {
     public static GeneralManager instance { get; set; }
@@ -20,10 +21,12 @@ public class GeneralManager : NetworkBehaviour
     public float testFloat;
 
     [HideInInspector] public ulong currentLobbyOwner;
-    
+
     [HideInInspector] public float NetworkID;
 
     [HideInInspector] public bool wantConnection;
+
+    private Slider FOVslider;
 
     internal Coroutine HostMigrationCorT;
     internal Coroutine JoiningGameCorT;
@@ -31,7 +34,6 @@ public class GeneralManager : NetworkBehaviour
 
     public NetworkVariable<ulong> CurrentHost = new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
     public NetworkVariable<ulong> BackupHost = new NetworkVariable<ulong>(writePerm: NetworkVariableWritePermission.Server);
-
 
 
     public void Awake()
@@ -47,6 +49,7 @@ public class GeneralManager : NetworkBehaviour
 
     private void Start()
     {
+
         _Start();
     }
 
@@ -65,6 +68,7 @@ public class GeneralManager : NetworkBehaviour
 
     public virtual void OnLobbyDataChange(Lobby newLobbyData)
     {
+        Debug.LogWarning("yeeyee ass haircut" + newLobbyData.GetData("Map"));
         Debug.LogAssertion("jeez louise  " + newLobbyData.Owner.Id + "   " + currentLobbyOwner);
         //if (!wantConnection) return;
         if (currentLobbyOwner != newLobbyData.Owner.Id)
@@ -77,10 +81,10 @@ public class GeneralManager : NetworkBehaviour
             HostMigrationCorT = StartCoroutine(HostMigrationCoroutine());
         }
     }
-    public virtual void OnConnectedToSession(bool _reconnecting)
-    {
+    /*    public virtual void OnConnectedToSession(bool _reconnecting)
+        {
 
-    }
+        }*/
     public virtual void PrepareHM()
     {
 
@@ -285,11 +289,11 @@ public class GeneralManager : NetworkBehaviour
         //Debug.LogWarning(Player_LookUp.Count);
 
     }
-    
+
     void Update()
     {
         _Update();
-        
+
     }
 
     public virtual void _Update()
@@ -312,9 +316,11 @@ public class GeneralManager : NetworkBehaviour
         {
             instance = this;
         }
-    }
+    } 
 
-    public void OnDestroy()
+}
+
+/*    public void OnDestroy()
     {
 
 
@@ -323,4 +329,10 @@ public class GeneralManager : NetworkBehaviour
         SteamLobbyManager.instance.LeaveLobby();
         Debug.LogAssertion("hoooooha");
     }
-}
+
+    //Options logic
+    public void saveData()
+    {
+
+    }
+}*/

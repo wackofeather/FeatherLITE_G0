@@ -94,7 +94,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 112000000, guid: 9d1e052224f21724592782408dabb06a, type: 2}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 1c95c90ce68601f4793d527ae37ef256, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -383,6 +383,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 946960429939075438, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1484659151753449795, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 1946425926
@@ -431,6 +435,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2453343013753710811, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2503827578517255046, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3023236164865272124, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.3
@@ -447,6 +459,14 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3525046474232947425, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
+      propertyPath: m_Lightmapping
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4664688811214350026, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4831204844198969013, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
       propertyPath: m_Name
       value: Test
@@ -458,6 +478,14 @@ PrefabInstance:
     - target: {fileID: 5301777880055520033, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
       propertyPath: m_LocalPosition.x
       value: 8.946
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284258289357778031, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9169794257740025108, guid: 19b112746e6bdaa46b431864e602b474, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1363,6 +1391,9 @@ MonoBehaviour:
   playerObj: {fileID: 0}
   _SteamID:
     m_InternalValue: 0
+  currentRailPath:
+    m_InternalValue:
+      points: []
 --- !u!4 &1671833826484777357
 Transform:
   m_ObjectHideFlags: 0

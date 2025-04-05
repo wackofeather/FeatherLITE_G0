@@ -92,7 +92,7 @@ public class MeleeState : BasePlayerState
 
         foreach (Collider playerCol in player.BumpCollider.GetComponent<BumpColliderChecker>().player_hits)
         {
-            playerCol.gameObject.GetComponent<PlayerStateMachine>().playerNetwork.DamageRPC(100);
+            playerCol.gameObject.GetComponent<PlayerStateMachine>().LocalDamage(100);
         }
 
         

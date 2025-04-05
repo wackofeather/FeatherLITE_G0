@@ -203,7 +203,7 @@ Light:
     serializedVersion: 2
     m_Bits: 2147483647
   m_RenderingLayerMask: 1
-  m_Lightmapping: 1
+  m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 585117191
+  GlobalObjectIdHash: 1506377076
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 0
@@ -682,9 +682,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -6675936338869786695, guid: c610c40e3ebcd8847ad45a15ea2136e0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -2555351614247099720, guid: c610c40e3ebcd8847ad45a15ea2136e0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: c610c40e3ebcd8847ad45a15ea2136e0, type: 3}
       propertyPath: m_Name
       value: map
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c610c40e3ebcd8847ad45a15ea2136e0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5854590937859556291, guid: c610c40e3ebcd8847ad45a15ea2136e0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7470345875887283051, guid: c610c40e3ebcd8847ad45a15ea2136e0, type: 3}
       propertyPath: m_Enabled
@@ -694,6 +710,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 149492a4b17462c47a0527917c5d2b18, type: 2}
+    - target: {fileID: 7981018425612724253, guid: c610c40e3ebcd8847ad45a15ea2136e0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -1,8 +1,10 @@
+using System.Collections;
 using UnityEngine;
 
 public class DeathState : BasePlayerState
 {
-
+    bool verifyingDeath;
+    float verifyDeathTimer;
     public DeathState(PlayerStateMachine player) : base(player)
     {
         key = 5;
@@ -17,11 +19,33 @@ public class DeathState : BasePlayerState
             player.inventory.isScoping = false;
             player.inventory.isShooting = false;
         }
+        else player.StartCoroutine(VerifyDeath(3));
 
 
         base.EnterState();
-        
 
+        
+    }
+
+    IEnumerator VerifyDeath(float timerTime)
+    {
+        verifyingDeath = true;
+        verifyDeathTimer = timerTime;
+
+        while (verifyDeathTimer > 0)
+        {
+
+            if (!verifyingDeath) yield break;
+            if (player.internal_CurrentState == key) { verifyingDeath = false; yield break; }
+
+            verifyDeathTimer -= Time.deltaTime;
+            yield return null;
+        }
+
+        player.ChangeState(player.stateDictionary[player.internal_CurrentState]);
+
+        verifyingDeath = false;
+        yield break;
     }
 
     public override void Update()
@@ -30,7 +54,7 @@ public class DeathState : BasePlayerState
         {
             player.playerNetwork.ConsumeState();
 
-            if (player.internal_CurrentState != key) player.ChangeState(player.stateDictionary[player.internal_CurrentState]);
+            if (player.internal_CurrentState != key && !verifyingDeath) player.ChangeState(player.stateDictionary[player.internal_CurrentState]);
 
             if (player.inventory.GetCurrentWeapon() != null) { player.inventory.GetCurrentWeapon().Weapon_Update(); }
             return;

@@ -28,7 +28,7 @@ public class FFA_gameMode : BaseGameMode
     {
         base.ServerSideRespawnplayer(playerNetworkObject, NetworkID);
 
-
+        Debug.Log("lalalalalapoopoo");
         Game_GeneralManager.game_instance.Owner_SpawnPlayerForGameRPC(playerNetworkObject, Game_GeneralManager.game_instance.internalSpawnTicker, Game_GeneralManager.game_instance.RpcTarget.Single(NetworkID, RpcTargetUse.Temp));
         Debug.Log("spawnTicker is" + Game_GeneralManager.game_instance.internalSpawnTicker);
         Game_GeneralManager.game_instance.internalSpawnTicker++;

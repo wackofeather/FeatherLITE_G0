@@ -59,12 +59,22 @@ public class RailgunClass : GunClass
 
 
 
-                if (chargeProgress >= 1) { currentAmmo = 1; shootingTimer = 1f; chargeProgress = -0.2f; }
+                if (chargeProgress >= 1) { currentAmmo = 1; shootingTimer = 0.5f; chargeProgress = -0.2f; }
 
                 //sDebug.LogAssertion(chargeProgress + "  " + weaponData.fireInput.action.IsPressed());
             }
-
+            player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().chargingRect.gameObject.transform.localScale = new Vector3(0, 0, 0);
             
+            if (currentAmmo > 0)
+            {
+                player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().chargingRect.gameObject.transform.localScale = new Vector3(1, Mathf.Clamp(1, 0, 1), 1);
+                player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().chargingRect.color = player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().chargedColor;
+            }
+            else
+            {
+                player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().chargingRect.gameObject.transform.localScale = new Vector3(1, Mathf.Clamp(chargeProgress, 0, 1), 1);
+                player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().chargingRect.color = player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().chargingColor;
+            }
         }
         else
         {
@@ -77,6 +87,8 @@ public class RailgunClass : GunClass
                 player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().predictivePath.SetPosition(i, path.points[i].point);
 
             }
+            player.inventory.EXT_GetProxy().GetComponent<RailgunProxy>().chargingRect.gameObject.transform.localScale = new Vector3(0,0,0);
+            player.inventory.VP_GetProxy().GetComponent<RailgunProxy>().chargingRect.gameObject.transform.localScale = new Vector3(0, 0, 0);
         }
 
 
@@ -132,7 +144,7 @@ public class RailgunClass : GunClass
         if (!player.networkInfo._isOwner) return true;
         if (!(Vector3.Dot((player.PlayerCamera.forward * -shootBackSpeed).normalized, player.rb.linearVelocity.normalized) > -0.1f && player.rb.linearVelocity.magnitude > shootBackSpeed))
         {
-            player.rb.AddForce(player.PlayerCamera.forward * -shootBackSpeed, ForceMode.VelocityChange);
+            player.rb.linearVelocity = player.PlayerCamera.forward * -shootBackSpeed;
             //Vector3 shootBackForce = Vector3.ClampMagnitude(((player.PlayerCamera.forward * -shootBackSpeed) - player.rb.linearVelocity) * 0.2f, shootBackSpeed * 1.7f);
             //player.rb.AddForce(shootBackForce, ForceMode.VelocityChange);
         }

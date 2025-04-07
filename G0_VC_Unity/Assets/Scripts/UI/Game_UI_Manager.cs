@@ -8,8 +8,8 @@ using Unity.Netcode;
 
 public class Game_UI_Manager : UI_Manager
 {
-    [SerializeField] Canvas ScreenCanvas;
-    [SerializeField] Canvas WorldCanvas;
+    public Canvas ScreenCanvas;
+    public Canvas WorldCanvas;
     public GameObject sharedScreen;
     public GameObject regularScreen;
 

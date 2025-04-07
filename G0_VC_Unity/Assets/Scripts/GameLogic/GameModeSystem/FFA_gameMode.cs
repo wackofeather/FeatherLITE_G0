@@ -22,7 +22,7 @@ public class FFA_gameMode : BaseGameMode
         await Task.Yield();
         Debug.Log("networkobject is" + Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count]);
         playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.gameObject.transform.position = Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position;
-        while (playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.rb.position != Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position)
+        while (Vector3.Distance(playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.rb.position, Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position) > 5)
         {
             playerObj.gameObject.GetComponent<PlayerNetwork>().playerStateMachine.rb.position = Game_GeneralManager.game_instance.currentMap.SpawnPlaces[SpawnTicker % Game_GeneralManager.game_instance.currentMap.SpawnPlaces.Count].position;
             await Task.Yield();

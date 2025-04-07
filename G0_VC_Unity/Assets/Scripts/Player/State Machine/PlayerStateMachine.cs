@@ -47,6 +47,7 @@ public class PlayerStateMachine : MonoBehaviour
     public InputActionReference melee;
     public InputActionReference interact;
     public InputActionReference copyCode;
+    public InputActionReference reload;
 
     public Transform Rotatables;
     public Transform PlayerCamera;
@@ -333,7 +334,7 @@ public class PlayerStateMachine : MonoBehaviour
             foreach (GameObject t in DummyOnlyObjects) t.SetActive(false);
             //foreach (Transform child in Exterior) child.gameObject.SetActive(false);
            // Debug.Log("host joined");
-            Exterior.GetComponent<ExteriorShadowSwitch>().ShadowsOnly(true);
+            
             //StartCoroutine(Testcoroutine());
 
         }
@@ -381,6 +382,10 @@ public class PlayerStateMachine : MonoBehaviour
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        Game_UI_Manager.game_instance.ScreenCanvas.worldCamera = PlayerCamera.GetComponent<Camera>();
+
+        Game_UI_Manager.game_instance.ScreenCanvas.planeDistance = 0.1f;
     }
 
 

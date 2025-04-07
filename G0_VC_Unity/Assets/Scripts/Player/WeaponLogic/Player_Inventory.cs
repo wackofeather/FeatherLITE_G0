@@ -25,6 +25,7 @@ public class Player_Inventory : MonoBehaviour
     public PlayerStateMachine player;
 
     public GameObject player_WeaponMesh;
+    public float oldDirection;
 
     private Dictionary<float, GameObject> VP_weapon_Dict = new Dictionary<float, GameObject>();
     private Dictionary<float, GameObject> EXT_weapon_Dict = new Dictionary<float, GameObject>();
@@ -94,7 +95,7 @@ public class Player_Inventory : MonoBehaviour
             OwnerGunTip = cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
         }
 
-
+        player.Exterior.GetComponent<ExteriorShadowSwitch>().ShadowsOnly(player.networkInfo._isOwner);
         //  currentWeapon = Weapon_Inventory[0];
         //ChangeCurrentWeapon_INDEX(0);
     }
@@ -130,9 +131,13 @@ public class Player_Inventory : MonoBehaviour
 
     public void ChangeCurrentWeapon(int direction)
     {
+     
+
         if (direction == 0 | Weapon_Inventory.Count == 1) return;
-        direction = Mathf.Clamp(direction, -1, 1);
+
         int shiftMultiplier = 0;
+
+        direction = Mathf.Clamp(direction, -1, 1);
 
         if (direction > 0) shiftMultiplier = 1;
         if (direction < 0) shiftMultiplier = Weapon_Inventory.Count - 1;

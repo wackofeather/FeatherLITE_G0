@@ -67,7 +67,7 @@ public class BasePlayerState
         if (player.melee.action.triggered && player.CurrentPlayerState != player.MeleeState) player.ChangeState(player.MeleeState);
 
         //player.playerNetwork.TransmitState();
-        if (!player.isMelee) player.inventory.ChangeCurrentWeapon((int)player.inventory.SwitchWeapon.action.ReadValue<float>());
+        if (!player.isMelee && player.inventory.SwitchWeapon.action.triggered) player.inventory.ChangeCurrentWeapon((int)player.inventory.SwitchWeapon.action.ReadValue<float>());
         if (player.inventory.GetCurrentWeapon() != null) { player.inventory.GetCurrentWeapon().Weapon_Update(); }
     }
     public virtual void FixedUpdate()

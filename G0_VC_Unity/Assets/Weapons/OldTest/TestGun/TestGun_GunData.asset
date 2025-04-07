@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dafeb43a1405e1d47aa51c6abce2ffde, type: 3}
   m_Name: TestGun_GunData
   m_EditorClassIdentifier: 
-  maxAmmo_Inventory: 0
+  maxAmmo_Inventory: 100
   BPS: 100
-  maxTravelPerFrame: 100
+  maxTravelPerFrame: 200
   bulletFX: {fileID: 5063894466379890091, guid: d9dea424039fdf14796606317a8f1088, type: 3}
   bloodSplatter: {fileID: 6667729461721251246, guid: 97e3d4bd380dd6c4e8c6e611cdccd0ee, type: 3}

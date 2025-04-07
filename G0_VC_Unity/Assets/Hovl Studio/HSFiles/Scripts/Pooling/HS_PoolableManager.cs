@@ -15,7 +15,7 @@ namespace CGT.Pooling
         /// </summary>
         public static HS_PoolableManager EnsureExists()
         {
-            HS_PoolableManager manager = FindObjectOfType<HS_PoolableManager>();
+            HS_PoolableManager manager = HS_PoolableManager.instance;
             if (manager == null)
             {
                 string managerName = "CGT_ObjectPoolManager";

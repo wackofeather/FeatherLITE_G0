@@ -24,6 +24,6 @@ MonoBehaviour:
   pickUpTime: 3
   reloadTime: 1.117
   maxAmmo_Inventory: 100
-  BPS: 10
+  BPS: 50
   gunTip: {fileID: 0}
   gunPickUpImage: {fileID: 0}

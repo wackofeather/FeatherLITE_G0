@@ -18,8 +18,9 @@ MonoBehaviour:
   inventory: {fileID: 0}
   gunData: {fileID: 11400000, guid: 1d501803ca963d54397c131b74a17b85, type: 2}
   bullet: {fileID: 0}
+  bulletSpeed: 0
   recoilAmount: {x: 0, y: 10}
-  shootBackSpeed: 7
+  shootBackSpeed: 14
   bounceNumber: 2
   maxHitDistance: 200
   endHitMask:
@@ -28,4 +29,4 @@ MonoBehaviour:
   beamSpeed: 10
   shootAnimTime: 2
   chargeProgress: 0
-  chargingSpeed: 1
+  chargingSpeed: 0.5

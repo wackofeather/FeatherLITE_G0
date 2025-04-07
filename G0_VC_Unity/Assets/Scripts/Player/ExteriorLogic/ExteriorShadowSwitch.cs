@@ -13,6 +13,7 @@ public class ExteriorShadowSwitch : MonoBehaviour
     }
     public void ShadowsOnly(bool boolean)
     {
+        renderers = GetComponentsInChildren<Renderer>().ToList();
         if (boolean == true)
         {
             for (int i = 0; i < renderers.Count; i++) 

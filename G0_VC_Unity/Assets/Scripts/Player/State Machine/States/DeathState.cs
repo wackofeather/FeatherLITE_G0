@@ -18,6 +18,7 @@ public class DeathState : BasePlayerState
         {
             player.inventory.isScoping = false;
             player.inventory.isShooting = false;
+            player.PlayerCamera.gameObject.SetActive(false);
         }
         else player.StartCoroutine(VerifyDeath(3));
 
@@ -94,5 +95,12 @@ public class DeathState : BasePlayerState
         player.inventory.VP_GetCurrentWeaponAnimator().SetBool("Scoping", player.inventory.isScoping);
 
         player.inventory.VP_GetCurrentWeaponAnimator().SetBool("Firing", player.inventory.isShooting);
+    }
+
+    public override void ExitState()
+    {
+        base.ExitState();
+
+        if (player.networkInfo._isOwner) player.PlayerCamera.gameObject.SetActive(true);
     }
 }

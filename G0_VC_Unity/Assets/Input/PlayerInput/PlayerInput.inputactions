@@ -51,6 +51,15 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "6f185ad8-f862-4ac4-b392-7f50ddd3aac8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "SwitchWeapon",
                     "type": "Value",
                     "id": "d50a7a15-d2e2-4070-8aaa-7a3a90f487e3",
@@ -175,7 +184,7 @@
                     "id": "a9e24b9b-1169-4f2d-85a6-46fc67be1bcb",
                     "path": "3DVector(mode=1)",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "ScaleVector2(x=2.2,y=2.2)",
                     "groups": "",
                     "action": "Move",
                     "isComposite": true,
@@ -437,7 +446,7 @@
                 {
                     "name": "",
                     "id": "b20a0436-1714-44d3-8b42-a830afe7f55c",
-                    "path": "<Gamepad>/buttonEast",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": ";ControllerGeneric",
@@ -497,6 +506,28 @@
                     "processors": "",
                     "groups": ";ControllerGeneric",
                     "action": "Copy Code",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c1496b27-c4b4-48d9-9784-0e2d2aeb415e",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ae6b0011-5f41-4168-b3fd-2bb3ea8f827a",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

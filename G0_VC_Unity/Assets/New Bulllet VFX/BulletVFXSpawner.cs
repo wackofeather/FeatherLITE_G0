@@ -10,6 +10,7 @@ public class BulletVFXSpawner : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log("bruh");
         if (Input.GetMouseButtonDown(0))
         {
             HS_Poolable projectile = HS_PoolableManager.instance.GetInstanceOf(bullet.GetComponent<HS_Poolable>());

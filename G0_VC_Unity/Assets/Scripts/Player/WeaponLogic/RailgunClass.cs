@@ -29,7 +29,7 @@ public class RailgunClass : GunClass
         if (!player.networkInfo._isOwner) return;
         if (chargeProgress > 0) chargeProgress = Mathf.Clamp(chargeProgress - (Time.time - leaveTime), 0, 1); //s
 
-        Debug.Log(player.inventory.isShooting);
+        //Debug.Log(player.inventory.isShooting);
         Debug.Log(inventory.VP_GetCurrentWeaponAnimator().GetBool("Firing"));
     }
     public override void Weapon_Update()

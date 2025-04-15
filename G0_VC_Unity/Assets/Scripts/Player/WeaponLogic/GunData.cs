@@ -9,7 +9,7 @@ public class GunData : ScriptableObject
     [SerializeField] float maxAmmo_Inventory;
     [Space]
     [SerializeField] float BPS;
-    public float maxTravelPerFrame;
+    public float bulletSpeed;
     public GameObject bulletFX;
     public GameObject bloodSplatter;
 

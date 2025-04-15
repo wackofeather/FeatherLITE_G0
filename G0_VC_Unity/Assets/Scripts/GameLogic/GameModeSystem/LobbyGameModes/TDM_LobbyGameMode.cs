@@ -253,7 +253,7 @@ public class TDM_LobbyGameMode : Base_LobbyGameMode
 
         local_teamList = network_teamList.Value;
 
-        Debug.Log(myTeam);
+        //Debug.Log(myTeam);
         if (Lobby_GeneralManager.LobbyManager_Instance.CurrentGameMode_Int.Value == 1)
         {
 

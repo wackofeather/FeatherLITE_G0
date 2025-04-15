@@ -31,8 +31,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5264718852119154384}
-  - {fileID: 1345462411581401890}
   - {fileID: 7048955824992028557}
+  - {fileID: 1345462411581401890}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.575}
 --- !u!114 &4668375544381931259
@@ -747,10 +747,6 @@ PrefabInstance:
     - target: {fileID: 1245265504551161277, guid: aa65452b57ffe2246964304c98ca3f12, type: 3}
       propertyPath: m_Name
       value: ShootBeam_LR
-      objectReference: {fileID: 0}
-    - target: {fileID: 7772397282759970501, guid: aa65452b57ffe2246964304c98ca3f12, type: 3}
-      propertyPath: m_Parameters.widthMultiplier
-      value: 0.25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

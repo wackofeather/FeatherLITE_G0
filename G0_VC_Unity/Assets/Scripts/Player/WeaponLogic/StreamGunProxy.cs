@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StreamGunProxy : MonoBehaviour
+public class StreamGunProxy : GunProxy
 {
-    public ParticleSystem shootParticle;
+    public GameObject bullet;
 }

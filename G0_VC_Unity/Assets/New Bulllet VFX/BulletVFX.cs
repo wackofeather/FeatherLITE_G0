@@ -18,6 +18,7 @@ public class BulletVFX : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.LogWarning(maxTravelPerFrame);
         transform.position = Vector3.MoveTowards(transform.position, end, maxTravelPerFrame);
         if(transform.position == end) {
             Debug.Log("I need sleep");

@@ -55,6 +55,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   renderers: []
+  player: {fileID: 58085483968552630}
 --- !u!95 &2523672247751498225
 Animator:
   serializedVersion: 7

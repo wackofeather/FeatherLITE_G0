@@ -13,7 +13,7 @@ public class GunClass : WeaponClass
     public GunData gunData;
     [HideInInspector] float maxAmmo_Mag;
     [SerializeField] GameObject bullet;
-    [SerializeField] float bulletSpeed;
+    
     
 
     public Vector2 recoilAmount;
@@ -35,7 +35,7 @@ public class GunClass : WeaponClass
         }
         catch
         {
-
+            Debug.Log("isgoofyashell");
         }
         
         
@@ -140,7 +140,7 @@ public class GunClass : WeaponClass
             if (!player.inventory.isShooting) break;
 
             ShootLogic();
-            Debug.Log(currentAmmo);
+            //Debug.Log(currentAmmo);
             currentAmmo -= 1;
 
             if (player.playerNetwork != null) player.playerNetwork.DummyShootRPC();
@@ -195,7 +195,7 @@ public class GunClass : WeaponClass
             Debug.Log("Pre-Pre-Pre-Chipotle");
             toShoot.transform.rotation = player.inventory.VP_GetProxy().GetComponent<GunProxy>().gunTip.transform.rotation;
             Debug.Log("Pre-Pre-Chipotle");
-            toShoot.gameObject.GetComponent<BulletVFX>().maxTravelPerFrame = bulletSpeed;
+            toShoot.gameObject.GetComponent<BulletVFX>().maxTravelPerFrame = gunData.bulletSpeed;
             toShoot.gameObject.GetComponent<BulletVFX>().end = hit.point;
             Debug.Log("Pre-Chipotle");
             toShoot.gameObject.SetActive(true);

@@ -94,8 +94,8 @@ public class Player_Inventory : MonoBehaviour
             // Convert the viewport point back to the world with the new FOV
             OwnerGunTip = cam.ViewportToWorldPoint(new Vector3(viewportPoint.x, viewportPoint.y, distance));
         }
-
-        player.Exterior.GetComponent<ExteriorShadowSwitch>().ShadowsOnly(player.networkInfo._isOwner);
+        Debug.Log("chicken jockey");
+        player.Exterior.GetComponent<ExteriorShadowSwitch>().ShadowsOnly(true);
         //  currentWeapon = Weapon_Inventory[0];
         //ChangeCurrentWeapon_INDEX(0);
     }
@@ -185,6 +185,8 @@ public class Player_Inventory : MonoBehaviour
         Weapon_Inventory.Insert(current_Index, weapon_copy);//weapon.clone(Weapon_Inventory.Count + 1));
         weapon_copy.Weapon_Init();
         changeWeapon_Internal(weapon_copy);
+
+        
 
         /* for (int i = 0; i < Weapon_Inventory.Count; i++)
          {
